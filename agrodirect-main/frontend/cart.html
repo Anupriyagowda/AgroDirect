@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="yourShoppingCart">Cart - AgroDirect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap"
+        rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="fruits.css"> -->
+    <link rel="stylesheet" href="cart.css">
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand premium-logo-nav" href="./home page/home.html">
+                <span class="icon-stack-sm me-2">
+                    <i class="fas fa-circle icon-bg"></i>
+                    <i class="fas fa-leaf icon-main"></i>
+                </span>
+                <span class="logo-text">AgroDirect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="./home page/home.html" data-i18n="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="shopnow.html" data-i18n="shopNow">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contactus.html" data-i18n="contactUs">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="review.html" data-i18n="reviewUs">Review Us</a></li>
+                    <li class="nav-item"><a class="nav-link" id="cartNavLink" href="cart.html" style="display:none;"><span data-i18n="cart">Cart</span> <i class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                                            <script>
+                                            // Hide Cart link for farmer/admin
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                try {
+                                                    var user = localStorage.getItem('agroUser');
+                                                    var role = user ? (JSON.parse(user).role || 'consumer') : 'consumer';
+                                                    var cartLink = document.getElementById('cartNavLink');
+                                                    if (cartLink) {
+                                                        cartLink.style.display = (role === 'consumer') ? '' : 'none';
+                                                    }
+                                                } catch(e) {}
+                                            });
+                                            </script>
+                    <div class="dropdown" id="userDropdown" style="display: none;">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userNameDisplay"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="profile.html" data-i18n="myProfile">Profile</a></li>
+                            <li><a class="dropdown-item" href="order.html" data-i18n="myOrders">My Orders</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton" data-i18n="logout">Logout</a></li>
+                        </ul>
+                    </div>
+                    <a href="index.html" class="btn btn-login ms-3" id="loginButton"><span
+                            data-i18n="login">Login</span> <i class="fas fa-sign-in-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cart Section -->
+    <section class="container my-5">
+        <div class="d-flex justify-content-between align-items-center title-container">
+            <h2 class="title-text">
+                🛒 <span data-i18n="yourShoppingCart">Your Shopping Cart</span>
+                <hr class="title-underline">
+            </h2>
+            <a href="shopnow.html" class="btn back-home-btn" data-i18n="continueShopping">🛍️ Continue Shopping</a>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-lg-8" id="cart-items-container">
+                <!-- Cart items will be loaded dynamically -->
+                <div class="empty-cart" id="empty-cart" style="display: none;">
+                    <i class="fas fa-shopping-cart"></i>
+                    <h3 data-i18n="yourCartIsEmpty">Your cart is empty</h3>
+                    <p data-i18n="emptyCartMsg">Looks like you haven't added any products to your cart yet.</p>
+                    <a href="shopnow.html" class="btn back-to-shop-btn" data-i18n="browseProducts">Browse Products</a>
+                </div>
+            </div>
+
+            <div class="col-lg-4" id="cart-summary-container">
+                <!-- Cart summary will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+                        <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic
+                            produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                                    Products</span></a></li>
+                        <li><a href="/aboutus.html"><i class="fas fa-chevron-right"></i><span data-i18n="aboutUs">About
+                                    Us</span></a></li>
+                        <li><a href="/privacypolicy.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="privacyPolicy">Privacy Policy</span></a></li>
+                        <li><a href="/termcondition.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="termCondition">Terms & Conditions</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="/seed/seeds.html" class="product-tag" data-i18n="seeds">Organic Seeds</a>
+                        <a href="/fruit/fruits.html" class="product-tag" data-i18n="fruits">Fresh Fruits</a>
+                        <a href="/vegetables/vegetable.html" class="product-tag" data-i18n="vegetables">Vegetables</a>
+                        <a href="/oil/coconut.html" class="product-tag" data-i18n="oilExtracts">Organic Oils</a>
+                        <a href="./grains/grains.html" class="product-tag" data-i18n="grains">Grains</a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                                Karnataka</span></p>
+                        <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+                        <p><i class="fas fa-envelope"></i><span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+                        <p><i class="fas fa-clock"></i><span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2026 AgroDirect All rights Reserved</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <!-- <p>Made with <i class="fas fa-heart heart"></i> for organic farming</p> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script src="/searchcard.js"></script>
+    <script type="module" src="lang-core.js"></script>
+    <script src="cart.js"></script>
+
+    <!-- Add this to your head section -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script>
+        // Initialize auth when page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            initAuth();
+        });
+    </script>
+    <script src="auth-core.js"></script>
+    <script src="/notifications.js"></script>
+</body>
+
+</html>

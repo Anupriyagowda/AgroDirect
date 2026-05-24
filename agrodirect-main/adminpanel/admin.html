@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Agro-Direct</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-leaf me-2"></i>Agro-Direct</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin.html"><i class="fas fa-tachometer-alt me-1"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="upload.html"><i class="fas fa-chart-bar me-1"></i>Upload</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="user.html"><i class="fas fa-cog me-1"></i>Users</a>
+                    </li> -->
+                </ul>
+                <div class="d-flex">
+                    <a href="orderadmin.html" class="btn btn-order me-2">
+                        <i class="fas fa-shopping-cart me-1"></i>Orders
+                    </a>
+                    <!-- <a href="../frontend/index.html" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a> -->
+                </div>
+                
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="panel-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="panel-title">
+                    <i class="fas fa-leaf me-2"></i>
+                    Agro-Direct
+                </h1>
+                <span class="badge bg-primary">Admin Panel</span>
+            </div>
+        </div>
+
+        <div id="alertToast" class="alert-toast"></div>
+
+        <!-- Category Navigation -->
+        <div class="category-nav d-flex justify-content-between align-items-center overflow-auto">
+            <a href="#fruits-section" class="active"><i class="fas fa-apple-alt"></i> Fruits</a>
+            <a href="#vegetables-section"><i class="fas fa-carrot"></i> Vegetables</a>
+            <a href="#seeds-section"><i class="fas fa-seedling"></i> Seeds</a>
+            <a href="#saplings-section"><i class="fas fa-tree"></i> Saplings</a>
+            <a href="#oil-extracts-section"><i class="fas fa-oil-can"></i> Oil Extracts</a>
+            <a href="#grains-section"><i class="fas fa-wheat-awn"></i> Grains</a>
+        </div>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading data...</p>
+        </div>
+
+        <!-- Fruits Section -->
+        <div id="fruits-section" class="section-card fruits-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-apple-alt me-2"></i>
+                    Fruits
+                </h3>
+                <span class="badge bg-danger badge-count px-3 py-2" id="fruitCount">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="fruitTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Vegetables Section -->
+        <div id="vegetables-section" class="section-card vegetables-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-carrot me-2"></i>
+                    Vegetables
+                </h3>
+                <span class="badge bg-success badge-count px-3 py-2" id="vegetableCount">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vegetableTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Seeds Section -->
+        <div id="seeds-section" class="section-card seeds-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-seedling me-2"></i>
+                    Seeds
+                </h3>
+                <span class="badge bg-warning text-dark badge-count px-3 py-2" id="seedCount">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="seedTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Saplings Section -->
+        <div id="saplings-section" class="section-card saplings-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-tree me-2"></i>
+                    Saplings
+                </h3>
+                <span class="badge bg-purple badge-count px-3 py-2" id="saplingCount" style="background-color: #9b59b6;">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="saplingTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Oil Extracts Section -->
+        <div id="oil-extracts-section" class="section-card oil-extracts-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-oil-can me-2"></i>
+                    Oil Extracts
+                </h3>
+                <span class="badge bg-primary badge-count px-3 py-2" id="oilCount">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="oilTable"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Grains Section -->
+        <div id="grains-section" class="section-card grains-section">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3 class="section-title">
+                    <i class="fas fa-wheat-awn me-2"></i>
+                    Grains
+                </h3>
+                <span class="badge badge-count px-3 py-2" id="grainCount" style="background-color: #e67e22; color: white;">0 items</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Status</th>
+                            <th>Availability</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="grainTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loadingSpinner').show();
+            
+            // Initialize all sections
+            fetchItems("fruits", "#fruitTable", "/admin/select-fruit", "#fruitCount");
+            fetchItems("vegetables", "#vegetableTable", "/admin/select-vegetable", "#vegetableCount");
+            fetchItems("seeds", "#seedTable", "/admin/select-seed", "#seedCount");
+            fetchItems("saplings", "#saplingTable", "/admin/select-sapling", "#saplingCount");
+            fetchItems("oilextracts", "#oilTable", "/admin/select-oilextract", "#oilCount");
+            fetchItems("grains", "#grainTable", "/admin/select-grain", "#grainCount");
+            
+            function fetchItems(type, tableId, updateUrl, countId) {
+                $.get(`http://localhost:5003/admin/${type}`, function(items) {
+                    let rows = "";
+                    // If the API endpoint doesn't exist yet, use sample data
+                    if (!items || items.length === 0) {
+                        items = generateSampleData(type, 5);
+                    }
+                    
+                    items.forEach(item => {
+                        const statusBadge = item.isAvailable ? 
+                            `<span class="status-badge status-available">Available</span>` : 
+                            `<span class="status-badge status-unavailable">Unavailable</span>`;
+                            
+                        rows += `
+                            <tr>
+                                <td class="item-name">${item.name}</td>
+                                <td><img src="${item.img}" class="item-img" alt="${item.name}"></td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" class="form-check-input item-checkbox" 
+                                            data-name="${item.name}" 
+                                            data-type="${type}"
+                                            data-url="${updateUrl}" 
+                                            ${item.isAvailable ? "checked" : ""}>
+                                    </div>
+                                </td>
+                                <td>
+                                          <button class="btn btn-sm btn-warning price-change-btn" 
+                    data-name="${item.name}" 
+                    data-type="${type}"
+                    data-price="${item.price}">
+                    <i class="fas fa-rupee-sign"></i> Change Price
+                </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    $(tableId).html(rows);
+                    $(countId).text(`${items.length} items`);
+                    
+                    $(".item-checkbox").change(function() {
+                        const itemName = $(this).data("name");
+                        const itemType = $(this).data("type");
+                        const isAvailable = $(this).is(":checked");
+                        const url = $(this).data("url");
+                        
+                        // Update the status badge right away
+                        const statusCell = $(this).closest('tr').find('.status-badge');
+                        if (isAvailable) {
+                            statusCell.removeClass('status-unavailable').addClass('status-available').text('Available');
+                        } else {
+                            statusCell.removeClass('status-available').addClass('status-unavailable').text('Unavailable');
+                        }
+                        
+                        $.ajax({
+                            url: `http://localhost:5003${url}`,
+                            type: "POST",
+                            contentType: "application/json",
+                            data: JSON.stringify({ name: itemName, isAvailable }),
+                            success: function(response) {
+                                showToast(`${itemName} is now ${isAvailable ? 'available' : 'unavailable'}`, 'success');
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(`Error updating ${itemType} availability:`, error);
+                                showToast(`${itemName} status updated (demo mode)`, 'success');
+                                // In demo mode, we don't revert the checkbox since we're simulating success
+                            }
+                        });
+                    });
+
+                    
+                    // Add event handlers for edit and delete buttons
+                    // $(".edit-btn").click(function() {
+                    //     const itemName = $(this).data("name");
+                    //     showToast(`Editing ${itemName}...`, 'info');
+                    // });
+                    
+                    // $(".delete-btn").click(function() {
+                    //     const itemName = $(this).data("name");
+                    //     if (confirm(`Are you sure you want to delete ${itemName}?`)) {
+                    //         $(this).closest('tr').fadeOut(500, function() {
+                    //             $(this).remove();
+                    //             showToast(`${itemName} has been deleted`, 'success');
+                    //         });
+                    //     }
+                    // });
+                    // ✅ Add this new handler for Price Button
+// 
+
+
+// Add this at the top of your script section
+let activePriceUpdate = null;
+
+$(document).on('click', '.price-change-btn', function() {
+    const button = $(this);
+    
+    // If there's an active price update for this button, ignore new clicks
+    if (button.hasClass('processing')) {
+        return;
+    }
+    
+    // Mark this button as processing
+    button.addClass('processing').prop('disabled', true)
+          .html('<i class="fas fa-spinner fa-spin"></i> Processing');
+    
+    const itemName = button.data("name");
+    const itemType = button.data("type");
+    const currentPrice = parseFloat(button.data("price"));
+
+    // Store the active update
+    activePriceUpdate = {
+        button: button,
+        resolve: null,
+        reject: null
+    };
+
+    // Create a promise to handle the prompt response
+    const promptPromise = new Promise((resolve, reject) => {
+        activePriceUpdate.resolve = resolve;
+        activePriceUpdate.reject = reject;
+        
+        const newPriceInput = prompt(`Current Price for ${itemName} is ₹${currentPrice}\nEnter New Price:`);
+        
+        if (newPriceInput === null) {
+            reject('cancelled');
+        } else {
+            resolve(newPriceInput);
+        }
+    });
+
+    promptPromise
+        .then(newPriceInput => {
+            if (newPriceInput.trim() === "") {
+                throw new Error("Price cannot be empty");
+            }
+            
+            const newPrice = parseFloat(newPriceInput);
+            if (isNaN(newPrice)) {
+                throw new Error("Please enter a valid number");
+            }
+            if (newPrice <= 0) {
+                throw new Error("Price must be greater than 0");
+            }
+            
+            return newPrice;
+        })
+        .then(newPrice => {
+            return $.ajax({
+                url: "http://localhost:5003/admin/update-price",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ 
+                    name: itemName, 
+                    type: itemType, 
+                    price: newPrice 
+                })
+            });
+        })
+        .then(response => {
+            if (response.success) {
+                if (response.modifiedCount > 0) {
+                    showToast(`Price updated for ${itemName} to ₹${response.newPrice}`, 'success');
+                    button.data("price", response.newPrice);
+                } else {
+                    showToast(`Price was already ₹${response.newPrice}`, 'info');
+                }
+            } else {
+                throw new Error(response.message || "Update failed");
+            }
+        })
+        .catch(error => {
+            if (error !== 'cancelled') {
+                const errorMsg = error.responseJSON?.message || error.message || "Failed to update price";
+                showToast(errorMsg, 'danger');
+                console.error("Update error:", error);
+            }
+        })
+        .finally(() => {
+            // Clean up
+            button.removeClass('processing').prop('disabled', false)
+                  .html('<i class="fas fa-rupee-sign"></i> Change Price');
+            activePriceUpdate = null;
+        });
+});
+
+                    $('#loadingSpinner').hide();
+                }).fail(function() {
+                    // If API fails, use sample data
+                    let items = generateSampleData(type, 5);
+                    let rows = "";
+                    
+                    items.forEach(item => {
+                        const statusBadge = item.isAvailable ? 
+                            `<span class="status-badge status-available">Available</span>` : 
+                            `<span class="status-badge status-unavailable">Unavailable</span>`;
+                            
+                        rows += `
+                            <tr>
+                                <td class="item-name">${item.name}</td>
+                                <td><img src="${item.img}" class="item-img" alt="${item.name}"></td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" class="form-check-input item-checkbox" 
+                                            data-name="${item.name}" 
+                                            data-type="${type}"
+                                            data-url="${updateUrl}" 
+                                            ${item.isAvailable ? "checked" : ""}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-primary edit-btn" data-name="${item.name}">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-danger delete-btn" data-name="${item.name}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    
+                    $(tableId).html(rows);
+                    $(countId).text(`${items.length} items`);
+                    
+                    // Add the same event handlers as above
+                    $(".item-checkbox").change(function() {
+                        const itemName = $(this).data("name");
+                        const isAvailable = $(this).is(":checked");
+                        
+                        // Update the status badge right away
+                        const statusCell = $(this).closest('tr').find('.status-badge');
+                        if (isAvailable) {
+                            statusCell.removeClass('status-unavailable').addClass('status-available').text('Available');
+                        } else {
+                            statusCell.removeClass('status-available').addClass('status-unavailable').text('Unavailable');
+                        }
+                        
+                        showToast(`${itemName} is now ${isAvailable ? 'available' : 'unavailable'} (demo mode)`, 'success');
+                    });
+                    
+                    $(".edit-btn").click(function() {
+                        const itemName = $(this).data("name");
+                        showToast(`Editing ${itemName}... (demo mode)`, 'info');
+                    });
+                    
+                    $(".delete-btn").click(function() {
+                        const itemName = $(this).data("name");
+                        if (confirm(`Are you sure you want to delete ${itemName}?`)) {
+                            $(this).closest('tr').fadeOut(500, function() {
+                                $(this).remove();
+                                showToast(`${itemName} has been deleted (demo mode)`, 'success');
+                            });
+                        }
+                    });
+                    
+                    $('#loadingSpinner').hide();
+                });
+            }
+            
+            function generateSampleData(type, count) {
+                const items = [];
+                const typeData = {
+                    fruits: {
+                        names: ["Apple", "Banana", "Orange", "Mango", "Grapes", "Pineapple", "Strawberry", "Watermelon"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    },
+                    vegetables: {
+                        names: ["Carrot", "Tomato", "Potato", "Broccoli", "Cucumber", "Spinach", "Onion", "Pepper"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    },
+                    seeds: {
+                        names: ["Sunflower", "Pumpkin", "Chia", "Flax", "Sesame", "Mustard", "Poppy", "Hemp"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    },
+                    saplings: {
+                        names: ["Mango", "Apple", "Oak", "Neem", "Eucalyptus", "Pine", "Banyan", "Palm"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    },
+                    oilextracts: {
+                        names: ["Olive", "Coconut", "Sunflower", "Mustard", "Sesame", "Almond", "Castor", "Jojoba"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    },
+                    grains: {
+                        names: ["Rice", "Wheat", "Barley", "Oats", "Corn", "Quinoa", "Millet", "Buckwheat"],
+                        imgPrefix: "https://via.placeholder.com/60x60?text="
+                    }
+                };
+                
+                const data = typeData[type] || typeData.fruits;
+                
+                for (let i = 0; i < count; i++) {
+                    const name = data.names[i % data.names.length];
+                    items.push({
+                        name: name,
+                        img: `${data.imgPrefix}${name}`,
+                        isAvailable: Math.random() > 0.3, // 70% chance of being available
+                        id: i + 1
+                    });
+                }
+                
+                return items;
+            }
+            
+            function showToast(message, type) {
+                const toast = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${type === 'success' ? '<i class="fas fa-check-circle me-2"></i>' : 
+                         type === 'info' ? '<i class="fas fa-info-circle me-2"></i>' : 
+                         '<i class="fas fa-exclamation-circle me-2"></i>'}
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                
+                $('#alertToast').html(toast);
+                
+                // Auto-dismiss after 3 seconds
+                setTimeout(() => {
+                    $('#alertToast .alert').alert('close');
+                }, 3000);
+            }
+            
+            // Category navigation smooth scroll
+            $('.category-nav a').on('click', function(e) {
+                e.preventDefault();
+                
+                $('.category-nav a').removeClass('active');
+                $(this).addClass('active');
+                
+                const target = $(this.getAttribute('href'));
+                
+                if (target.length) {
+                    $('html, body').animate({
+                        scrollTop: target.offset().top - 100
+                    }, 500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

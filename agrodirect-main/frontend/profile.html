@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="myProfile">My Profile - AgroDirect</title>
+
+  <!-- CSS Links -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="home page/home.css">
+
+  <style>
+    :root {
+      --primary-color: #28a745;
+      --text-color: #333;
+      --white: #fff;
+      --transition: all 0.3s ease;
+    }
+
+    /* Navbar styles */
+    .custom-navbar {
+      background-color: white;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+      padding: 15px 0;
+    }
+
+    .navbar-brand {
+      color: var(--primary-color);
+      font-size: 24px;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-link {
+      color: var(--text-color);
+      font-weight: 500;
+      margin: 0 10px;
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-color);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background-color: var(--primary-color);
+      bottom: -5px;
+      left: 0;
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* User dropdown styles */
+    .btn-user {
+      background-color: transparent;
+      color: var(--primary-color);
+      border: 1px solid var(--primary-color);
+      border-radius: 30px;
+      padding: 5px 15px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-user:hover {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-login {
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 30px;
+      padding: 5px 15px;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-login:hover {
+      background-color: #218838;
+      color: white;
+    }
+
+    .dropdown-menu {
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-top: 5px;
+    }
+
+    .dropdown-item {
+      padding: 8px 15px;
+      transition: var(--transition);
+    }
+
+    .dropdown-item:hover {
+      background-color: #f8f9fa;
+      color: var(--primary-color);
+    }
+
+    .dropdown-divider {
+      margin: 5px 0;
+    }
+
+    /* Profile section styling */
+    .profile-section {
+      background-color: #f8f9fa;
+      padding: 60px 0;
+      min-height: 70vh;
+    }
+
+    .profile-card {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      padding: 30px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .profile-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .profile-header h2 {
+      color: var(--primary-color);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .profile-header h3 {
+      color: var(--text-color);
+      font-weight: 400;
+    }
+
+    .profile-detail {
+      margin-bottom: 20px;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: var(--primary-color);
+      margin-bottom: 5px;
+    }
+
+    .detail-value {
+      color: #555;
+    }
+
+    /* Footer styles */
+    .organic-footer {
+      background-color: #1e3c14;
+      color: rgba(255, 255, 255, 0.8);
+      padding: 70px 0 0;
+    }
+
+    .footer-column {
+      margin-bottom: 40px;
+    }
+
+    .footer-about {
+      padding-right: 20px;
+    }
+
+    .footer-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 20px;
+      display: inline-block;
+    }
+
+    .footer-about p {
+      margin-bottom: 25px;
+      line-height: 1.8;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--white);
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      background: var(--primary-color);
+      transform: translateY(-3px);
+    }
+
+    .footer-title {
+      color: var(--white);
+      font-size: 1.3rem;
+      margin-bottom: 25px;
+      position: relative;
+      padding-bottom: 12px;
+    }
+
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 50px;
+      height: 2px;
+      background: var(--primary-color);
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .footer-links li {
+      margin-bottom: 12px;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.7);
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-links a i {
+      margin-right: 10px;
+      font-size: 12px;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: var(--white);
+      transform: translateX(5px);
+    }
+
+    .footer-links a:hover i {
+      color: var(--primary-color);
+    }
+
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .product-tag {
+      display: inline-block;
+      padding: 5px 15px;
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 30px;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .product-tag:hover {
+      background: var(--primary-color);
+      color: var(--white);
+    }
+
+    .footer-contact p {
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .footer-contact p i {
+      margin-right: 15px;
+      color: var(--primary-color);
+      width: 20px;
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px 0;
+      margin-top: 30px;
+    }
+
+    .footer-bottom p {
+      margin: 0;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar with working dropdown showing username -->
+  <nav class="navbar navbar-expand-lg custom-navbar">
+    <div class="container">
+      <a class="navbar-brand premium-logo-nav" href="/home page/home.html">
+        <span class="icon-stack-sm me-2">
+            <i class="fas fa-circle icon-bg"></i>
+            <i class="fas fa-leaf icon-main"></i>
+        </span>
+        <span class="logo-text">AgroDirect</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="/home page/home.html" data-i18n="home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="shopnow.html" data-i18n="shopNow">Shop Now</a></li>
+          <li class="nav-item"><a class="nav-link" href="contactus.html" data-i18n="contactUs">Contact Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="review.html" data-i18n="reviewUs">Review Us</a></li>
+          <li class="nav-item"><a class="nav-link" href="cart.html"><span data-i18n="cart">Cart</span> <i
+                class="fas fa-shopping-cart"></i></a></li>
+        </ul>
+        <div class="d-flex align-items-center ms-3">
+          <div class="user-section" id="userSection">
+            <div class="dropdown">
+              <button class="btn btn-user dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
+                aria-expanded="false">
+                <span id="userNameDisplay"></span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i><span
+                      data-i18n="myProfile">Profile</span></a></li>
+                <li><a class="dropdown-item" href="order.html"><i class="fas fa-box me-2"></i><span
+                      data-i18n="myOrders">My
+                      Orders</span></a></li>
+                <li>
+                  <hr class="dropdown-divider">
+                </li>
+                <li><a class="dropdown-item" href="#" id="logoutButton"><i class="fas fa-sign-out-alt me-2"></i><span
+                      data-i18n="logout">Logout</span></a></li>
+              </ul>
+            </div>
+            <a href="index.html" class="btn btn-login ms-3" id="loginButton"><span data-i18n="login">Login</span> <i
+                class="fas fa-sign-in-alt"></i></a>
+          </div>
+        </div>
+      </div>
+  </nav>
+
+  <!-- Profile Section -->
+  <section class="profile-section">
+    <div class="container">
+      <div class="profile-card">
+        <div class="profile-header">
+          <h2 data-i18n="myProfile">My Profile</h2>
+          <p class="lead" data-i18n="manageAccount">Manage your account information</p>
+        </div>
+
+        <div id="loading" class="text-center py-5">
+          <div class="spinner-border text-success" role="status">
+            <span class="visually-hidden" data-i18n="loading">Loading...</span>
+          </div>
+          <p class="mt-3" data-i18n="loadingProfile">Loading your profile...</p>
+        </div>
+
+        <div id="error-message" class="alert alert-danger d-none" role="alert">
+          Error loading profile. Please try again.
+        </div>
+
+        <div id="profile-content" style="display: none;">
+          <div class="profile-detail d-flex justify-content-between align-items-center">
+            <div>
+              <div class="detail-label">Full Name</div>
+              <div class="detail-value" id="user-name"></div>
+            </div>
+            <button class="btn btn-outline-success btn-sm" onclick="editName()">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+          </div>
+
+          <!-- Name Edit Form -->
+          <div id="name-edit-form" class="profile-detail" style="display: none; background: #f1f8f1;">
+            <div class="detail-label text-success">Update Name</div>
+            <div class="input-group mt-2">
+              <input type="text" id="edit-name-input" class="form-control" placeholder="Enter full name">
+              <button class="btn btn-success" onclick="saveName(event)">Save</button>
+              <button class="btn btn-secondary" onclick="cancelEditName()">Cancel</button>
+            </div>
+          </div>
+
+          <div class="profile-detail d-flex justify-content-between align-items-center">
+            <div>
+              <div class="detail-label">Email Address</div>
+              <div class="detail-value" id="user-email"></div>
+            </div>
+            <button class="btn btn-outline-success btn-sm" onclick="editEmail()">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+          </div>
+
+          <!-- Email Edit Form -->
+          <div id="email-edit-form" class="profile-detail" style="display: none; background: #f1f8f1;">
+            <div class="detail-label text-success">Update Email</div>
+            <div class="input-group mt-2">
+              <input type="email" id="edit-email-input" class="form-control" placeholder="Enter new email address">
+              <button class="btn btn-success" onclick="saveEmail(event)">Save</button>
+              <button class="btn btn-secondary" onclick="cancelEditEmail()">Cancel</button>
+            </div>
+          </div>
+
+          <div class="profile-detail d-flex justify-content-between align-items-center border-bottom-0 pb-0">
+            <div>
+              <h4 class="mb-0 text-success" data-i18n="shippingAddress">Shipping Address</h4>
+            </div>
+            <button class="btn btn-outline-success btn-sm" onclick="editAddress()">
+              <i class="fas fa-edit"></i> Edit Address
+            </button>
+          </div>
+          <div class="profile-detail pt-2">
+            <div class="detail-value" id="user-address"></div>
+          </div>
+
+          <!-- Address Edit Form -->
+          <div id="address-edit-form" class="profile-detail" style="display: none; background: #f1f8f1;">
+            <div class="detail-label mb-3 text-success">Update Shipping Address</div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label small text-muted mb-1">First Name</label>
+                <input type="text" id="addr-first-name" class="form-control" placeholder="First Name">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label small text-muted mb-1">Last Name</label>
+                <input type="text" id="addr-last-name" class="form-control" placeholder="Last Name">
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">Address Line 1</label>
+                <input type="text" id="addr-line1" class="form-control" placeholder="Street Address, P.O. box, etc.">
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">Address Line 2 (Optional)</label>
+                <input type="text" id="addr-line2" class="form-control" placeholder="Apartment, suite, unit, building, floor, etc.">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">City</label>
+                <input type="text" id="addr-city" class="form-control" placeholder="City">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">State</label>
+                <input type="text" id="addr-state" class="form-control" placeholder="State">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label small text-muted mb-1">Zip Code</label>
+                <input type="text" id="addr-zip" class="form-control" placeholder="Postal Code">
+              </div>
+              <div class="col-md-12">
+                <label class="form-label small text-muted mb-1">Phone Number</label>
+                <input type="text" id="addr-phone" class="form-control" placeholder="Phone Number">
+              </div>
+              <div class="col-12">
+                <label class="form-label small text-muted mb-1">Delivery Instructions (Optional)</label>
+                <textarea id="addr-instructions" class="form-control" placeholder="Any specific instructions for delivery" rows="2"></textarea>
+              </div>
+              <div class="col-12 mt-4 text-end">
+                <button class="btn btn-secondary me-2" onclick="cancelEditAddress()">Cancel</button>
+                <button class="btn btn-success" onclick="saveAddress(event)">Save Address</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="organic-footer">
+    <div class="container">
+      <div class="row">
+        <!-- Company Info -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <div class="footer-about">
+            <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+            <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic produce. We believe
+              in quality,
+              freshness, and environmental responsibility.</p>
+            <div class="social-links">
+              <a href="#"><i class="fab fa-facebook-f"></i></a>
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-instagram"></i></a>
+              <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                  Products</span></a></li>
+            <li><a href="aboutus.html"><i class="fas fa-chevron-right"></i><span data-i18n="aboutUs">About Us</span></a>
+            </li>
+            <li><a href="privacypolicy.html"><i class="fas fa-chevron-right"></i><span data-i18n="privacyPolicy">Privacy
+                  Policy</span></a></li>
+            <li><a href="termcondition.html"><i class="fas fa-chevron-right"></i><span data-i18n="termCondition">Terms &
+                  Conditions</span></a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Product Categories -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+          <div class="product-tags">
+            <a href="seed/seeds.html" class="product-tag" data-i18n="seeds">Organic Seeds</a>
+            <a href="fruit/fruits.html" class="product-tag" data-i18n="fruits">Fresh Fruits</a>
+            <a href="vegetables/vegetable.html" class="product-tag" data-i18n="vegetables">Vegetables</a>
+            <a href="oil/coconut.html" class="product-tag" data-i18n="oilExtracts">Organic Oils</a>
+            <a href="grains/grains.html" class="product-tag" data-i18n="grains">Grains</a>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="col-lg-3 col-md-6 footer-column">
+          <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+          <div class="footer-contact">
+            <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                Karnataka</span></p>
+            <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+            <p><i class="fas fa-envelope"></i><span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+            <p><i class="fas fa-clock"></i><span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Bottom -->
+    <div class="footer-bottom">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p>&copy; 2026 AgroDirect All rights Reserved
+            </p>
+          </div>
+          <div class="col-md-6 text-end">
+            <!-- Optional content can go here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+
+  <script>
+    // Initialize auth when page loads
+    document.addEventListener("DOMContentLoaded", function () {
+      initAuth();
+      checkLoginStatus();
+    });
+
+    function checkLoginStatus() {
+      const token = localStorage.getItem('agroToken');
+      const userSection = document.getElementById('userSection');
+      const loginButton = document.getElementById('loginButton');
+
+      if (token) {
+        // User is logged in
+        userSection.style.display = 'block';
+        loginButton.style.display = 'none';
+        loadUserProfile();
+      } else {
+        // User is not logged in
+        userSection.style.display = 'none';
+        loginButton.style.display = 'block';
+      }
+    }
+
+    async function loadUserProfile() {
+      const token = localStorage.getItem('agroToken');
+      if (!token) return;
+
+      try {
+        const response = await fetch('/api/user/profile', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const userData = await response.json();
+          updateUserDisplay(userData);
+          displayProfile(userData);
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    }
+
+    function updateUserDisplay(userData) {
+      const userNameDisplay = document.getElementById('userNameDisplay');
+      if (userData.name) {
+        userNameDisplay.textContent = userData.name;
+        localStorage.setItem('userName', userData.name);
+      } else {
+        userNameDisplay.textContent = 'User';
+      }
+    }
+
+    function displayProfile(userData) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error-message').style.display = 'none';
+
+      document.getElementById('user-name').textContent = userData.name || 'Not specified';
+      document.getElementById('user-email').textContent = userData.email || 'Not specified';
+
+      let addressObj = null;
+      if (typeof userData.address === 'string') {
+          try { addressObj = JSON.parse(userData.address); } catch(e) {}
+      } else {
+          addressObj = userData.address;
+      }
+      
+      window.currentAddressObj = addressObj;
+      renderAddressText(addressObj);
+
+      document.getElementById('profile-content').style.display = 'block';
+    }
+
+    function renderAddressText(address) {
+      if (address) {
+        const line2Html = address.addressLine2 ? address.addressLine2 + '<br>' : '';
+        const addressText = `
+          <strong>${address.firstName || ''} ${address.lastName || ''}</strong><br>
+          ${address.addressLine1 || ''}<br>
+          ${line2Html}
+          ${address.city || ''}, ${address.state || ''} - ${address.zipCode || ''}<br>
+          Phone: ${address.phone || 'Not provided'}<br>
+          <small class="text-muted mt-2 d-inline-block">Instructions: ${address.deliveryInstructions || 'None'}</small>
+        `;
+        document.getElementById('user-address').innerHTML = addressText;
+      } else {
+        document.getElementById('user-address').innerHTML = '<span class="text-muted fst-italic">No address added yet. Click edit to add your shipping address.</span>';
+      }
+    }
+
+    // Name Editing Logic
+    function editName() {
+      document.getElementById('name-edit-form').style.display = 'block';
+      document.getElementById('edit-name-input').value = document.getElementById('user-name').textContent;
+    }
+    
+    function cancelEditName() {
+      document.getElementById('name-edit-form').style.display = 'none';
+    }
+
+    async function saveName(event) {
+      const newName = document.getElementById('edit-name-input').value.trim();
+      if(!newName) return alert('Name cannot be empty');
+      
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+      
+      try {
+        const token = localStorage.getItem('agroToken');
+        const res = await fetch('/api/user/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ name: newName })
+        });
+        
+        if(res.ok) {
+           document.getElementById('user-name').textContent = newName;
+           document.getElementById('userNameDisplay').textContent = newName;
+           localStorage.setItem('userName', newName);
+           cancelEditName();
+        } else {
+           alert('Failed to update name');
+        }
+      } catch(e) {
+        console.error(e);
+        alert('An error occurred');
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // Email Editing Logic
+    function editEmail() {
+      document.getElementById('email-edit-form').style.display = 'block';
+      document.getElementById('edit-email-input').value = document.getElementById('user-email').textContent;
+    }
+    
+    function cancelEditEmail() {
+      document.getElementById('email-edit-form').style.display = 'none';
+    }
+
+    async function saveEmail(event) {
+      const newEmail = document.getElementById('edit-email-input').value.trim();
+      if(!newEmail || !newEmail.includes('@')) return alert('Please enter a valid email address');
+      
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+      
+      try {
+        const token = localStorage.getItem('agroToken');
+        const currentName = document.getElementById('user-name').textContent;
+        const res = await fetch('/api/user/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify({ name: currentName, email: newEmail })
+        });
+        
+        const data = await res.json();
+        if(res.ok) {
+           if(data.token) {
+               if(localStorage.getItem('agroToken')) localStorage.setItem('agroToken', data.token);
+               if(sessionStorage.getItem('agroToken')) sessionStorage.setItem('agroToken', data.token);
+           }
+           document.getElementById('user-email').textContent = newEmail;
+           cancelEditEmail();
+           alert('Email updated successfully! Please use this new email for future logins.');
+        } else {
+           if(data.error && data.error.includes('UNIQUE constraint failed') || data.error === 'Email already exists') {
+             alert('This email is already registered.');
+           } else {
+             alert('Failed to update email: ' + (data.error || 'Unknown error'));
+           }
+        }
+      } catch(e) {
+        console.error(e);
+        alert('An error occurred');
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // Address Editing Logic
+    function editAddress() {
+      document.getElementById('address-edit-form').style.display = 'block';
+      if(window.currentAddressObj) {
+        const addr = window.currentAddressObj;
+        document.getElementById('addr-first-name').value = addr.firstName || '';
+        document.getElementById('addr-last-name').value = addr.lastName || '';
+        document.getElementById('addr-line1').value = addr.addressLine1 || '';
+        document.getElementById('addr-line2').value = addr.addressLine2 || '';
+        document.getElementById('addr-city').value = addr.city || '';
+        document.getElementById('addr-state').value = addr.state || '';
+        document.getElementById('addr-zip').value = addr.zipCode || '';
+        document.getElementById('addr-phone').value = addr.phone || '';
+        document.getElementById('addr-instructions').value = addr.deliveryInstructions || '';
+      }
+    }
+
+    function cancelEditAddress() {
+      document.getElementById('address-edit-form').style.display = 'none';
+    }
+
+    async function saveAddress(event) {
+      const addrObj = {
+        firstName: document.getElementById('addr-first-name').value.trim(),
+        lastName: document.getElementById('addr-last-name').value.trim(),
+        addressLine1: document.getElementById('addr-line1').value.trim(),
+        addressLine2: document.getElementById('addr-line2').value.trim(),
+        city: document.getElementById('addr-city').value.trim(),
+        state: document.getElementById('addr-state').value.trim(),
+        zipCode: document.getElementById('addr-zip').value.trim(),
+        phone: document.getElementById('addr-phone').value.trim(),
+        deliveryInstructions: document.getElementById('addr-instructions').value.trim()
+      };
+
+      if (!addrObj.firstName || !addrObj.addressLine1 || !addrObj.phone) {
+          return alert('Please fill in at least First Name, Address Line 1, and Phone.');
+      }
+
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = 'Saving...';
+      btn.disabled = true;
+
+      try {
+        const token = localStorage.getItem('agroToken');
+        const res = await fetch('/api/user/address', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+            body: JSON.stringify(addrObj)
+        });
+        
+        if(res.ok) {
+           window.currentAddressObj = addrObj;
+           renderAddressText(addrObj);
+           cancelEditAddress();
+        } else {
+           alert('Failed to save address');
+        }
+      } catch (e) {
+        console.error(e);
+        alert('An error occurred');
+      } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
+      }
+    }
+
+    // Logout functionality
+    document.getElementById('logoutButton')?.addEventListener('click', function (e) {
+      e.preventDefault();
+      localStorage.removeItem('agroToken');
+      localStorage.removeItem('userName');
+      window.location.href = 'index.html';
+    });
+  </script>
+
+  <script src="auth-core.js"></script>
+  <script type="module" src="lang-core.js"></script>
+  <script src="/notifications.js"></script>
+</body>
+
+</html>

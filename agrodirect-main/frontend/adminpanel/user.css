@@ -1,0 +1,173 @@
+body {
+    background-color: #f8f9fa;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 70px;
+}
+.navbar-custom {
+    background-color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.navbar-brand {
+    font-weight: 700;
+    color: #2c3e50;
+}
+.navbar-brand i {
+    color: #27ae60;
+}
+.nav-link {
+    font-weight: 500;
+    color: #34495e;
+    margin: 0 5px;
+}
+.nav-link:hover {
+    color: #27ae60;
+}
+.btn-login {
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    font-weight: 500;
+}
+.btn-login:hover {
+    background-color: #219653;
+    color: white;
+}
+.btn-order {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    font-weight: 500;
+}
+.btn-order:hover {
+    background-color: #2980b9;
+    color: white;
+}
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.panel-header {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.panel-title {
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+.section-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s;
+}
+.section-card:hover {
+    transform: translateY(-5px);
+}
+.section-title {
+    color: #2c3e50;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f1f1f1;
+}
+.user-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.user-table th {
+    background-color: #6c757d;
+    color: white;
+    padding: 15px;
+    font-weight: 500;
+}
+.user-table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+}
+.user-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+.user-table tbody tr:hover {
+    background-color: #f1f7fc;
+}
+.user-avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #e9ecef;
+}
+.user-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+.status-badge {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 50px;
+}
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+.role-badge {
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 50px;
+}
+.role-admin {
+    background-color: #d1e7ff;
+    color: #084298;
+}
+.role-user {
+    background-color: #e2e3e5;
+    color: #41464b;
+}
+.role-farmer {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+.loading-spinner {
+    display: none;
+    margin: 50px auto;
+    text-align: center;
+}
+.alert-toast {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+    max-width: 350px;
+}
+.search-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.pagination .page-item.active .page-link {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+.pagination .page-link {
+    color: #6c757d;
+}

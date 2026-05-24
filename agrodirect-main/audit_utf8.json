@@ -1,0 +1,127 @@
+﻿{
+    "auditReportVersion":  2,
+    "vulnerabilities":  {
+                            "sqlite3":  {
+                                            "name":  "sqlite3",
+                                            "severity":  "high",
+                                            "isDirect":  true,
+                                            "via":  [
+                                                        "tar"
+                                                    ],
+                                            "effects":  [
+
+                                                        ],
+                                            "range":  "\u003e=5.0.3",
+                                            "nodes":  [
+                                                          "node_modules/sqlite3"
+                                                      ],
+                                            "fixAvailable":  {
+                                                                 "name":  "sqlite3",
+                                                                 "version":  "5.0.2",
+                                                                 "isSemVerMajor":  true
+                                                             }
+                                        },
+                            "tar":  {
+                                        "name":  "tar",
+                                        "severity":  "high",
+                                        "isDirect":  false,
+                                        "via":  [
+                                                    {
+                                                        "source":  1112329,
+                                                        "name":  "tar",
+                                                        "dependency":  "tar",
+                                                        "title":  "Race Condition in node-tar Path Reservations via Unicode Ligature Collisions on macOS APFS",
+                                                        "url":  "https://github.com/advisories/GHSA-r6q2-hw4h-h46w",
+                                                        "severity":  "high",
+                                                        "cwe":  [
+                                                                    "CWE-176"
+                                                                ],
+                                                        "cvss":  {
+                                                                     "score":  8.8,
+                                                                     "vectorString":  "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:H/A:L"
+                                                                 },
+                                                        "range":  "\u003c=7.5.3"
+                                                    },
+                                                    {
+                                                        "source":  1112659,
+                                                        "name":  "tar",
+                                                        "dependency":  "tar",
+                                                        "title":  "node-tar Vulnerable to Arbitrary File Creation/Overwrite via Hardlink Path Traversal",
+                                                        "url":  "https://github.com/advisories/GHSA-34x7-hfp2-rc4v",
+                                                        "severity":  "high",
+                                                        "cwe":  [
+                                                                    "CWE-22",
+                                                                    "CWE-59"
+                                                                ],
+                                                        "cvss":  {
+                                                                     "score":  8.2,
+                                                                     "vectorString":  "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:L/A:N"
+                                                                 },
+                                                        "range":  "\u003c7.5.7"
+                                                    },
+                                                    {
+                                                        "source":  1113300,
+                                                        "name":  "tar",
+                                                        "dependency":  "tar",
+                                                        "title":  "node-tar is Vulnerable to Arbitrary File Overwrite and Symlink Poisoning via Insufficient Path Sanitization",
+                                                        "url":  "https://github.com/advisories/GHSA-8qq5-rm4j-mr97",
+                                                        "severity":  "high",
+                                                        "cwe":  [
+                                                                    "CWE-22"
+                                                                ],
+                                                        "cvss":  {
+                                                                     "score":  0,
+                                                                     "vectorString":  null
+                                                                 },
+                                                        "range":  "\u003c=7.5.2"
+                                                    },
+                                                    {
+                                                        "source":  1113375,
+                                                        "name":  "tar",
+                                                        "dependency":  "tar",
+                                                        "title":  "Arbitrary File Read/Write via Hardlink Target Escape Through Symlink Chain in node-tar Extraction",
+                                                        "url":  "https://github.com/advisories/GHSA-83g3-92jg-28cx",
+                                                        "severity":  "high",
+                                                        "cwe":  [
+                                                                    "CWE-22"
+                                                                ],
+                                                        "cvss":  {
+                                                                     "score":  7.1,
+                                                                     "vectorString":  "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:N"
+                                                                 },
+                                                        "range":  "\u003c7.5.8"
+                                                    }
+                                                ],
+                                        "effects":  [
+                                                        "sqlite3"
+                                                    ],
+                                        "range":  "\u003c=7.5.7",
+                                        "nodes":  [
+                                                      "node_modules/tar"
+                                                  ],
+                                        "fixAvailable":  {
+                                                             "name":  "sqlite3",
+                                                             "version":  "5.0.2",
+                                                             "isSemVerMajor":  true
+                                                         }
+                                    }
+                        },
+    "metadata":  {
+                     "vulnerabilities":  {
+                                             "info":  0,
+                                             "low":  0,
+                                             "moderate":  0,
+                                             "high":  2,
+                                             "critical":  0,
+                                             "total":  2
+                                         },
+                     "dependencies":  {
+                                          "prod":  124,
+                                          "dev":  30,
+                                          "optional":  50,
+                                          "peer":  0,
+                                          "peerOptional":  0,
+                                          "total":  203
+                                      }
+                 }
+}

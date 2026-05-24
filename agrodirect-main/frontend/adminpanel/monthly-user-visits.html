@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly User Visit Details - Agro-Direct</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { background: #f8f9fa; }
+        .chart-container { background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 2rem; margin-top: 2rem; }
+        .section-title { font-weight: 600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+            <h2 class="section-title"><i class="fas fa-users me-2"></i>Monthly User Visit Details</h2>
+            <a href="admin.html" class="btn btn-outline-secondary"><i class="fas fa-arrow-left me-1"></i>Back to Dashboard</a>
+        </div>
+        <div class="chart-container">
+            <canvas id="userVisitsBarChart" height="100"></canvas>
+        </div>
+        <div class="chart-container mt-4">
+            <canvas id="userVisitsLineChart" height="100"></canvas>
+        </div>
+    </div>
+    <script>
+        // Function to fetch real user visit (registration) data
+        async function fetchUserVisits() {
+            try {
+                const response = await fetch('/admin/analytics/user-visits');
+                const data = await response.json();
+                
+                if (data && data.length > 0) {
+                    const months = data.map(row => row.month);
+                    const counts = data.map(row => row.userCount);
+                    
+                    renderBarChart(months, counts);
+                    renderLineChart(months, counts);
+                } else {
+                    document.querySelector('.container').insertAdjacentHTML('beforeend', '<div class="alert alert-light border text-center mt-4">No user registration data found yet.</div>');
+                    renderBarChart(['No Data'], [0]);
+                    renderLineChart(['No Data'], [0]);
+                }
+            } catch (error) {
+                console.error('Error fetching user analytics:', error);
+            }
+        }
+
+        function renderBarChart(labels, data) {
+            new Chart(document.getElementById('userVisitsBarChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'User Registrations',
+                        data: data,
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 2,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false }, title: { display: true, text: 'Monthly User Registrations' } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function renderLineChart(labels, data) {
+            new Chart(document.getElementById('userVisitsLineChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Registration Trend',
+                        data: data,
+                        fill: false,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        tension: 0.3,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false }, title: { display: true, text: 'User Growth Trend' } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // Initialize
+        fetchUserVisits();
+    </script>
+</body>
+</html>

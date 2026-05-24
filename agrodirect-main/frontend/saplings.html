@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saplings - AgroConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* Use the same CSS styles as the previous fruits page */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .navbar {
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .product-card {
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+            height: 100%;
+            padding: 10px;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .product-img {
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #198754;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+        .product-price {
+            color: #e68900;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .product-description {
+            font-size: 0.9rem;
+            color: #6c757d;
+            min-height: 50px;
+            margin-bottom: 10px;
+        }
+        .btn-custom {
+            background-color: #198754;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            transition: all 0.3s ease-in-out;
+            margin-bottom: 5px;
+        }
+        .btn-custom:hover {
+            background-color: #155d44;
+        }
+        footer {
+            background: #198754;
+            padding: 15px;
+            color: white;
+            text-align: center;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+        .quantity {
+            width: 60px;
+            text-align: center;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+        }
+        .review-section {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .stars {
+            color: #ffc107;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-success">
+        <div class="container">
+            <a class="navbar-brand" href="#">AgroConnect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shopnow.html">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#review">Review Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#cart">Cart</a></li>
+                </ul>
+                <a href="login.html" class="btn btn-custom ms-3" id="loginButton">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="container my-5">
+        <h2 class="text-center mb-4">Saplings</h2>
+        <a href="home.html" class="back-btn">Back to Home</a>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-4">
+            <!-- Sapling Cards -->
+            <script>
+                const saplings = [
+                    { name: "Mango", img: "mango", price: 200, desc: "A tropical tree with delicious fruits.", rating: 4.6, reviews: ["Delicious mangoes!", "Great for gardens.", "Loves sunny spots."] },
+                    { name: "Neem", img: "neem", price: 150, desc: "A medicinal tree with numerous health benefits.", rating: 4.5, reviews: ["Great for medicinal use.", "Very easy to grow.", "Ideal for hot climates."] },
+                    { name: "Guava", img: "guava", price: 180, desc: "A fruit tree with sweet and tangy guavas.", rating: 4.7, reviews: ["Juicy guavas!", "Perfect for jams.", "Thrives in tropical climates."] },
+                    { name: "Apple", img: "apple", price: 250, desc: "A cool-climate tree that produces sweet apples.", rating: 4.8, reviews: ["Great for orchards.", "Tasty apples.", "Cold-resistant."] },
+                    { name: "Peach", img: "peach", price: 220, desc: "A fruit tree with sweet, juicy peaches.", rating: 4.6, reviews: ["Sweet peaches!", "Ideal for summer gardens.", "Great for jams."] },
+                    { name: "Chili", img: "chili", price: 100, desc: "A small plant with spicy fruits.", rating: 4.4, reviews: ["Adds heat to dishes.", "Easy to grow.", "Great in gardens."] },
+                    { name: "Pineapple", img: "pineapple", price: 300, desc: "Tropical plant with sweet fruits.", rating: 4.7, reviews: ["Delicious pineapples!", "Great for tropical gardens.", "Love the sweetness."] },
+                    { name: "Papaya", img: "papaya", price: 180, desc: "A tropical tree with sweet, fleshy fruits.", rating: 4.3, reviews: ["Sweet papayas!", "Easy to grow.", "Great in tropical areas."] },
+                    { name: "Banana", img: "banana", price: 150, desc: "A plant that yields delicious bananas.", rating: 4.6, reviews: ["Great for fruit lovers.", "Thrives in tropical climates.", "Loves the sun."] },
+                    { name: "Lemon", img: "lemon", price: 120, desc: "A citrus plant with tangy fruits.", rating: 4.5, reviews: ["Perfect for gardens.", "Adds freshness to dishes.", "Ideal for pots."] }
+                ];
+
+                document.write(
+                    saplings.map(sap => ` 
+                        <div class="col">
+                            <div class="card product-card">
+                                <img src="https://source.unsplash.com/400x300/?${sap.img}" class="card-img-top product-img" alt="${sap.name}">
+                                <div class="card-body text-center">
+                                    <h5 class="product-title">${sap.name}</h5>
+                                    <p class="product-description">${sap.desc}</p>
+                                    <p class="product-price">₹${sap.price} / sapling</p>
+                                    <div class="rating">
+                                        ${[...Array(5)].map((_, i) => i < sap.rating ? `<span class="stars">★</span>` : `<span>★</span>`).join('')}
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="quantity" class="form-label">Quantity</label>
+                                        <input type="number" id="quantity" class="form-control quantity" min="0" value="0">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="unit" class="form-label">Unit</label>
+                                        <select class="form-select" id="unit">
+                                            <option value="sapling">Sapling</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="total" class="form-label">Total Price</label>
+                                        <input type="text" class="form-control" id="total" disabled>
+                                    </div>
+                                    <button class="btn-custom">Add to Cart</button>
+                                    <a href="${sap.name.toLowerCase()}.html" class="btn btn-sm btn-outline-success">View</a>
+                                    <div class="collapse review-section" id="${sap.name.replace(/\s+/g, '')}Details">
+                                        <h6>Customer Reviews:</h6>
+                                        <ul>
+                                            ${sap.reviews.map(review => `<li>${review}</li>`).join('')}
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')
+                );
+            </script>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 AgroConnect. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const quantityInputs = document.querySelectorAll('#quantity');
+            const unitInputs = document.querySelectorAll('#unit');
+            const totalPriceInputs = document.querySelectorAll('#total');
+            
+            quantityInputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    const quantity = parseFloat(input.value);
+                    const unit = unitInputs[index].value;
+                    let totalPrice = 0;
+                    
+                    if (unit === 'sapling') {
+                        totalPrice = quantity * saplings[index].price;
+                    }
+                    totalPriceInputs[index].value = `₹${totalPrice.toFixed(2)}`;
+                });
+            });
+
+            document.body.style.opacity = "1";
+        });
+    </script>
+<script src="/notifications.js"></script></body>
+</html>
+

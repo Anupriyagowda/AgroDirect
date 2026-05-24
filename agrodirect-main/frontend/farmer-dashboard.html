@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Dashboard | AgroDirect</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="notifications.css">
+    <script src="notifications.js"></script>
+    <style>
+        :root {
+            --primary: #10b981;
+            --primary-dark: #064e3b;
+            --secondary: #64748b;
+            --light-bg: #f8fafc;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--light-bg);
+            color: var(--secondary);
+        }
+
+        .sidebar {
+            min-height: 100vh;
+            background: var(--primary-dark);
+            color: white;
+            padding: 24px;
+        }
+
+        .sidebar .position-sticky {
+            top: 0;
+            position: sticky;
+        }
+
+        .sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 16px;
+            margin: 8px 0;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .sidebar .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .sidebar .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .card {
+            border: none;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            background: white;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 24px;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .dashboard-header {
+            background: transparent;
+            padding: 30px 0;
+        }
+
+        .dashboard-header h1 {
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.025em;
+        }
+
+        .badge-verified {
+            background: var(--primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* --- Table Styling --- */
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 600;
+            text-transform: capitalize;
+            border-bottom: 1px solid #f1f5f9;
+            padding: 16px;
+        }
+
+        .table td {
+            padding: 16px;
+            vertical-align: middle;
+            color: #1e293b;
+        }
+
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #10b981;
+            color: white;
+        }
+
+        .action-icon-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 4px;
+            border: 1px solid transparent;
+            background: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .btn-edit-icon { border-color: #3b82f6; color: #3b82f6; }
+        .btn-delete-icon { border-color: #ef4444; color: #ef4444; }
+
+        .btn-edit-icon:hover { background: #3b82f6; color: white; }
+        .btn-delete-icon:hover { background: #ef4444; color: white; }
+
+        .product-list-title {
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 20px !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <nav class="col-md-2 d-none d-md-block sidebar">
+                <div class="position-sticky">
+                    <a href="home page/home.html" style="text-decoration: none; color: inherit;">
+                        <h4 class="text-center mb-4">🌿 AgroDirect</h4>
+                    </a>
+                    <ul class="nav flex-column px-3">
+                        <li class="nav-item"><a class="nav-link" href="../home page/home.html"><i class="fas fa-home me-2"></i> <span data-i18n="home">Home</span></a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#"><i class="fas fa-chart-pie me-2"></i>
+                            <span data-i18n="dashboard">Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('products')"><i
+                                class="fas fa-box me-2"></i> <span data-i18n="myProducts">My Products</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('orders')"><i
+                                class="fas fa-shopping-cart me-2"></i> <span data-i18n="orders">Orders</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('reviews')"><i
+                                class="fas fa-star me-2"></i> <span data-i18n="reviews">Reviews</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('sales')"><i
+                                class="fas fa-chart-line me-2"></i> <span data-i18n="monthlySales">Monthly Sales</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" onclick="showSection('profile')"><i
+                                class="fas fa-user me-2"></i> <span data-i18n="myProfile">My Profile</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#addProductModal"><i class="fas fa-upload me-2"></i> <span data-i18n="upload">Upload Product</span></a></li>
+                        
+                        <li class="nav-item mt-4">
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light w-100 dropdown-toggle text-start border-0 lang-btn" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="color: rgba(255, 255, 255, 0.8);">
+                                    <i class="fas fa-language me-2"></i> Language
+                                </button>
+                                <ul class="dropdown-menu shadow" aria-labelledby="langDropdown">
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="en-US">English</a></li>
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="hi-IN">हिन्दी</a></li>
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="kn-IN">ಕನ್ನಡ</a></li>
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="ta-IN">தமிழ்</a></li>
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="te-IN">తెలుగు</a></li>
+                                    <li><a class="dropdown-item lang-select" href="#" data-lang="gu-IN">ગુજરાતી</a></li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item mt-3"><a class="nav-link text-warning" href="#" onclick="logout()"><i
+                                class="fas fa-sign-out-alt me-2"></i> <span data-i18n="logout">Logout</span></a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto px-md-4">
+                <div class="dashboard-header d-flex justify-content-between align-items-center mb-4">
+                    <h1 class="h2"><span data-i18n="welcome">Welcome to AgroDirect</span>, <span id="farmerName">Farmer</span> <span id="verificationStatus" class="badge-verified ms-2"><i class="fas fa-check-circle"></i> <span data-i18n="verified">Verified</span></span></h1>
+                    <button class="btn btn-primary" id="addProductBtn" data-bs-toggle="modal"
+                        data-bs-target="#addProductModal">
+                        <i class="fas fa-plus me-2"></i> <span data-i18n="addNewProduct">Add New Product</span>
+                    </button>
+                </div>
+
+                <div id="unverifiedMessage" class="alert alert-warning" style="display: none;">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span data-i18n="pendingVerificationMsg"><strong>Your account is pending verification.</strong> You can browse your dashboard, but adding new products will be enabled once an admin verifies your account.</span>
+                    <hr>
+                    <div class="mt-3">
+                        <label class="form-label fw-bold">Upload Verification Documents (e.g. Farmer Certificate, FSSAI)</label>
+                        <form id="certificateForm" class="d-flex align-items-center">
+                            <input type="file" id="certificateFile" class="form-control w-auto" accept="image/*,application/pdf">
+                            <button type="submit" class="btn btn-sm btn-outline-primary ms-2">Upload</button>
+                            <span id="certificateStatus" class="ms-2"></span>
+                        </form>
+                        <div id="certificatePreview" class="mt-3" style="display:none; max-width: 300px; border: 1px dashed #ccc; padding: 10px;"></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Stats -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card p-3">
+                            <h6 data-i18n="totalProducts">Total Products</h6>
+                            <h2 id="totalProductsCount">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card p-3">
+                            <h6 data-i18n="activeOrders">Active Orders</h6>
+                            <h2 id="activeOrdersCount">0</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card p-3">
+                            <h6 data-i18n="revenue">Revenue</h6>
+                            <h2 id="totalRevenue">₹0</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div id="productsSection" class="section-content">
+                    <div class="card p-0 mb-4">
+                        <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="product-list-title m-0" data-i18n="myProducts">My Products</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th data-i18n="productImage">Image</th>
+                                        <th data-i18n="productName">Name</th>
+                                        <th data-i18n="productCategory">Category</th>
+                                        <th data-i18n="productPrice">Price</th>
+                                        <th data-i18n="productStatus">Status</th>
+                                        <th data-i18n="productActions">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productTableBody">
+                                    <!-- Dynamic Content -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Section -->
+                <div id="reviewsSection" class="section-content" style="display: none;">
+                    <div class="card p-0 mb-4">
+                        <div class="p-4 border-bottom">
+                            <h5 class="product-list-title m-0"><i class="fas fa-star text-warning me-2"></i>Product Reviews & Ratings</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Category</th>
+                                        <th>Rating</th>
+                                        <th>Comment</th>
+                                        <th>Reviewer</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="farmerReviewsTableBody">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Loading reviews...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="ordersSection" class="section-content" style="display: none;">
+                    <div class="card p-0 mb-4">
+                        <div class="p-4 border-bottom">
+                            <h5 class="product-list-title m-0"><i class="fas fa-shopping-cart text-primary me-2"></i>Recent Orders</h5>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Items</th>
+                                        <th>Total Price</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody">
+                                    <tr>
+                                        <td colspan="6" class="text-center py-4">Loading orders...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Monthly Sales Section -->
+                <div id="salesSection" class="section-content" style="display: none;">
+                    <div class="card p-0 mb-4">
+                        <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="product-list-title m-0"><i class="fas fa-chart-line text-success me-2"></i>Monthly Sales Performance</h5>
+                        </div>
+                        <div class="table-responsive p-3">
+                            <table class="table table-hover align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Month</th>
+                                        <th>Total Orders</th>
+                                        <th>Revenue (₹)</th>
+                                        <th>Trend</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="monthlySalesTableBody">
+                                    <tr>
+                                        <td colspan="4" class="text-center py-4">Loading sales data...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profileSection" class="section-content" style="display: none;">
+                    <div class="card p-0 mb-4">
+                        <div class="p-4 border-bottom d-flex justify-content-between align-items-center">
+                            <h5 class="product-list-title m-0"><i class="fas fa-user text-primary me-2"></i><span data-i18n="myProfile">My Profile</span></h5>
+                        </div>
+                        <div class="p-4">
+                            <!-- Name Row -->
+                            <div class="row mb-3 align-items-center border-bottom pb-3">
+                                <div class="col-md-3 fw-bold" data-i18n="fullName">Full Name</div>
+                                <div class="col-md-7" id="farmer-profile-name">Loading...</div>
+                                <div class="col-md-2 text-end">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editFarmerName()"><i class="fas fa-edit"></i> <span data-i18n="edit">Edit</span></button>
+                                </div>
+                            </div>
+                            <!-- Name Edit Form -->
+                            <div id="farmer-name-edit-form" class="row mb-3 bg-light p-3 rounded" style="display: none;">
+                                <div class="col-md-9">
+                                    <input type="text" id="edit-farmer-name-input" class="form-control" placeholder="Enter full name">
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <button class="btn btn-sm btn-success" onclick="saveFarmerName(event)" data-i18n="save">Save</button>
+                                    <button class="btn btn-sm btn-secondary" onclick="cancelEditFarmerName()" data-i18n="cancel">Cancel</button>
+                                </div>
+                            </div>
+
+                            <!-- Email Row -->
+                            <div class="row mb-3 align-items-center border-bottom pb-3">
+                                <div class="col-md-3 fw-bold" data-i18n="emailAddress">Email Address</div>
+                                <div class="col-md-7" id="farmer-profile-email">Loading...</div>
+                                <div class="col-md-2 text-end">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="editFarmerEmail()"><i class="fas fa-edit"></i> <span data-i18n="edit">Edit</span></button>
+                                </div>
+                            </div>
+                            <!-- Email Edit Form -->
+                            <div id="farmer-email-edit-form" class="row mb-3 bg-light p-3 rounded" style="display: none;">
+                                <div class="col-md-9">
+                                    <input type="email" id="edit-farmer-email-input" class="form-control" placeholder="Enter new email address">
+                                </div>
+                                <div class="col-md-3 text-end">
+                                    <button class="btn btn-sm btn-success" onclick="saveFarmerEmail(event)" data-i18n="save">Save</button>
+                                    <button class="btn btn-sm btn-secondary" onclick="cancelEditFarmerEmail()" data-i18n="cancel">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Add Product Modal -->
+    <div class="modal fade" id="addProductModal" tabindex="-1">
+        <!-- ... existing content ... -->
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-i18n="addNewProduct">Add Your Listing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm">
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="productCategory">Category</label>
+                            <select id="prodCategory" class="form-select" required>
+                                <option value="vegetables">Vegetables</option>
+                                <option value="fruits">Fruits</option>
+                                <option value="grains">Grains</option>
+                                <option value="oilextracts">Oil Extracts</option>
+                                <option value="saplings">Saplings</option>
+                                <option value="seeds">Seeds</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="productName">Product Name</label>
+                            <input type="text" id="prodName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><span data-i18n="productPrice">Price per Unit</span> (₹)</label>
+                            <input type="number" id="prodPrice" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="description">Description</label>
+                            <textarea id="prodDesc" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="productImage">Product Image</label>
+                            <input type="file" id="prodImg" class="form-control" accept="image/png, image/jpeg">
+                            <img id="addImagePreview" class="img-thumbnail mt-2" style="display:none;max-height:120px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Size/Unit (e.g., 1kg, 500g)</label>
+                            <input type="text" id="prodSize" class="form-control" placeholder="1kg">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" data-i18n="addNewProduct">List Product</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Product Modal -->
+    <div class="modal fade" id="editProductModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" data-i18n="edit">Edit Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editProductForm">
+                        <input type="hidden" id="editProdId">
+                        <input type="hidden" id="editProdCategory">
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="productName">Product Name</label>
+                            <input type="text" id="editProdName" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label"><span data-i18n="productPrice">Price per Unit</span> (₹)</label>
+                            <input type="number" id="editProdPrice" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="description">Description</label>
+                            <textarea id="editProdDesc" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="productImage">Product Image</label>
+                            <input type="file" id="editProdImg" class="form-control" accept="image/png, image/jpeg">
+                            <img id="editImagePreview" class="img-thumbnail mt-2" style="display:none;max-height:120px;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Size/Unit</label>
+                            <input type="text" id="editProdSize" class="form-control">
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="editProdAvailable">
+                                <label class="form-check-label" data-i18n="available">Available for Sale</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" data-i18n="saveChanges">Save Changes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light border-bottom-0">
+                    <h5 class="modal-title fw-bold">Order Details: <span id="modalOrderId" class="text-primary"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <h6 class="text-muted mb-3"><i class="fas fa-user-circle me-2"></i>Customer Information</h6>
+                                <p class="mb-2"><strong>Name:</strong> <span id="modalCustomerName"></span></p>
+                                <p class="mb-0"><strong>Email:</strong> <span id="modalCustomerEmail"></span></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-3 bg-light rounded h-100">
+                                <h6 class="text-muted mb-3"><i class="fas fa-info-circle me-2"></i>Order Info</h6>
+                                <p class="mb-2"><strong>Date:</strong> <span id="modalOrderDate"></span></p>
+                                <p class="mb-2"><strong>Status:</strong> <span id="modalOrderStatus" class="badge"></span></p>
+                                <p class="mb-0"><strong>Payment:</strong> <span id="modalPaymentMethod"></span> (<span id="modalPaymentStatus"></span>)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h6 class="text-muted mb-3"><i class="fas fa-map-marker-alt me-2"></i>Delivery Address</h6>
+                    <div class="p-3 bg-light rounded mb-4" id="modalDeliveryAddress" style="white-space: pre-wrap;">
+                        No address provided.
+                    </div>
+
+                    <h6 class="text-muted mb-3"><i class="fas fa-box-open me-2"></i>Order Items</h6>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-hover align-middle rounded overflow-hidden shadow-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Price</th>
+                                    <th>Qty</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modalOrderItems" class="bg-white border-top border-light">
+                                <!-- Items -->
+                            </tbody>
+                            <tfoot class="bg-light fw-bold border-top border-2 border-white">
+                                <tr>
+                                    <td colspan="3" class="text-end py-3">Grand Total:</td>
+                                    <td id="modalOrderTotal" class="text-success fs-5 py-3">₹0</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-top-0 d-flex justify-content-between">
+                    <div>
+                        <span class="text-muted me-2 small fw-medium">Quick Action:</span>
+                        <button class="btn btn-sm btn-outline-primary" onclick="window.updateModalOrderStatus('shipped')"><i class="fas fa-truck me-1"></i>Mark Shipped</button>
+                        <button class="btn btn-sm btn-success px-3 ms-1" onclick="window.updateModalOrderStatus('delivered')"><i class="fas fa-check-circle me-1"></i>Mark Delivered</button>
+                        <button id="modalRefundActionBtn" class="btn btn-sm btn-dark px-3 ms-1" onclick="window.processOrderRefund()" style="display:none;"><i class="fas fa-undo me-1"></i>Process Refund</button>
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="lang-core.js"></script>
+    <script type="module">
+        import VoiceGuidance from './voice-guidance.js';
+
+        // Certificate upload logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const certForm = document.getElementById('certificateForm');
+            const certFile = document.getElementById('certificateFile');
+            const certStatus = document.getElementById('certificateStatus');
+            const certPreview = document.getElementById('certificatePreview');
+            // Load existing certificate if present (dummy logic)
+            const storedCert = localStorage.getItem('farmerCertificate');
+            if (storedCert) {
+                certPreview.innerHTML = storedCert.endsWith('.pdf')
+                    ? `<a href="${storedCert}" target="_blank">View Uploaded Certificate (PDF)</a>`
+                    : `<img src="${storedCert}" alt="Certificate Preview" style="max-width:200px;">`;
+                certPreview.style.display = 'block';
+            }
+            certForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!certFile.files.length) {
+                    certStatus.textContent = 'Please select a file.';
+                    certStatus.className = 'text-danger ms-3';
+                    return;
+                }
+                const file = certFile.files[0];
+                if (file.type === 'application/pdf') {
+                    // For demo, just create a blob URL
+                    const url = URL.createObjectURL(file);
+                    localStorage.setItem('farmerCertificate', url);
+                    certPreview.innerHTML = `<a href="${url}" target="_blank">View Uploaded Certificate (PDF)</a>`;
+                } else if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        localStorage.setItem('farmerCertificate', e.target.result);
+                        certPreview.innerHTML = `<img src="${e.target.result}" alt="Certificate Preview" style="max-width:200px;">`;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    certStatus.textContent = 'Invalid file type.';
+                    certStatus.className = 'text-danger ms-3';
+                    return;
+                }
+                certStatus.textContent = 'Certificate uploaded!';
+                certStatus.className = 'text-success ms-3';
+                certPreview.style.display = 'block';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            VoiceGuidance.init();
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            if (!user || user.role !== 'farmer') {
+                window.location.href = 'index.html';
+                return;
+            }
+            document.getElementById('farmerName').textContent = user.name;
+
+            // Voice Welcome
+            VoiceGuidance.farmerWelcome();
+
+            // Initial checks
+            checkVerificationStatus(user.email);
+            fetchStats();
+            loadCategories();
+            fetchProducts();
+            fetchOrders();
+        });
+
+        // Re-render dynamic content on language change
+        window.addEventListener('languageChanged', () => {
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            if(user) checkVerificationStatus(user.email);
+            fetchProducts();
+            fetchOrders();
+            // Refetch or Re-render reviews
+            loadFarmerReviews();
+        });
+
+        let isVerifiedFarmer = false;
+
+        async function loadCategories() {
+            try {
+                const res = await fetch('/admin/categories');
+                const categories = await res.json();
+                const select = document.getElementById('prodCategory');
+                select.innerHTML = categories.map(c => `<option value="${c.name}">${c.displayName}</option>`).join('');
+            } catch (err) {
+                console.error("Error loading categories:", err);
+            }
+        }
+
+        async function checkVerificationStatus(email) {
+            try {
+                const response = await fetch(`/admin/farmer-status?email=${email}`);
+                const statusDiv = document.getElementById('verificationStatus');
+                if (response.ok) {
+                    const data = await response.json();
+                    isVerifiedFarmer = data.isVerified === 1;
+                    if (statusDiv) {
+                        const lang = localStorage.getItem('agroDirectLang') || 'en-US';
+                        const translations = window.translations ? window.translations[lang] : null;
+                        
+                        const verifiedLabel = (translations && translations.verified) || "Verified";
+                        let pendingLabel = (translations && translations.pendingVerificationMsg) || "Pending Verification";
+                        pendingLabel = pendingLabel.includes('.') ? pendingLabel.split('.')[0] : pendingLabel;
+
+                        statusDiv.innerHTML = isVerifiedFarmer 
+                            ? `<i class="fas fa-check-circle"></i> ${verifiedLabel}` 
+                            : `<i class="fas fa-clock"></i> ${pendingLabel}`;
+                        statusDiv.className = isVerifiedFarmer 
+                            ? 'badge-verified ms-2' 
+                            : 'badge bg-warning text-dark ms-2';
+                    }
+                    if (!isVerifiedFarmer) {
+                        document.getElementById('unverifiedMessage').style.display = 'block';
+                    }
+                }
+            } catch (error) {
+                console.error('Error checking verification status:', error);
+            }
+        }
+
+        async function fetchStats() {
+            // Stats fetching logic...
+        }
+
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(s => s.style.display = 'none');
+            // Hide dashboard stats unless in dashboard/products view
+            const stats = document.getElementById('dashboardStats');
+            if (stats) stats.style.display = (sectionId === 'dashboard' || sectionId === 'products') ? 'flex' : 'none';
+
+            // Reset active links
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+            if (sectionId === 'dashboard' || sectionId === 'products') {
+                document.getElementById('productsSection').style.display = 'block';
+                fetchProducts();
+                VoiceGuidance.speak('myProducts');
+                // Set active link for products
+                document.querySelectorAll('.nav-link').forEach(l => { 
+                    if (l.innerText.includes('My Products')) l.classList.add('active'); 
+                });
+            } else if (sectionId === 'orders') {
+                const ordersSec = document.getElementById('ordersSection');
+                if (ordersSec) ordersSec.style.display = 'block';
+                fetchOrders();
+                VoiceGuidance.speak('orders');
+                // Set active link for orders
+                document.querySelectorAll('.nav-link').forEach(l => { 
+                    if (l.innerText.includes('Orders')) l.classList.add('active'); 
+                });
+            } else if (sectionId === 'reviews') {
+                document.getElementById('reviewsSection').style.display = 'block';
+                loadFarmerReviews();
+                // Set active link for reviews
+                document.querySelectorAll('.nav-link').forEach(l => { 
+                    if (l.querySelector('.fa-star')) l.classList.add('active'); 
+                });
+            } else if (sectionId === 'sales') {
+                const salesSec = document.getElementById('salesSection');
+                if (salesSec) salesSec.style.display = 'block';
+                fetchMonthlySales();
+                // Set active link for sales
+                document.querySelectorAll('.nav-link').forEach(l => { 
+                    if (l.innerText.includes('Monthly Sales')) l.classList.add('active'); 
+                });
+            } else if (sectionId === 'profile') {
+                const profileSec = document.getElementById('profileSection');
+                if (profileSec) profileSec.style.display = 'block';
+                window.loadFarmerProfile();
+                document.querySelectorAll('.nav-link').forEach(l => { 
+                    if (l.innerText.includes('My Profile')) l.classList.add('active'); 
+                });
+            }
+        }
+
+        async function loadFarmerReviews() {
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            const tbody = document.getElementById('farmerReviewsTableBody');
+            
+            if (!tbody) return;
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">Loading reviews...</td></tr>';
+            
+            try {
+                const res = await fetch(`/api/reviews?sellerEmail=${user.email}`);
+                const reviews = await res.json();
+                
+                if (!reviews || reviews.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-muted">No reviews found for your products yet.</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = reviews.map(r => `
+                    <tr>
+                        <td class="fw-bold text-dark">${r.productName}</td>
+                        <td><span class="badge bg-light text-dark border text-capitalize">${r.category}</span></td>
+                        <td>
+                            <div class="text-warning">
+                                ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}
+                                <small class="text-muted ms-1">(${r.rating}/5)</small>
+                            </div>
+                        </td>
+                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${r.comment || ''}">
+                            ${r.comment || '<span class="text-muted italic">No comment</span>'}
+                        </td>
+                        <td>${r.userName || r.userEmail || 'Anonymous'}</td>
+                        <td class="text-muted small">${new Date(r.date).toLocaleDateString()}</td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                console.error("Error loading reviews:", e);
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4 text-danger">Failed to load reviews.</td></tr>';
+            }
+        }
+
+        let globalOrders = [];
+
+        window.fetchMonthlySales = fetchMonthlySales;
+        async function fetchMonthlySales() {
+            try {
+                const user = JSON.parse(localStorage.getItem('agroUser'));
+                if (!user) return;
+                
+                const tbody = document.getElementById('monthlySalesTableBody');
+                if (!tbody) return;
+                
+                const res = await fetch(`/api/orders?sellerEmail=${user.email}`);
+                const data = await res.json();
+                const orders = data.orders || [];
+                
+                const salesByMonth = {};
+                
+                orders.forEach(o => {
+                    if ((o.status || o.orderStatus || 'pending').toLowerCase() !== 'delivered' && (o.status || o.orderStatus || 'pending').toLowerCase() !== 'shipped' && (o.status || o.orderStatus || 'pending').toLowerCase() !== 'paid') {
+                        const st = (o.status || o.orderStatus || '').toLowerCase();
+                        if (['cancelled', 'misplaced', 'interrupted', 'refunded'].includes(st)) return;
+                    }
+                    
+                    const date = new Date(o.createdAt || o.date || Date.now());
+                    const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                    const monthName = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+                    
+                    if (!salesByMonth[monthKey]) {
+                        salesByMonth[monthKey] = {
+                            monthName: monthName,
+                            orderCount: 0,
+                            revenue: 0
+                        };
+                    }
+                    salesByMonth[monthKey].orderCount += 1;
+                    salesByMonth[monthKey].revenue += (o.totalPrice || o.totalAmount || 0);
+                });
+                
+                const sortedMonths = Object.keys(salesByMonth).sort().reverse();
+                
+                if (sortedMonths.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-muted">No sales data available.</td></tr>';
+                    return;
+                }
+                
+                tbody.innerHTML = sortedMonths.map(key => {
+                    const m = salesByMonth[key];
+                    return `
+                        <tr>
+                            <td class="fw-bold">${m.monthName}</td>
+                            <td><span class="badge bg-light text-dark border px-3 py-2 shadow-sm rounded-pill">${m.orderCount} Orders</span></td>
+                            <td class="text-success fw-bold fs-5">₹${m.revenue.toFixed(2)}</td>
+                            <td><span class="badge bg-success px-2 py-1"><i class="fas fa-arrow-trend-up me-1"></i> Growing</span></td>
+                        </tr>
+                    `;
+                }).join('');
+                
+            } catch (error) {
+                console.error('Error fetching monthly sales:', error);
+                const tbody = document.getElementById('monthlySalesTableBody');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="4" class="text-center py-4 text-danger">Failed to load sales data.</td></tr>';
+            }
+        }
+
+        window.fetchOrders = fetchOrders;
+        async function fetchOrders() {
+            try {
+                const user = JSON.parse(localStorage.getItem('agroUser'));
+                if (!user) {
+                    const tbody = document.getElementById('ordersTableBody');
+                    if (tbody) tbody.innerHTML = '<tr><td colspan="6">No orders found.</td></tr>';
+                    return;
+                }
+                const res = await fetch(`/api/orders?sellerEmail=${user.email}`);
+                const data = await res.json();
+                const orders = data.orders || [];
+                globalOrders = orders; // store for viewing
+                
+                const lang = localStorage.getItem('agroDirectLang') || 'en-US';
+                const t = window.translations ? window.translations[lang] : null;
+                const viewWord = (t && t.viewOrder) ? t.viewOrder : 'View';
+
+                const tbody = document.getElementById('ordersTableBody');
+                if (tbody) {
+                    tbody.innerHTML = orders.map(o => {
+                        const status = (o.status || o.orderStatus || 'pending').toLowerCase();
+                        let badgeClass = 'bg-info';
+                        let displayStatus = status.charAt(0).toUpperCase() + status.slice(1);
+                        
+                        if (status === 'pending') { badgeClass = 'bg-warning text-dark'; displayStatus = t?.pendingWord || 'Pending'; }
+                        if (status === 'shipped') { badgeClass = 'bg-primary'; displayStatus = t?.shippedWord || 'Shipped'; }
+                        if (status === 'delivered') { badgeClass = 'bg-success'; displayStatus = t?.deliveredWord || 'Delivered'; }
+                        if (status === 'cancelled') { badgeClass = 'bg-danger'; displayStatus = t?.cancelledWord || 'Cancelled'; }
+                        if (status === 'misplaced') { badgeClass = 'bg-danger text-light'; displayStatus = t?.misplacedWord || 'Misplaced'; }
+                        if (status === 'interrupted') { badgeClass = 'bg-danger text-light'; displayStatus = t?.interruptedWord || 'Interrupted'; }
+                        if (status === 'refunded') { badgeClass = 'bg-dark text-light'; displayStatus = t?.refundedWord || 'Refunded'; }
+
+                        let parsedItems = o.items;
+                        if (typeof parsedItems === 'string') {
+                            try { parsedItems = JSON.parse(parsedItems); } catch(e) { parsedItems = []; }
+                        }
+                        // try translate category items if possible
+                        const itemsStr = parsedItems.map(i => {
+                             const translatedName = t && t[i.name.toLowerCase()] ? t[i.name.toLowerCase()] : i.name;
+                             return translatedName;
+                        }).join(', ');
+
+                        return `
+                        <tr>
+                            <td class="fw-medium">#${o.id || o._id}</td>
+                            <td>${o.userEmail}</td>
+                            <td class="text-truncate" style="max-width: 200px;" title="${itemsStr}">${itemsStr}</td>
+                            <td class="fw-bold text-dark">₹${o.totalPrice || o.totalAmount}</td>
+                            <td><span class="badge ${badgeClass} px-2 py-1 rounded-pill">${displayStatus}</span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary mb-1 me-1 shadow-sm" onclick="window.viewOrderDetails('${o.id || o._id}')" title="${viewWord}">
+                                    <i class="fas fa-eye"></i> ${viewWord}
+                                </button>
+                                <div class="dropdown d-inline-block mb-1 shadow-sm">
+                                    <button class="btn btn-sm btn-success dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" ${!isVerifiedFarmer ? 'disabled' : ''}>
+                                        Status
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="min-width: 140px;">
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'pending')"><i class="fas fa-clock text-warning me-2 w-15px"></i>${t?.pendingWord || 'Pending'}</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'shipped')"><i class="fas fa-truck text-primary me-2 w-15px"></i>${t?.shippedWord || 'Shipped'}</a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'delivered')"><i class="fas fa-check-circle text-success me-2 w-15px"></i>${t?.deliveredWord || 'Delivered'}</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'interrupted')"><i class="fas fa-exclamation-circle me-2 w-15px"></i>${t?.interruptedWord || 'Interrupted'}</a></li>
+                                        <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'misplaced')"><i class="fas fa-map-marker-alt me-2 w-15px"></i>${t?.misplacedWord || 'Misplaced'}</a></li>
+                                        <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'cancelled')"><i class="fas fa-times-circle me-2 w-15px"></i>${t?.cancelledWord || 'Cancelled'}</a></li>
+                                        <li><a class="dropdown-item py-2 text-dark" href="javascript:void(0)" onclick="window.updateStatus('${o.id || o._id}', 'refunded')"><i class="fas fa-undo me-2 w-15px"></i>${t?.refundedWord || 'Refunded'}</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        `;
+                    }).join('');
+                }
+                const activeCountEl = document.getElementById('activeOrdersCount');
+                if(activeCountEl) {
+                    activeCountEl.innerText = orders.filter(o => {
+                        const st = (o.status || o.orderStatus || 'pending').toLowerCase();
+                        return st === 'pending' || st === 'shipped';
+                    }).length;
+                }
+                
+                // Update Revenue
+                const revenue = orders.reduce((sum, o) => {
+                    const st = (o.status || o.orderStatus || '').toLowerCase();
+                    if (st === 'delivered' || st === 'paid' || o.isPaid) {
+                        return sum + (o.totalPrice || o.totalAmount || 0);
+                    }
+                    return sum;
+                }, 0);
+                const revEl = document.getElementById('totalRevenue');
+                if(revEl) revEl.innerText = `₹${revenue.toFixed(2)}`;
+            } catch (err) {
+                const tbody = document.getElementById('ordersTableBody');
+                if (tbody) tbody.innerHTML = '<tr><td colspan="6" class="text-danger text-center py-4">Error loading orders.</td></tr>';
+                console.error('Error fetching orders:', err);
+            }
+        }
+
+        window.updateStatus = updateStatus;
+        async function updateStatus(id, status) {
+            try {
+                const res = await fetch(`/api/orders/${id}/status`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status })
+                });
+                if (res.ok) {
+                    if (window.VoiceGuidance && window.VoiceGuidance.speak) {
+                        window.VoiceGuidance.speak('voiceStatusUpdated');
+                    }
+                    window.fetchOrders();
+                }
+            } catch (e) {
+                console.error("Error updating status:", e);
+            }
+        }
+
+        window.currentViewOrderId = null;
+        let orderModalInstance = null;
+
+        window.viewOrderDetails = function(orderId) {
+            const order = (globalOrders || []).find(o => String(o.id || o._id) === String(orderId));
+            if (!order) return;
+            
+            window.currentViewOrderId = orderId;
+            document.getElementById('modalOrderId').textContent = '#' + (order.id || order._id);
+            
+            // Customer Info
+            const customerName = (order.userId && order.userId.name) ? order.userId.name : 'Unknown Customer';
+            document.getElementById('modalCustomerName').textContent = customerName;
+            document.getElementById('modalCustomerEmail').textContent = order.userEmail || 'N/A';
+            
+            // Order Info
+            document.getElementById('modalOrderDate').textContent = new Date(order.orderDate || order.createdAt).toLocaleString();
+            
+            const status = (order.status || order.orderStatus || 'pending').toLowerCase();
+            const statusEl = document.getElementById('modalOrderStatus');
+            statusEl.textContent = status.toUpperCase();
+            statusEl.className = 'badge px-2 py-1 rounded-pill ' + 
+                (status === 'pending' ? 'bg-warning text-dark' : 
+                 status === 'shipped' ? 'bg-primary' : 
+                 status === 'delivered' ? 'bg-success' : 
+                 (status === 'cancelled' || status === 'misplaced' || status === 'interrupted') ? 'bg-danger' : 
+                 status === 'refunded' ? 'bg-dark' : 'bg-secondary');
+
+            document.getElementById('modalPaymentMethod').textContent = order.paymentMethod || 'Online/COD';
+            const isPaid = order.isPaid || (order.paymentMethod && order.paymentMethod.toLowerCase() === 'online' && status !== 'cancelled');
+            const payStatusEl = document.getElementById('modalPaymentStatus');
+            payStatusEl.textContent = isPaid ? 'Paid' : 'Unpaid';
+            payStatusEl.className = isPaid ? 'text-success fw-bold' : 'text-danger fw-bold';
+            
+            // Address
+            let addrHtml = '<span class="text-muted fst-italic">No address provided.</span>';
+            if (order.userId && order.userId.address) {
+                const addr = order.userId.address;
+                if (typeof addr === 'object' && addr !== null) {
+                   const lines = [];
+                   if (addr.addressLine1) lines.push(addr.addressLine1);
+                   if (addr.addressLine2) lines.push(addr.addressLine2);
+                   let cityZip = [];
+                   if (addr.city) cityZip.push(addr.city);
+                   if (addr.zip) cityZip.push(addr.zip);
+                   if (cityZip.length) lines.push(cityZip.join(', '));
+                   if (addr.state) lines.push(addr.state);
+                   if (addr.phone) lines.push('<strong>Phone:</strong> ' + addr.phone);
+                   if (lines.length > 0) addrHtml = lines.join('<br>');
+                } else if (typeof addr === 'string') {
+                   addrHtml = addr;
+                }
+            }
+            document.getElementById('modalDeliveryAddress').innerHTML = addrHtml;
+            
+            // Items
+            let parsedItems = order.items;
+            if (typeof parsedItems === 'string') {
+                try { parsedItems = JSON.parse(parsedItems); } catch(e) { parsedItems = []; }
+            }
+            
+            const itemsHtml = parsedItems.map(item => `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            ${item.img ? `<img src="${item.img}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;" class="me-3">` : ''}
+                            <div>
+                                <span class="fw-medium text-dark">${item.name || 'Unknown Item'}</span>
+                                <small class="text-muted d-block">${item.unit || item.size || ''}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="align-middle">₹${item.price || 0}</td>
+                    <td class="align-middle fw-medium">${item.quantity || 1}</td>
+                    <td class="align-middle fw-bold">₹${(item.price || 0) * (item.quantity || 1)}</td>
+                </tr>
+            `).join('');
+            
+            // Insert items into modal
+            document.getElementById('modalOrderItems').innerHTML = itemsHtml || '<tr><td colspan="4" class="text-center text-muted">No items found</td></tr>';
+            
+            document.getElementById('modalOrderTotal').textContent = '₹' + (order.totalPrice || order.totalAmount || 0);
+
+            const refundBtn = document.getElementById('modalRefundActionBtn');
+            if (refundBtn) {
+                if (isPaid && (status === 'cancelled' || status === 'interrupted' || status === 'misplaced')) {
+                    refundBtn.style.display = 'inline-block';
+                } else {
+                    refundBtn.style.display = 'none';
+                }
+            }
+            
+            if (!orderModalInstance) {
+                orderModalInstance = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+            }
+            orderModalInstance.show();
+        };
+
+        window.updateModalOrderStatus = function(status) {
+            if (window.currentViewOrderId) {
+                window.updateStatus(window.currentViewOrderId, status);
+                
+                const statusEl = document.getElementById('modalOrderStatus');
+                statusEl.textContent = status.toUpperCase();
+                statusEl.className = 'badge px-2 py-1 rounded-pill ' + 
+                    (status === 'pending' ? 'bg-warning text-dark' : 
+                     status === 'shipped' ? 'bg-primary' : 
+                     status === 'delivered' ? 'bg-success' : 
+                     (status === 'cancelled' || status === 'misplaced' || status === 'interrupted') ? 'bg-danger text-light' : 
+                     status === 'refunded' ? 'bg-dark text-light' : 'bg-secondary');
+
+                // Adjust refund button visibility if status changes
+                const refundBtn = document.getElementById('modalRefundActionBtn');
+                if (refundBtn && window.globalOrders) {
+                    const order = window.globalOrders.find(o => String(o.id || o._id) === String(window.currentViewOrderId));
+                    if (order) {
+                        const isPaid = order.isPaid || (order.paymentMethod && order.paymentMethod.toLowerCase() === 'online' && status !== 'cancelled');
+                        if (isPaid && (status === 'cancelled' || status === 'interrupted' || status === 'misplaced')) {
+                            refundBtn.style.display = 'inline-block';
+                        } else {
+                            refundBtn.style.display = 'none';
+                        }
+                    }
+                }
+            }
+        };
+
+        window.processOrderRefund = async function() {
+            if (!window.currentViewOrderId) return;
+            
+            if (confirm("Are you sure you want to process a refund for this order? This action will set the status to 'Refunded'.")) {
+                try {
+                    // Update status directly to 'refunded' through the existing endpoint
+                    const res = await fetch(`/api/orders/${window.currentViewOrderId}/status`, {
+                        method: 'PATCH',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ status: 'refunded' })
+                    });
+                    if (res.ok) {
+                        if (window.VoiceGuidance && window.VoiceGuidance.speak) {
+                            window.VoiceGuidance.speak('voiceStatusUpdated');
+                        }
+                        
+                        const statusEl = document.getElementById('modalOrderStatus');
+                        if(statusEl) {
+                            statusEl.textContent = 'REFUNDED';
+                            statusEl.className = 'badge px-2 py-1 rounded-pill bg-dark text-light';
+                        }
+                        
+                        const refundBtn = document.getElementById('modalRefundActionBtn');
+                        if(refundBtn) refundBtn.style.display = 'none';
+                        
+                        window.fetchOrders();
+                        
+                        // Show quick toast/alert logic since native notifications take too much code
+                        const toastMsg = document.createElement('div');
+                        toastMsg.className = 'position-fixed bottom-0 end-0 p-3';
+                        toastMsg.style.zIndex = '1060';
+                        toastMsg.innerHTML = `<div class="toast show bg-success text-white" role="alert"><div class="toast-body"><i class="fas fa-check-circle me-2"></i>Refund processed successfully.</div></div>`;
+                        document.body.appendChild(toastMsg);
+                        setTimeout(() => toastMsg.remove(), 3000);
+                        
+                    } else {
+                        alert("Failed to process refund. Please try again.");
+                    }
+                } catch (e) {
+                    console.error("Refund error:", e);
+                    alert("An error occurred while processing the refund.");
+                }
+            }
+        };
+
+        async function fetchProducts() {
+            try {
+                const user = JSON.parse(localStorage.getItem('agroUser'));
+                const catRes = await fetch('/admin/categories');
+                const categories = await catRes.json();
+                
+                let allProducts = [];
+                for (const cat of categories) {
+                    const res = await fetch(`/admin/items/${cat.name}?sellerEmail=${user.email}`);
+                    const data = await res.json();
+                    if (Array.isArray(data)) {
+                        allProducts = allProducts.concat(data.map(p => ({ ...p, category: cat.name })));
+                    }
+                }
+                renderProducts(allProducts);
+            } catch (err) {
+                console.error("Error fetching products:", err);
+            }
+        }
+
+        function renderProducts(products) {
+            const tbody = document.getElementById('productTableBody');
+            document.getElementById('totalProductsCount').innerText = products.length;
+            
+            if (products.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-5">You haven\'t listed any products yet.</td></tr>';
+                return;
+            }
+
+            const lang = localStorage.getItem('agroDirectLang') || 'en-US';
+            const t = window.translations ? window.translations[lang] : null;
+
+            tbody.innerHTML = products.map(p => {
+                const translatedCategory = t && t[p.category.toLowerCase()] ? t[p.category.toLowerCase()] : p.category;
+                const activeWord = t?.activeWord || 'Active';
+                const hiddenWord = t?.hiddenWord || 'Hidden';
+                
+                return `
+                <tr>
+                    <td>
+                        <img src="${p.img || 'https://via.placeholder.com/50'}" width="50" height="50" style="object-fit: cover; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    </td>
+                    <td class="fw-medium">${p.name}</td>
+                    <td class="text-muted text-capitalize">${translatedCategory}</td>
+                    <td class="fw-bold text-dark">₹${p.price}</td>
+                    <td><span class="status-badge ${p.isAvailable ? '' : 'bg-secondary'}">${p.isAvailable ? activeWord : hiddenWord}</span></td>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <button class="action-icon-btn btn-edit-icon" onclick='openEditModal(${JSON.stringify(p).replace(/'/g, "&apos;")})' title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-icon-btn btn-delete-icon" onclick="deleteProd('${p.category}', '${p.id}', '${p.name}')" ${!isVerifiedFarmer ? 'disabled' : ''} title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `}).join('');
+        }
+
+        let currentEditImg = '';
+        function openEditModal(product) {
+            document.getElementById('editProdId').value = product.id;
+            document.getElementById('editProdCategory').value = product.category;
+            document.getElementById('editProdName').value = product.name;
+            document.getElementById('editProdPrice').value = product.price;
+            document.getElementById('editProdDesc').value = product.desc;
+            document.getElementById('editProdImg').value = '';
+            document.getElementById('editProdSize').value = product.size || '';
+            document.getElementById('editProdAvailable').checked = product.isAvailable == 1;
+            
+            currentEditImg = product.img || '';
+            const preview = document.getElementById('editImagePreview');
+            if (currentEditImg) {
+                preview.style.display = 'block';
+                preview.src = currentEditImg;
+            } else {
+                preview.style.display = 'none';
+                preview.src = '';
+            }
+            new bootstrap.Modal(document.getElementById('editProductModal')).show();
+        }
+
+        document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            
+            let imgData = currentEditImg;
+            const imgFile = document.getElementById('editProdImg').files[0];
+            if (imgFile) {
+                imgData = await toBase64(imgFile);
+            }
+
+            const payload = {
+                id: document.getElementById('editProdId').value,
+                category: document.getElementById('editProdCategory').value,
+                name: document.getElementById('editProdName').value,
+                price: document.getElementById('editProdPrice').value,
+                desc: document.getElementById('editProdDesc').value,
+                img: imgData,
+                size: document.getElementById('editProdSize').value,
+                isAvailable: document.getElementById('editProdAvailable').checked,
+                sellerEmail: user.email
+            };
+
+            const res = await fetch('/admin/edit-product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                showSuccess("Product updated successfully");
+                bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
+                fetchProducts();
+            } else {
+                showError(data.message);
+            }
+        });
+
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!isVerifiedFarmer) {
+                showError("Verification pending. You cannot add products yet.");
+                return;
+            }
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            
+            let imgData = '';
+            const imgFile = document.getElementById('prodImg').files[0];
+            if (imgFile) {
+                imgData = await toBase64(imgFile);
+            }
+
+            const payload = {
+                category: document.getElementById('prodCategory').value,
+                name: document.getElementById('prodName').value,
+                price: document.getElementById('prodPrice').value,
+                desc: document.getElementById('prodDesc').value,
+                img: imgData,
+                size: document.getElementById('prodSize').value || null,
+                sellerEmail: user.email,
+                isAvailable: true
+            };
+
+            const res = await fetch('/admin/add-product', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+            if (data.success) {
+                showSuccess("Product added successfully");
+                bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
+                document.getElementById('addProductForm').reset();
+                addImagePreview.style.display = 'none';
+                fetchProducts();
+            } else {
+                showError(data.message);
+            }
+        });
+
+        async function deleteProd(cat, id, name) {
+            const confirmed = await modernConfirm('Delete Product', `Are you sure you want to delete ${name}?`);
+            if (confirmed) {
+                try {
+                    const user = JSON.parse(localStorage.getItem('agroUser'));
+                    const res = await fetch(`/admin/delete-item/${cat}/${id}?sellerEmail=${user.email}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        showSuccess("Product deleted");
+                        fetchProducts();
+                    } else {
+                        const data = await res.json();
+                        showError(data.message || "Failed to delete product");
+                    }
+                } catch (e) {
+                    showError("Error deleting product");
+                }
+            }
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = '/index.html';
+        }
+
+        // Attach to window
+        window.showSection = showSection;
+        window.updateStatus = updateStatus;
+        window.deleteProd = deleteProd;
+        window.openEditModal = openEditModal;
+        window.logout = logout;
+
+        // Helper: file to base64
+        function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = reject;
+            });
+        }
+
+        // Image preview for add product
+        const prodImgInput = document.getElementById('prodImg');
+        const addImagePreview = document.getElementById('addImagePreview');
+        if (prodImgInput && addImagePreview) {
+            prodImgInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        addImagePreview.src = e.target.result;
+                        addImagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    addImagePreview.src = '';
+                    addImagePreview.style.display = 'none';
+                }
+            });
+        }
+        // To clear file input: prodImgInput.value = "";
+
+        // Image preview for edit product
+        const editProdImgInput = document.getElementById('editProdImg');
+        const editImagePreview = document.getElementById('editImagePreview');
+        if (editProdImgInput && editImagePreview) {
+            editProdImgInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        editImagePreview.src = e.target.result;
+                        editImagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    editImagePreview.src = '';
+                    editImagePreview.style.display = 'none';
+                }
+            });
+        }
+        // To clear file input: editProdImgInput.value = "";
+
+        // ==========================
+        // Profile Management Logic
+        // ==========================
+        window.loadFarmerProfile = async function() {
+            const token = localStorage.getItem('agroToken');
+            if (!token) return;
+            try {
+                const res = await fetch('/api/user/profile', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    document.getElementById('farmer-profile-name').textContent = data.name || 'Not specified';
+                    document.getElementById('farmer-profile-email').textContent = data.email || 'Not specified';
+                }
+            } catch (e) {
+                console.error('Error loading profile:', e);
+            }
+        };
+
+        window.editFarmerName = function() {
+            document.getElementById('farmer-name-edit-form').style.display = 'flex';
+            document.getElementById('edit-farmer-name-input').value = document.getElementById('farmer-profile-name').textContent;
+        };
+
+        window.cancelEditFarmerName = function() {
+            document.getElementById('farmer-name-edit-form').style.display = 'none';
+        };
+
+        window.saveFarmerName = async function(event) {
+            const newName = document.getElementById('edit-farmer-name-input').value.trim();
+            if(!newName) return alert('Name cannot be empty');
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('agroToken');
+                const res = await fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ name: newName })
+                });
+                if(res.ok) {
+                    document.getElementById('farmer-profile-name').textContent = newName;
+                    document.getElementById('farmerName').textContent = newName;
+                    
+                    let user = JSON.parse(localStorage.getItem('agroUser') || '{}');
+                    if(user) { user.name = newName; localStorage.setItem('agroUser', JSON.stringify(user)); }
+                    
+                    window.cancelEditFarmerName();
+                } else {
+                    alert('Failed to update name');
+                }
+            } catch(e) {
+                console.error(e);
+                alert('An error occurred');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        };
+
+        window.editFarmerEmail = function() {
+            document.getElementById('farmer-email-edit-form').style.display = 'flex';
+            document.getElementById('edit-farmer-email-input').value = document.getElementById('farmer-profile-email').textContent;
+        };
+
+        window.cancelEditFarmerEmail = function() {
+            document.getElementById('farmer-email-edit-form').style.display = 'none';
+        };
+
+        window.saveFarmerEmail = async function(event) {
+            const newEmail = document.getElementById('edit-farmer-email-input').value.trim();
+            if(!newEmail || !newEmail.includes('@')) return alert('Please enter a valid email address');
+            
+            const btn = event.target;
+            const originalText = btn.textContent;
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+            
+            try {
+                const token = localStorage.getItem('agroToken');
+                const currentName = document.getElementById('farmer-profile-name').textContent;
+                const res = await fetch('/api/user/profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ name: currentName, email: newEmail })
+                });
+                const data = await res.json();
+                if(res.ok) {
+                    if(data.token) {
+                        if(localStorage.getItem('agroToken')) localStorage.setItem('agroToken', data.token);
+                        if(sessionStorage.getItem('agroToken')) sessionStorage.setItem('agroToken', data.token);
+                    }
+                    
+                    let user = JSON.parse(localStorage.getItem('agroUser') || '{}');
+                    if(user) { user.email = newEmail; localStorage.setItem('agroUser', JSON.stringify(user)); }
+                    
+                    document.getElementById('farmer-profile-email').textContent = newEmail;
+                    window.cancelEditFarmerEmail();
+                    alert('Email updated successfully! Please use this new email for future logins.');
+                } else {
+                    if(data.error && data.error.includes('UNIQUE constraint failed') || data.error === 'Email already exists') {
+                        alert('This email is already registered.');
+                    } else {
+                        alert('Failed to update email: ' + (data.error || 'Unknown error'));
+                    }
+                }
+            } catch(e) {
+                console.error(e);
+                alert('An error occurred');
+            } finally {
+                btn.textContent = originalText;
+                btn.disabled = false;
+            }
+        };
+    </script>
+    <!-- Reviews Modal -->
+    <div class="modal fade" id="farmerReviewsModal" tabindex="-1" aria-labelledby="farmerReviewsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="farmerReviewsModalLabel">Product Reviews</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="farmerReviewsModalBody">
+                    <!-- Reviews will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

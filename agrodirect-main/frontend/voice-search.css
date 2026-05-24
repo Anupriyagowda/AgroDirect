@@ -1,0 +1,64 @@
+/* Voice Search UI styles */
+
+.search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.voice-search-btn {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #27ae60; /* Success green */
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 5;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.voice-search-btn:hover {
+    color: #2ecc71;
+    transform: scale(1.1);
+}
+
+.voice-search-btn.listening {
+    color: #e74c3c; /* Red when listening */
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.4);
+    }
+    70% {
+        transform: scale(1.2);
+        box-shadow: 0 0 0 10px rgba(231, 76, 60, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+    }
+}
+
+/* Ensure search box has enough padding for the icon */
+.search-box {
+    padding-right: 45px !important;
+}
+
+/* Dark mode support if applicable */
+.dark-mode .voice-search-btn {
+    color: #2ecc71;
+}
+
+.dark-mode .voice-search-btn.listening {
+    color: #ff4757;
+}

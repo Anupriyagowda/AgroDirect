@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="orderConfirmed">Confirm Order - AgroDirect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2e7d32;
+            --secondary-color: #8bc34a;
+            --accent-color: #f9a825;
+            --light-green: #e8f5e9;
+            --dark-green: #1b5e20;
+            --text-color: #333;
+            --light-text: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            transition: opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        /* Navbar Styling */
+        .custom-navbar {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        /* Order Review Container */
+        .order-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .order-header {
+            background-color: var(--light-green);
+            padding: 20px 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .order-body {
+            padding: 30px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-green);
+        }
+
+        /* Cart Items Table */
+        .cart-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cart-table th {
+            text-align: left;
+            padding: 12px 15px;
+            background-color: var(--light-green);
+            color: var(--dark-green);
+            font-weight: 600;
+        }
+
+        .cart-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .cart-item-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quantity-input {
+            width: 50px;
+            text-align: center;
+            margin: 0 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+
+        .remove-item {
+            color: #dc3545;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .remove-item:hover {
+            color: #a71d2a;
+        }
+
+        /* Address Section */
+        .address-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .address-card h5 {
+            color: var(--dark-green);
+            margin-bottom: 15px;
+        }
+
+        .edit-address {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .payment-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .payment-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(139, 195, 74, 0.2);
+        }
+
+        .payment-card.active {
+            border-color: var(--primary-color);
+            background-color: rgba(46, 125, 50, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 24px;
+            margin-right: 15px;
+            color: var(--primary-color);
+            width: 40px;
+            text-align: center;
+        }
+
+        .payment-details {
+            flex-grow: 1;
+        }
+
+        .payment-details h6 {
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .payment-details p {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .payment-check {
+            margin-left: 15px;
+        }
+
+        /* Order Summary */
+        .order-summary {
+            background: var(--light-green);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark-green);
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+            margin-top: 10px;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 30px;
+            padding: 10px 25px;
+            font-weight: 500;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 500;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+        }
+
+        /* Delivery Restriction Alert */
+        .delivery-alert {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 5px solid #ffc107;
+            border-radius: 4px;
+        }
+
+        /* Footer Styling */
+        .organic-footer {
+            background-color: #1e3c14;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 70px 0 0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .order-container {
+                margin: 20px;
+            }
+
+            .cart-table thead {
+                display: none;
+            }
+
+            .cart-table tr {
+                display: block;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #eee;
+            }
+
+            .cart-table td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: none;
+            }
+
+            .cart-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                margin-right: 20px;
+                color: var(--dark-green);
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .action-buttons .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="fadeIn">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🌿 AgroDirect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home page/home.html" data-i18n="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shopnow.html" data-i18n="shopNow">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contactus.html" data-i18n="contactUs">Contact Us</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="review.html" data-i18n="reviewUs">Review Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html"><span data-i18n="cart">Cart</span> <i
+                                class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+                <div class="d-flex align-items-center ms-3">
+                    <div class="user-section">
+                        <div class="dropdown">
+                            <button class="btn btn-user dropdown-toggle" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="userNameDisplay"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i><span
+                                            data-i18n="myProfile">Profile</span></a></li>
+                                <li><a class="dropdown-item" href="order.html"><i class="fas fa-box me-2"></i><span
+                                            data-i18n="myOrders">My
+                                            Orders</span></a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#" id="logoutButton"><i
+                                            class="fas fa-sign-out-alt me-2"></i><span
+                                            data-i18n="logout">Logout</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="index.html" class="btn btn-login ms-3" id="loginButton"><span
+                            data-i18n="login">Login</span> <i class="fas fa-sign-in-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Order Review Container -->
+    <div class="container my-5">
+        <div class="order-container">
+            <div class="order-header">
+                <h2 data-i18n="confirmOrderTitle"><i class="fas fa-shopping-bag me-2"></i> Confirm Your Order</h2>
+            </div>
+
+            <div class="order-body">
+                <!-- Cart Items Section -->
+                <h4 class="section-title" data-i18n="yourItems"><i class="fas fa-shopping-cart me-2"></i> Your Items
+                </h4>
+                <div class="table-responsive">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th data-i18n="product">Product</th>
+                                <th data-i18n="price">Price</th>
+                                <th data-i18n="quantity">Quantity</th>
+                                <th data-i18n="subtotal">Subtotal</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="cartItems">
+                            <!-- Cart items will be dynamically inserted here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="text-end mt-3">
+                    <button class="btn btn-outline-primary" onclick="window.location.href='cart.html'"
+                        data-i18n="editCart">
+                        <i class="fas fa-edit me-2"></i>Edit Cart
+                    </button>
+                </div>
+
+                <!-- Delivery Address Section -->
+                <h4 class="section-title mt-5" data-i18n="deliveryAddressTitle"><i
+                        class="fas fa-map-marker-alt me-2"></i> Delivery Address</h4>
+                <div class="address-card">
+                    <a class="edit-address" onclick="window.location.href='checkout.html'">
+                        <i class="fas fa-edit me-1"></i> <span data-i18n="edit">Edit</span>
+                    </a>
+                    <h5 id="deliveryName">---</h5>
+                    <p id="deliveryAddress">
+                        <!-- Address will be dynamically inserted here -->
+                    </p>
+                    <p><strong><span data-i18n="phone">Phone</span>:</strong> <span id="deliveryPhone">---</span></p>
+                </div>
+
+                <!-- Delivery Restriction Alert -->
+                <div class="alert alert-info" id="deliveryRestrictionNotice" style="display: none;">
+                    <h5 data-i18n="deliveryRestrictionTitle"><i class="fas fa-info-circle me-2"></i>Delivery
+                        Restriction:</h5>
+                    <p class="mb-0" data-i18n="deliveryRestrictionMsg">Fruits, vegetables, and saplings can only be
+                        delivered within Kolara, Karnataka.</p>
+                </div>
+
+                <!-- Payment Options Section -->
+                <h4 class="section-title mt-5" data-i18n="paymentMethod"><i class="fas fa-credit-card me-2"></i> Payment
+                    Method</h4>
+                <div class="payment-options">
+                    <div class="payment-card active" id="dummyCardPayment">
+                        <div class="payment-icon">
+                            <i class="far fa-credit-card"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h6 data-i18n="dummyCard">Credit/Debit Card (Mock)</h6>
+                            <p data-i18n="dummyCardDesc">Simulate a secure online card payment.</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="fas fa-check-circle text-success"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-card" id="dummyUpiPayment">
+                        <div class="payment-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h6 data-i18n="dummyUpi">UPI Payment (Mock)</h6>
+                            <p data-i18n="dummyUpiDesc">Simulate an instant UPI payment.</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle"></i>
+                        </div>
+                    </div>
+
+                    <div class="payment-card" id="codPayment">
+                        <div class="payment-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="payment-details">
+                            <h6 data-i18n="cod">Cash on Delivery (COD)</h6>
+                            <p data-i18n="codDescription">Pay in cash when your order is delivered</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="far fa-circle"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <h4 class="mb-4" data-i18n="orderSummary"><i class="fas fa-receipt me-2"></i> Order Summary</h4>
+                    <div class="summary-row">
+                        <span data-i18n="subtotal">Subtotal</span>
+                        <span id="subtotal">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span data-i18n="deliveryFee">Delivery Fee</span>
+                        <span id="deliveryFee">₹0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span data-i18n="taxes">Taxes</span>
+                        <span id="taxes">₹0.00</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span data-i18n="total">Total</span>
+                        <span id="total">₹0.00</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-buttons">
+                    <button class="btn btn-outline-primary" onclick="window.location.href='shopnow.html'"
+                        data-i18n="continueShopping">
+                        <i class="fas fa-arrow-left me-2"></i> Continue Shopping
+                    </button>
+                    <button class="btn btn-primary" id="placeOrderBtn" data-i18n="placeOrder">
+                        Place Order <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="invoiceSection"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+                        <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic
+                            produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                                    Products</span></a></li>
+                        <li><a href="/aboutus.html"><i class="fas fa-chevron-right"></i><span data-i18n="aboutUs">About
+                                    Us</span></a></li>
+                        <li><a href="/privacypolicy.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="privacyPolicy">Privacy Policy</span></a></li>
+                        <li><a href="/termcondition.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="termCondition">Terms & Conditions</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="/seed/seeds.html" class="product-tag" data-i18n="seeds">Organic Seeds</a>
+                        <a href="/fruit/fruits.html" class="product-tag" data-i18n="fruits">Fresh Fruits</a>
+                        <a href="/vegetables/vegetable.html" class="product-tag" data-i18n="vegetables">Vegetables</a>
+                        <a href="/oil/coconut.html" class="product-tag" data-i18n="oilExtracts">Organic Oils</a>
+                        <a href="./grains/grains.html" class="product-tag" data-i18n="grains">Grains</a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                                Karnataka</span></p>
+                        <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+                        <p><i class="fas fa-envelope"></i><span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+                        <p><i class="fas fa-clock"></i><span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p data-i18n="copyrightVal">© 2026 AgroDirect. All rights reserved.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade in body on load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.opacity = "1";
+
+            // Load cart items and address
+            window.currentCart = [];
+            window.userProfile = null;
+            loadCartItems();
+            loadDeliveryAddress();
+
+            // Payment method selection using event delegation
+            document.addEventListener('click', function (e) {
+                const card = e.target.closest('.payment-card');
+                if (card) {
+                    document.querySelectorAll('.payment-card').forEach(c => {
+                        c.classList.remove('active');
+                        const checkIcon = c.querySelector('.payment-check i');
+                        if (checkIcon) checkIcon.className = 'far fa-circle';
+                    });
+                    card.classList.add('active');
+                    const activeCheckIcon = card.querySelector('.payment-check i');
+                    if (activeCheckIcon) activeCheckIcon.className = 'fas fa-check-circle text-success';
+                }
+            });
+
+            // <!-- In confirmorder.html, modify the placeOrderBtn click handler -->
+            document.getElementById('placeOrderBtn').addEventListener('click', async function () {
+
+                try {
+                    // Get payment method
+                    const activePaymentCard = document.querySelector('.payment-card.active');
+                    if (!activePaymentCard) {
+                        alert('Please select a payment method');
+                        return;
+                    }
+                    const paymentTitle = activePaymentCard.querySelector('h6');
+                    const paymentMethod = paymentTitle ? paymentTitle.textContent : 'Unknown';
+                    const isMockPayment = activePaymentCard.id.startsWith('dummy');
+
+                    if (isMockPayment) {
+                        // show a full screen loading modal with spinner
+                        const overlay = document.createElement('div');
+                        overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(255,255,255,0.95);z-index:9999;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:all 0.3s;';
+                        overlay.innerHTML = '<div class="spinner-border text-success" style="width: 4rem; height: 4rem; border-width: 0.3em;" role="status"></div><h3 class="mt-4 text-success fw-bold">Processing Secure Payment...</h3><p class="text-muted">Please do not close this window</p>';
+                        document.body.appendChild(overlay);
+                        
+                        // Fake processing delay
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        
+                        // Success screen
+                        overlay.innerHTML = '<i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i><h3 class="mt-4 text-success fw-bold">Payment Successful!</h3><p class="text-muted">Transaction ID: TXN_DUMMY_' + Date.now() + '</p>';
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        document.body.removeChild(overlay);
+                    }
+
+                    const totalAmount = parseFloat(
+                        document.getElementById('total').textContent.replace('₹', '')
+                    );
+
+                    // Place order
+                    const token = localStorage.getItem('agroToken');
+                    console.log('[ORDER] Placing order with data:', { 
+                        method: paymentMethod, 
+                        amount: totalAmount, 
+                        itemsCount: window.currentCart.length 
+                    });
+                    
+                    const response = await fetch('/api/orders', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            paymentMethod: isMockPayment ? 'Online (Mock)' : paymentMethod,
+                            totalAmount: totalAmount,
+                            items: window.currentCart,
+                            userEmail: window.userProfile ? window.userProfile.email : ''
+                        })
+                    });
+
+                    const text = await response.text();
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        throw new Error(`Server returned non-JSON response: ${text.substring(0, 200)}...`);
+                    }
+
+                    if (!response.ok) {
+                        throw new Error(data.message || data.error || 'Failed to place order');
+                    }
+
+                    // Redirect to order confirmation after a longer delay to show invoice
+                    if (window.VoiceGuidance) {
+                        window.VoiceGuidance.orderPlaced();
+                    }
+                    
+                    // Render premium invoice
+                    if (window.renderInvoice) {
+                        renderInvoice({
+                            id: data.order._id,
+                            customerName: window.userProfile ? window.userProfile.name : 'Customer',
+                            deliveryAddress: document.getElementById('deliveryAddress')?.textContent || 'Registered Address',
+                            paymentMethod: isMockPayment ? 'Online (Mock)' : paymentMethod,
+                            items: window.currentCart,
+                            totalAmount: totalAmount
+                        });
+                        
+                        // Hide original order body with smooth transition
+                        document.querySelector('.order-body').style.opacity = '0.3';
+                        document.querySelector('.order-body').style.pointerEvents = 'none';
+                        
+                        // Show success message
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'alert alert-success text-center mt-4';
+                        successMsg.innerHTML = '<h4><i class="fas fa-check-circle me-2"></i> Order Placed Successfully!</h4><p>Your invoice has been generated below. Redirecting to your orders in 10 seconds...</p>';
+                        document.querySelector('.order-container').prepend(successMsg);
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = `order.html?orderId=${data.order._id}`;
+                    }, 10000);
+
+                } catch (err) {
+                    console.error('Order error:', err);
+                    // Show a more user-friendly but detailed error
+                    if (err.message.includes('non-JSON')) {
+                        alert('Order failed due to a server error. Please check if the server is running correctly.');
+                    } else {
+                        alert(`Order failed: ${err.message}`);
+                    }
+                }
+            });
+        });
+
+        async function loadCartItems() {
+            const token = localStorage.getItem('agroToken');
+            if (!token) {
+                alert('Please login to view your cart');
+                window.location.href = '/index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/cart', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch cart');
+                }
+
+                const { cart } = await response.json();
+                window.currentCart = cart;
+                const cartItemsContainer = document.getElementById('cartItems');
+                cartItemsContainer.innerHTML = '';
+
+                let subtotal = 0;
+                let hasRestrictedItems = false;
+
+                cart.forEach(item => {
+                    let itemTotal;
+                    if (item.type === 'sapling' || item.type === 'oil') {
+                        itemTotal = item.price * item.quantity;
+                    } else {
+                        const quantityInKg = item.unit === 'g' ? item.quantity / 1000 : item.quantity;
+                        itemTotal = item.price * quantityInKg;
+                    }
+                    subtotal += itemTotal;
+
+                    // Check if item is restricted (fruits, vegetables, or saplings)
+                    if (item.type === 'fruit' || item.type === 'vegetable' || item.type === 'sapling') {
+                        hasRestrictedItems = true;
+                    }
+
+                    cartItemsContainer.innerHTML += `
+                        <tr>
+                            <td data-label="Product">
+                                <div class="d-flex align-items-center">
+                                    <img src="${item.img || item.image || 'data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22150%22%20height%3D%22150%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20150%20150%22%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22%23eee%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20font-family%3D%22Arial%22%20font-size%3D%2220%22%20text-anchor%3D%22middle%22%20fill%3D%22%23aaa%22%20dy%3D%22.3em%22%3EProduct%3C%2Ftext%3E%3C%2Fsvg%3E'}" alt="${item.name}" class="cart-item-img">
+                                    <div>
+                                        <h6>${item.name}</h6>
+                                        <small class="text-muted">${item.type} ${item.unit ? `(${item.unit})` : ''}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td data-label="Price">₹${item.price.toFixed(2)}</td>
+                            <td data-label="Quantity">${item.quantity}</td>
+                            <td data-label="Subtotal">₹${itemTotal.toFixed(2)}</td>
+                            <td></td>
+                        </tr>
+                    `;
+                });
+
+                // Update order summary
+                const deliveryFee = subtotal > 500 ? 0 : 50;
+                const tax = subtotal * 0.09; // assuming 9% tax
+                const total = subtotal + deliveryFee + tax;
+
+                document.getElementById('subtotal').textContent = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('deliveryFee').textContent = deliveryFee === 0 ? 'Free' : `₹${deliveryFee.toFixed(2)}`;
+                document.getElementById('taxes').textContent = `₹${tax.toFixed(2)}`;
+                document.getElementById('total').textContent = `₹${total.toFixed(2)}`;
+
+                // Store whether we have restricted items for address validation
+                sessionStorage.setItem('hasRestrictedItems', hasRestrictedItems);
+            } catch (err) {
+                console.error('Error loading cart:', err);
+                alert('Failed to load cart: ' + err.message);
+            }
+        }
+        async function loadDeliveryAddress() {
+            const token = localStorage.getItem('agroToken');
+            if (!token) {
+                alert('Please login to view address');
+                window.location.href = '/index.html';
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/user/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to fetch address');
+                }
+
+                const user = await response.json();
+                window.userProfile = user;
+
+                // Check if address exists
+                if (!user.address) {
+                    document.getElementById('deliveryName').textContent = user.name || '---';
+                    document.getElementById('deliveryAddress').innerHTML = 'No address found. Please add one.';
+                    document.getElementById('deliveryPhone').textContent = '';
+                    return;
+                }
+
+                // Format the address for display
+                let address = user.address;
+                if (typeof address === 'string') {
+                    try { address = JSON.parse(address); } catch(e) {}
+                }
+                let addressHTML = '';
+
+                // Set Name (from address if available, else user profile)
+                if (address.firstName || address.lastName) {
+                    document.getElementById('deliveryName').textContent =
+                        `${address.firstName || ''} ${address.lastName || ''}`.trim();
+                } else {
+                    document.getElementById('deliveryName').textContent = user.name || '---';
+                }
+
+                if (address.addressLine1) addressHTML += `${address.addressLine1}<br>`;
+                if (address.addressLine2) addressHTML += `${address.addressLine2}<br>`;
+                if (address.city || address.state || address.zipCode) {
+                    addressHTML += `${address.city || ''}, ${address.state || ''} ${address.zipCode || ''}`;
+                }
+
+                document.getElementById('deliveryAddress').innerHTML = addressHTML;
+                document.getElementById('deliveryPhone').textContent = address.phone || '';
+
+                // Check for delivery instructions
+                if (address.deliveryInstructions) {
+                    document.getElementById('deliveryAddress').innerHTML +=
+                        `<br><strong>Instructions:</strong> ${address.deliveryInstructions}`;
+                }
+
+                // Check for delivery restrictions
+                checkDeliveryRestrictions(user.address);
+            } catch (err) {
+                console.error('Error loading address:', err);
+                document.getElementById('deliveryAddress').innerHTML =
+                    'Error loading address. Please try again or edit your address.';
+            }
+        }
+
+        function checkDeliveryRestrictions(address) {
+            // Delivery restrictions have been completely removed per user request.
+            // Orders can now be placed from any location.
+            const alertElement = document.getElementById('deliveryRestrictionNotice');
+            if (alertElement) alertElement.style.display = 'none';
+        }
+
+        // selectPayment function removed as we now use event delegation
+
+        // Initialize auth and voice when page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            // auth-core.js handles updateAuthUI automatically, 
+            // but we can call it here if needed or just remove this block.
+            if (typeof updateAuthUI === 'function') updateAuthUI();
+        });
+    </script>
+    <script type="module">
+        import VoiceGuidance from './voice-guidance.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            VoiceGuidance.init();
+            VoiceGuidance.checkoutHelp();
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script type="module" src="lang-core.js"></script>
+    <script src="auth-core.js"></script>
+    <script src="notifications.js"></script>
+    <script src="invoice.js"></script>
+    <script>
+    // Example: After order is placed, call renderInvoice(orderObj)
+    // You should replace this with actual order data after placing order
+    // Example dummy order for demo:
+    /*
+    const dummyOrder = {
+        id: 12345,
+        orderStatus: 'Placed',
+        orderDate: new Date().toISOString(),
+        items: [
+            { name: 'Tomato', quantity: 2, price: 30 },
+            { name: 'Potato', quantity: 1, price: 20 }
+        ],
+        totalAmount: 80,
+        paymentMethod: 'COD',
+        deliveryAddress: '123 Main St, City, State, 123456'
+    };
+    renderInvoice(dummyOrder);
+    */
+    </script>
+</body>
+
+</html>

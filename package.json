@@ -1,0 +1,14 @@
+{
+  "name": "agrodirect-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "concurrently \"npm --prefix agrodirect-main/backend run dev\" \"npm --prefix agrodirect-main run dev\"",
+    "start": "concurrently \"npm --prefix agrodirect-main/backend start\" \"npm --prefix agrodirect-main start\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "twilio": "^6.0.2"
+  }
+}

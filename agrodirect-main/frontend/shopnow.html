@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Now - AgroDirect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="voice-search.css">
+    <style>
+
+    </style>
+</head>
+
+<body class="fadeIn">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🌿 AgroDirect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home page/home.html" data-i18n="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="shopnow.html" data-i18n="shopNow">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contactus.html" data-i18n="contactUs">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="review.html" data-i18n="reviewUs">Review Us</a></li>
+                    <li class="nav-item"><a class="nav-link" id="cartNavLink" href="cart.html" style="display:none;"><span data-i18n="cart">Cart</span> <i class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+                <div class="d-flex align-items-center ms-3">
+                                            <script>
+                                            // Hide Cart link for farmer/admin
+                                            document.addEventListener('DOMContentLoaded', function() {
+                                                try {
+                                                    var user = localStorage.getItem('agroUser');
+                                                    var role = user ? (JSON.parse(user).role || 'consumer') : 'consumer';
+                                                    var cartLink = document.getElementById('cartNavLink');
+                                                    if (cartLink) {
+                                                        cartLink.style.display = (role === 'consumer') ? '' : 'none';
+                                                    }
+                                                } catch(e) {}
+                                            });
+                                            </script>
+                    <div class="user-section">
+                        <div class="dropdown">
+                            <button class="btn btn-user dropdown-toggle" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="userNameDisplay"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i><span
+                                            data-i18n="profile">Profile</span></a></li>
+                                <li><a class="dropdown-item" href="order.html"><i class="fas fa-box me-2"></i><span
+                                            data-i18n="orders">My
+                                            Orders</span></a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#" id="logoutButton"><i
+                                            class="fas fa-sign-out-alt me-2"></i><span
+                                            data-i18n="logout">Logout</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="index.html" class="btn btn-login ms-3" id="loginButton"><span
+                            data-i18n="login">Login</span> <i class="fas fa-sign-in-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <div class="container-fluid py-4" style="background-color: var(--light-green);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-center text-md-start">
+                    <h1 class="display-5 fw-bold text-success mb-3" data-i18n="shopHeroTitle">Fresh From The Farm</h1>
+                    <p class="lead mb-4" data-i18n="shopHeroDesc">Discover our wide range of organic produce directly
+                        from local farmers. Quality
+                        you can trust, freshness you can taste.</p>
+                </div>
+                <div class="col-md-4 text-center d-none d-md-block">
+                    <img src="badgeshopnow.webp" alt="Organic Badge" style="max-width: 150px;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shop Now Section -->
+    <!-- Search Section -->
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="search-container">
+                    <input type="text" class="form-control search-box" placeholder="Search for products..." data-i18n-placeholder="searchPlaceholder">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="category-title" data-i18n="shopByCategory">Shop by Category</h2>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/vegetableimg.webp" class="card-img-top" alt="Vegetables">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2" data-i18n="freshBadge">Fresh</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="vegetables">Vegetables</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="vegDesc">Farm-fresh vegetables harvested at peak
+                            ripeness</p>
+                        <a href="vegetables/vegetable.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/fruit-basket.jpg" class="card-img-top" alt="Fruits">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Seasonal</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="fruits">Fruits</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="fruitDesc">Sweet and juicy fruits, naturally
+                            ripened</p>
+                        <a href="fruit/fruits.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/seedimg.jpg" class="card-img-top" alt="Seeds">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Organic</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="seeds">Seeds</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="seedDesc">High-quality seeds for your home
+                            garden</p>
+                        <a href="seed/seeds.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/saplingsimg.jpg" class="card-img-top" alt="Saplings">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Growing</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="saplings">Saplings</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="saplingDesc">Healthy plant saplings ready to
+                            thrive</p>
+                        <a href="saplings/saplings.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/grainsimg.jpg" class="card-img-top" alt="Grains">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Staple</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="grains">Grains</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="grainDesc">Wholesome and nutritious organic
+                            grains</p>
+                        <a href="grains/grains.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <div class="position-relative overflow-hidden">
+                        <img src="shopnow_images/oilextract.webp" class="card-img-top" alt="Oil Extracts">
+                        <div class="position-absolute top-0 start-0 m-3">
+                            <span class="badge bg-success rounded-pill px-3 py-2">Pure</span>
+                        </div>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title" data-i18n="oilExtracts">Oil Extracts</h5>
+                        <p class="card-text text-muted mb-3" data-i18n="oilDesc">Cold-pressed oils with no additives</p>
+                        <a href="oil/oilextracts.html" class="btn btn-success"><span data-i18n="viewProducts">View
+                                Products</span> <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="container-fluid py-5 my-5" style="background-color: var(--light-green);">
+        <div class="container">
+            <h2 class="text-center mb-4" style="color: var(--dark-green);" data-i18n="whyChooseUs">Why Choose
+                AgroDirect?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="text-center p-4">
+                        <i class="fas fa-leaf fa-3x mb-3" style="color: var(--primary-color);"></i>
+                        <h4 data-i18n="organicFarmingTitle">100% Organic</h4>
+                        <p data-i18n="organicFarmingDesc">All our products are grown with organic farming practices
+                            without harmful chemicals.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center p-4">
+                        <i class="fas fa-truck fa-3x mb-3" style="color: var(--primary-color);"></i>
+                        <h4 data-i18n="farmToTableTitle">Farm to Door</h4>
+                        <p data-i18n="farmToTableDesc">We deliver fresh produce directly from farms to your doorstep
+                            within 24 hours.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-center p-4">
+                        <i class="fas fa-users fa-3x mb-3" style="color: var(--primary-color);"></i>
+                        <h4 data-i18n="communitySupportTitle">Support Local Farmers</h4>
+                        <p data-i18n="communitySupportDesc">By shopping with us, you're directly supporting local
+                            farming communities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+                        <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic
+                            produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                                    Products</span></a></li>
+                        <li><a href="aboutus.html"><i class="fas fa-chevron-right"></i><span data-i18n="aboutUs">About
+                                    Us</span></a></li>
+                        <!-- <li><a href="/"><i class="fas fa-chevron-right"></i>Delivery Information</a></li> -->
+                        <li><a href="privacypolicy.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="privacyPolicy">Privacy Policy</span></a></li>
+                        <!--  <li><a href="termcondition.html"><i class="fas fa-chevron-right"></i>Terms & Conditions</a></li>-->
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="seed/seeds.html" class="product-tag">Organic Seeds</a>
+                        <a href="fruit/fruits.html" class="product-tag">Fresh Fruits</a>
+                        <a href="vegetables/vegetable.html" class="product-tag">Vegetables</a>
+                        <a href="oil/oilextracts.html" class="product-tag">Organic Oils</a>
+                        <a href="grains/grains.html" class="product-tag">Grains</a>
+                        <!-- <a href="/" class="product-tag">Pulses</a>
+                    <a href="#" class="product-tag">Spices</a>
+                    <a href="#" class="product-tag">Herbs</a> -->
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                                Karnataka</span></p>
+                        <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+                        <p><i class="fas fa-envelope"></i> <span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+                        <p><i class="fas fa-clock"></i> <span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2026 AgroDirect All rights Reserved</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <!-- <p>Made with <i class="fas fa-heart heart"></i> for organic farming</p> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fade in body on load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.opacity = "1";
+        });
+
+        // // Add active class to current page in navbar
+        // document.addEventListener('DOMContentLoaded', function() {
+        //     const currentPage = window.location.pathname.split("/").pop();
+        //     const navLinks = document.querySelectorAll('.nav-link');
+
+        //     navLinks.forEach(link => {
+        //         const linkHref = link.getAttribute('href').split("/").pop();
+        //         if (linkHref === currentPage) {
+        //             link.classList.add('active');
+        //             link.style.color = 'var(--primary-color)';
+        //             link.style.fontWeight = '600';
+        //         }
+        //     });
+        // });
+
+        // Search functionality
+        const searchBox = document.querySelector('.search-box');
+        if (searchBox) {
+            searchBox.addEventListener('input', function (e) {
+                const term = e.target.value.toLowerCase().trim();
+                const categoryCards = document.querySelectorAll('.category-title + .row .col');
+                
+                categoryCards.forEach(card => {
+                    const title = card.querySelector('.card-title')?.textContent.toLowerCase() || "";
+                    const desc = card.querySelector('.card-text')?.textContent.toLowerCase() || "";
+                    if (title.includes(term) || desc.includes(term)) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+    </script>
+    <!-- Include these dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script>
+        // Initialize auth when page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            initAuth();
+            updateAuthUI();
+        });
+    </script>
+    <link rel="stylesheet" href="shopnow.css">
+    <script src="auth-core.js"></script>
+    <script type="module" src="lang-core.js"></script>
+    <script src="notifications.js"></script>
+</body>
+
+</html>

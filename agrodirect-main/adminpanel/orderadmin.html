@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Orders - Agro-Direct</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-leaf me-2"></i>Agro-Direct</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin.html"><i class="fas fa-tachometer-alt me-1"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="upload.html"><i class="fas fa-chart-bar me-1"></i>Upload</a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="user.html"><i class="fas fa-cog me-1"></i>Users</a>
+                    </li> -->
+                </ul>
+                <div class="d-flex">
+                    <a href="orderadmin.html" class="btn btn-order me-2">
+                        <i class="fas fa-shopping-cart me-1"></i>Orders
+                    </a>
+                    <!-- <a href="../frontend/index.html" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt me-1"></i>Login
+                    </a> -->
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="panel-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="panel-title">
+                    <i class="fas fa-shopping-cart me-2"></i>
+                    Order Management
+                </h1>
+                <span class="badge bg-primary">Admin Panel</span>
+            </div>
+        </div>
+
+        <div id="alertToast" class="alert-toast"></div>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2">Loading orders...</p>
+        </div>
+
+        <div id="ordersContainer" class="orders-section">
+            <!-- Orders will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#loadingSpinner').show();
+            fetchAllOrders();
+            
+            function fetchAllOrders() {
+                $.get('http://localhost:5000/api/all-orders', function(data) {
+                    const orders = data.orders || [];
+                    
+                    if (orders.length === 0) {
+                        $('#ordersContainer').html('<div class="alert alert-info">No orders found.</div>');
+                        $('#loadingSpinner').hide();
+                        return;
+                    }
+                    
+                    let html = '';
+                    orders.forEach(order => {
+                        const orderDate = new Date(order.orderDate).toLocaleString('en-IN', { 
+                            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        });
+
+                        html += `
+                            <div class="section-card order-card mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-receipt me-2"></i>
+                                        Order #${order._id || 'N/A'}
+                                    </h3>
+                                    <span class="badge bg-primary">${order.orderStatus || 'Processing'}</span>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-user me-2"></i>Customer:</strong> ${order.userId?.name || 'Unknown User'}</p>
+                                        <p><strong><i class="fas fa-map-marker-alt me-2"></i>Address:</strong> 
+                                            ${order.userId?.address?.addressLine1 || ''}, ${order.userId?.address?.city || ''}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-phone me-2"></i>Phone:</strong> ${order.userId?.address?.phone || 'N/A'}</p>
+                                        <p><strong><i class="fas fa-calendar-alt me-2"></i>Date:</strong> ${orderDate}</p>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mb-3"><i class="fas fa-box-open me-2"></i>Order Items</h5>
+                                <div class="table-responsive">
+                                    <table class="table item-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${order.items.map(item => `
+                                                <tr>
+                                                    <td class="item-name">${item.name}</td>
+                                                    <td>${item.quantity} ${item.unit || ''}</td>
+                                                    <td>₹${item.price?.toFixed(2) || '0.00'}</td>
+                                                    <td>₹${((item.price || 0) * (item.quantity || 1)).toFixed(2)}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-3">
+                                    <h4 class="me-3">Total: ₹${order.totalAmount?.toFixed(2) || '0.00'}</h4>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-2">
+                                    
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash me-1"></i> Cancel Order
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    $('#ordersContainer').html(html);
+                    $('#loadingSpinner').hide();
+                    
+                    // Add event handlers for buttons
+                    $('.btn-outline-primary').click(function() {
+                        const orderId = $(this).closest('.order-card').find('.section-title').text().replace('Order #', '').trim();
+                        showToast(`Updating status for order ${orderId}...`, 'info');
+                    });
+                    
+                    $('.btn-outline-danger').click(function() {
+                        const orderId = $(this).closest('.order-card').find('.section-title').text().replace('Order #', '').trim();
+                        if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+                            showToast(`Order ${orderId} has been cancelled`, 'success');
+                        }
+                    });
+                    
+                }).fail(function(error) {
+                    console.error('Error loading orders:', error);
+                    $('#ordersContainer').html('<div class="alert alert-danger">Error loading orders. Showing demo data...</div>');
+                    
+                    // Load sample data if API fails
+                    const sampleOrders = generateSampleOrders(3);
+                    let html = '';
+                    
+                    sampleOrders.forEach(order => {
+                        const orderDate = new Date(order.orderDate).toLocaleString('en-IN', { 
+                            day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                        });
+
+                        html += `
+                            <div class="section-card order-card mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h3 class="section-title">
+                                        <i class="fas fa-receipt me-2"></i>
+                                        Order #${order._id}
+                                    </h3>
+                                    <span class="badge bg-primary">${order.orderStatus}</span>
+                                </div>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-user me-2"></i>Customer:</strong> ${order.userName}</p>
+                                        <p><strong><i class="fas fa-map-marker-alt me-2"></i>Address:</strong> 
+                                            ${order.address}
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><strong><i class="fas fa-phone me-2"></i>Phone:</strong> ${order.phone}</p>
+                                        <p><strong><i class="fas fa-calendar-alt me-2"></i>Date:</strong> ${orderDate}</p>
+                                    </div>
+                                </div>
+                                
+                                <h5 class="mb-3"><i class="fas fa-box-open me-2"></i>Order Items</h5>
+                                <div class="table-responsive">
+                                    <table class="table item-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Quantity</th>
+                                                <th>Price</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${order.items.map(item => `
+                                                <tr>
+                                                    <td class="item-name">${item.name}</td>
+                                                    <td>${item.quantity} ${item.unit}</td>
+                                                    <td>₹${item.price.toFixed(2)}</td>
+                                                    <td>₹${(item.price * item.quantity).toFixed(2)}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-3">
+                                    <h4 class="me-3">Total: ₹${order.totalAmount.toFixed(2)}</h4>
+                                </div>
+                                
+                                <div class="d-flex justify-content-end mt-2">
+                                    <button class="btn btn-outline-primary me-2">
+                                        <i class="fas fa-edit me-1"></i> Update Status
+                                    </button>
+                                    <button class="btn btn-outline-danger">
+                                        <i class="fas fa-trash me-1"></i> Cancel Order
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    
+                    $('#ordersContainer').append(html);
+                    $('#loadingSpinner').hide();
+                });
+            }
+            
+            function generateSampleOrders(count) {
+                const sampleItems = [
+                    { name: "Organic Apples", quantity: 2, unit: "kg", price: 120 },
+                    { name: "Fresh Carrots", quantity: 1, unit: "kg", price: 40 },
+                    { name: "Basmati Rice", quantity: 5, unit: "kg", price: 80 },
+                    { name: "Sunflower Oil", quantity: 1, unit: "litre", price: 180 },
+                    { name: "Tomatoes", quantity: 3, unit: "kg", price: 30 }
+                ];
+                
+                const statuses = ["Processing", "Shipped", "Delivered", "Cancelled"];
+                const addresses = [
+                    "123 Garden Lane, Bangalore",
+                    "456 Farm Road, Mumbai",
+                    "789 Orchard Street, Delhi"
+                ];
+                
+                const orders = [];
+                const now = new Date();
+                
+                for (let i = 0; i < count; i++) {
+                    const itemCount = Math.min(3, sampleItems.length);
+                    const shuffledItems = [...sampleItems].sort(() => 0.5 - Math.random()).slice(0, itemCount);
+                    const totalAmount = shuffledItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    
+                    orders.push({
+                        _id: "ORD" + (1000 + i),
+                        orderDate: new Date(now.getTime() - (i * 24 * 60 * 60 * 1000)),
+                        orderStatus: statuses[i % statuses.length],
+                        userName: ["Rahul Sharma", "Priya Patel", "Amit Singh"][i % 3],
+                        address: addresses[i % addresses.length],
+                        phone: "98" + Math.floor(10000000 + Math.random() * 90000000),
+                        items: shuffledItems,
+                        totalAmount: totalAmount
+                    });
+                }
+                
+                return orders;
+            }
+            
+            function showToast(message, type) {
+                const toast = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        ${type === 'success' ? '<i class="fas fa-check-circle me-2"></i>' : 
+                         type === 'info' ? '<i class="fas fa-info-circle me-2"></i>' : 
+                         '<i class="fas fa-exclamation-circle me-2"></i>'}
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                `;
+                
+                $('#alertToast').html(toast);
+                
+                // Auto-dismiss after 3 seconds
+                setTimeout(() => {
+                    $('#alertToast .alert').alert('close');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

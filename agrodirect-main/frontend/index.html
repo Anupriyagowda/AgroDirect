@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgroDirect - Farm Management Platform</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="theme-switcher.js"></script>
+    <script src="theme-customizer.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            if (user && (user.role === 'farmer' || user.role === 'admin')) {
+                // Hide navbar links
+                const navLinks = document.querySelectorAll('a.nav-link');
+                navLinks.forEach(link => {
+                    if (
+                        link.getAttribute('data-i18n') === 'shopNow' ||
+                        link.getAttribute('data-i18n') === 'contactUs' ||
+                        link.getAttribute('data-i18n') === 'reviewUs'
+                    ) {
+                        link.style.display = 'none';
+                    }
+                });
+                // Hide footer quick links
+                const footerLinks = document.querySelectorAll('.footer-links a, .footer-title[data-i18n="contactUs"]');
+                footerLinks.forEach(link => {
+                    if (
+                        link.getAttribute('data-i18n') === 'shopNow' ||
+                        link.getAttribute('data-i18n') === 'contactUs' ||
+                        link.getAttribute('data-i18n') === 'reviewUs'
+                    ) {
+                        link.style.display = 'none';
+                    }
+                });
+                // Hide contact info column
+                const contactCol = document.querySelector('.footer-title[data-i18n="contactUs"]')?.parentElement;
+                if (contactCol) contactCol.style.display = 'none';
+            }
+        } catch (e) { /* ignore */ }
+    });
+    </script>
+</head>
+
+<body>
+    <button id="themeToggle" class="theme-toggle" onclick="window.ThemeSwitcher.toggle()" data-i18n-title="toggleTheme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+
+    <div class="container">
+        <div class="form-box">
+            <div class="form-content">
+                <div class="logo">
+                    <h1 class="premium-logo">
+                        <span class="icon-stack">
+                            <i class="fas fa-circle icon-bg"></i>
+                            <i class="fas fa-leaf icon-main"></i>
+                        </span>
+                        AgroDirect
+                    </h1>
+                    <p class="tagline" data-i18n="tagline">Direct fresh from the farm</p>
+                </div>
+
+                <div class="language-selection-panel mb-4">
+                    <div class="lang-pills">
+                        <span class="lang-pill" onclick="changeLanguage('en-US')" data-lang="en-US">English</span>
+                        <span class="lang-pill" onclick="changeLanguage('hi-IN')" data-lang="hi-IN">हिन्दी</span>
+                        <span class="lang-pill" onclick="changeLanguage('gu-IN')" data-lang="gu-IN">ગુજરાતી</span>
+                        <span class="lang-pill" onclick="changeLanguage('kn-IN')" data-lang="kn-IN">ಕನ್ನಡ</span>
+                        <span class="lang-pill" onclick="changeLanguage('te-IN')" data-lang="te-IN">తెలుగు</span>
+                        <span class="lang-pill" onclick="changeLanguage('ta-IN')" data-lang="ta-IN">தமிழ்</span>
+                        <span class="lang-pill" onclick="changeLanguage('ml-IN')" data-lang="ml-IN">മലയാളം</span>
+                    </div>
+                </div>
+
+                <!-- Inside the roleSelection div, update the admin button onclick -->
+                <div id="roleSelection">
+                    <h2 data-i18n="selectAccountType">Select Account Type</h2>
+                    <div class="btn-group">
+                        <button id="role-consumer" class="btn-custom" onclick="setRole('consumer')">
+                            <i class="fas fa-user"></i> <span data-i18n="consumer">Consumer</span>
+                        </button>
+                        <button id="role-farmer" class="btn-custom" onclick="setRole('farmer')">
+                            <i class="fas fa-tractor"></i> <span data-i18n="farmer">Farmer</span>
+                        </button>
+                    </div>
+                </div>
+
+
+                <div id="loginForm" style="display: none;" autocomplete="off">
+                    <button class="btn btn-link back-btn mb-2" style="padding:0; color:#388e3c; font-weight:600;" onclick="toggleForm('roleSelection')">
+                        <i class="fas fa-arrow-left"></i> <span data-i18n="back">Back</span>
+                    </button>
+                    <h2 data-i18n="loginTitle">Login to Your Account</h2>
+                    <div id="loginSuccessMsg" class="success-message" style="display:none;"></div>
+                    <form class="input-group" id="signupFormFields" enctype="multipart/form-data">
+                        <div class="floating-input-field">
+                            <input type="text" id="loginEmailOrPhone" placeholder=" " required autocomplete="off" list="previousEmails">
+                            <label data-i18n="emailOrPhone">Email or Mobile Number</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <datalist id="previousEmails"></datalist>
+                        <div class="floating-input-field">
+                            <input type="password" id="loginPassword" placeholder=" " required autocomplete="new-password">
+                            <label data-i18n="password">Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <span class="password-eye" onclick="togglePasswordVisibility('loginPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div id="loginPasswordError" class="invalid-feedback"></div>
+                    </form>
+                    <div class="remember-forgot">
+                        <label><input type="checkbox"> <span data-i18n="rememberMe">Remember me</span></label>
+                        <span class="toggle-link" onclick="showRecover()" data-i18n="forgotPassword">Forgot
+                            Password?</span>
+                    </div>
+                    <button class="btn-custom" onclick="login(event)">
+                        <i class="fas fa-sign-in-alt"></i> <span data-i18n="login">Login</span>
+                    </button>
+                    <p class="form-footer"><span data-i18n="noAccount">Don't have an account?</span> <span
+                            class="toggle-link" onclick="toggleForm('signupForm')" data-i18n="signUp">Sign Up</span></p>
+                </div>
+
+                <div id="signupForm" style="display: none;">
+                    <button class="btn btn-link back-btn mb-2" style="padding:0; color:#388e3c; font-weight:600;" onclick="toggleForm('loginForm')">
+                        <i class="fas fa-arrow-left"></i> <span data-i18n="back">Back</span>
+                    </button>
+                    <h2 data-i18n="createAccountTitle">Create Your Account</h2>
+                        <form id="signupFormElement" autocomplete="off" enctype="multipart/form-data" class="input-group">
+                        <div class="floating-input-field">
+                            <input type="email" id="signupEmail" placeholder=" " required autocomplete="new-email">
+                            <label data-i18n="emailAddress">Email Address</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div class="floating-input-field">
+                            <input type="tel" id="signupPhone" placeholder=" " pattern="[0-9]{10}" maxlength="10" required autocomplete="new">
+                            <label data-i18n="phoneNumber">Mobile Number</label>
+                            <i class="fas fa-phone input-icon"></i>
+                        </div>
+                        <div class="floating-input-field">
+                            <input type="text" id="signupName" placeholder=" " required>
+                            <label data-i18n="fullName">Full Name</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="floating-input-field">
+                            <input type="password" id="signupPassword" placeholder=" " required autocomplete="new-password">
+                            <label data-i18n="password">Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <span class="password-eye" onclick="togglePasswordVisibility('signupPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div class="mb-3" id="certificateUploadBox" style="width:100%; display:none;">
+                            <label for="signupCertificate" style="font-weight:600; display:block; margin-bottom:6px; color:#155724;">
+                                <i class="fas fa-certificate me-1"></i>
+                                You must upload an organic certificate (PDF or image) to register as a farmer
+                            </label>
+                            <input type="file" id="signupCertificate" name="certificate" accept=".pdf,image/*" required style="width:100%; padding:10px; border-radius:8px; border:1.5px solid #b2dfdb; background:#f8fffa;">
+                        </div>
+                    </form>
+                    <div id="signupOtpSection" style="display:none; width:100%; margin-top:12px; padding:14px; border:1px solid #d7ebd7; border-radius:14px; background:#f7fff7;">
+                        <div class="floating-input-field">
+                            <input type="text" id="signupEmailOtp" placeholder=" " inputmode="numeric" maxlength="6" autocomplete="one-time-code">
+                            <label>Email OTP</label>
+                            <i class="fas fa-envelope-open-text input-icon"></i>
+                        </div>
+                        <div id="signupOtpMessage" class="success-message" style="display:none; margin-top:10px;"></div>
+                    </div>
+                    <div id="signupError" class="invalid-feedback" style="display:none;"></div>
+                    <div class="password-requirements" data-i18n="passwordReq">
+                        <i class="fas fa-info-circle"></i> Password must be at least 6 characters and include a special
+                        character (!@#$%^&*).
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:14px;">
+                        <button class="btn-custom" id="signupRequestOtpBtn" onclick="signup(event)">
+                            <i class="fas fa-paper-plane"></i> <span>Send Email OTP</span>
+                        </button>
+                        <button class="btn-custom" id="signupVerifyBtn" onclick="completeSignup(event)" style="display:none;">
+                            <i class="fas fa-shield-alt"></i> <span>Verify Email OTP &amp; Create Account</span>
+                        </button>
+                    </div>
+                    <p class="form-footer"><span data-i18n="alreadyHaveAccount">Already have an account?</span> <span
+                            class="toggle-link" onclick="toggleForm('loginForm')" data-i18n="login">Login</span></p>
+                </div>
+
+                <div id="recoverForm" style="display: none;">
+                    <button class="btn btn-link back-btn mb-2" style="padding:0; color:#388e3c; font-weight:600;" onclick="toggleForm('loginForm')">
+                        <i class="fas fa-arrow-left"></i> <span data-i18n="back">Back</span>
+                    </button>
+                    <h2 data-i18n="recoverTitle">Recover Password</h2>
+                    <div id="recoverSuccessMsg" class="success-message" style="display:none;"></div>
+                                    <form id="recoverFormElement" autocomplete="off" class="input-group">
+                        <div class="floating-input-field">
+                                            <input type="email" id="recoverEmail" placeholder=" " required autocomplete="new-email">
+                            <label data-i18n="enterEmail">Enter your email</label>
+                            <i class="fas fa-envelope input-icon"></i>
+                        </div>
+                        <div id="recoverError" class="invalid-feedback"></div>
+                    </form>
+                    <button class="btn-custom" onclick="recoverPassword(event)">
+                        <i class="fas fa-key"></i> <span data-i18n="resetPasswordBtn">Reset Password</span>
+                    </button>
+                    <p class="form-footer"><span data-i18n="backTo">Back to</span> <span class="toggle-link"
+                            onclick="toggleForm('loginForm')" data-i18n="login">Login</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+                <!-- Popup for role mismatch -->
+    <div id="roleMismatchPopup" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.35); z-index:2000; align-items:center; justify-content:center;">
+      <div style="background:#fff; color:#222; border-radius:18px; padding:32px 28px; max-width:350px; margin:auto; box-shadow:0 8px 32px rgba(0,0,0,0.18); text-align:center;">
+        <div style="font-size:2.2rem; color:#e53935; margin-bottom:12px;"><i class="fas fa-exclamation-triangle"></i></div>
+        <div id="roleMismatchMsg" style="font-size:1.1rem; margin-bottom:18px;"></div>
+        <button class="btn-custom" onclick="document.getElementById('roleMismatchPopup').style.display='none'">OK</button>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="lang-core.js"></script>
+    <script type="module" src="index.js"></script>
+    <script src="/notifications.js"></script>
+</body>
+
+</html>

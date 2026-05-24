@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - AgroDirect</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    <script src="theme-switcher.js"></script>
+    <script src="theme-customizer.js" defer></script>
+    <style>
+        .admin-badge {
+            background-color: #d32f2f;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <button id="themeToggle" class="theme-toggle" onclick="window.ThemeSwitcher.toggle()" data-i18n-title="toggleTheme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <div class="container">
+        <div class="form-box">
+            <div class="form-content">
+                <div class="logo">
+                    <h1 class="premium-logo">
+                        <span class="icon-stack">
+                            <i class="fas fa-circle icon-bg"></i>
+                            <i class="fas fa-shield-alt icon-main"></i>
+                        </span>
+                        AgroDirect
+                    </h1>
+                    <div class="admin-badge">Admin Portal</div>
+                </div>
+
+                <div id="loginForm" autocomplete="off" style="margin-top: 30px;">
+                    <h2 data-i18n="loginTitle" style="margin-bottom: 25px;">Admin Authentication</h2>
+                    <div id="loginSuccessMsg" class="success-message" style="display:none;"></div>
+                    <form class="input-group" id="loginFormFields" onsubmit="adminLogin(event)" enctype="multipart/form-data">
+                        <div class="floating-input-field">
+                            <input type="text" id="loginEmailOrPhone" placeholder=" " required autocomplete="off">
+                            <label data-i18n="emailOrPhone">Email Address</label>
+                            <i class="fas fa-user input-icon"></i>
+                        </div>
+                        <div class="floating-input-field">
+                            <input type="password" id="loginPassword" placeholder=" " required autocomplete="new-password">
+                            <label data-i18n="password">Password</label>
+                            <i class="fas fa-lock input-icon"></i>
+                            <span class="password-eye" onclick="togglePasswordVisibility('loginPassword', this)">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                        </div>
+                        <div id="loginPasswordError" class="invalid-feedback"></div>
+                    </form>
+                    
+                    <button class="btn-custom" onclick="adminLogin(event)" style="background: linear-gradient(135deg, #d32f2f, #b71c1c);">
+                        <i class="fas fa-sign-in-alt"></i> <span>Secure Login</span>
+                    </button>
+                    <p class="form-footer mt-4">
+                        <span class="toggle-link" onclick="window.location.href='index.html'">
+                            <i class="fas fa-arrow-left"></i> Back to User Portal
+                        </span>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="notifications.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if already logged in as admin
+            try {
+                const u = localStorage.getItem('agroUser');
+                if (u) {
+                    const parsed = JSON.parse(u);
+                    if (parsed.role === 'admin') {
+                        window.location.href = '/adminpanel/admin.html';
+                    }
+                }
+            } catch(e) {}
+        });
+
+        function togglePasswordVisibility(inputId, iconSpan) {
+            const input = document.getElementById(inputId);
+            const icon = iconSpan.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        async function adminLogin(e) {
+            if (e) e.preventDefault();
+            
+            const emailOrPhone = document.getElementById('loginEmailOrPhone').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginPasswordError');
+
+            if (!emailOrPhone || !password) {
+                errorDiv.textContent = 'Please provide both email and password';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                // Admin login is specifically for the 'admin' role
+                let payLoad = { password, role: 'admin' };
+                
+                const isPhone = /^\\d{10}$/.test(emailOrPhone);
+                if (isPhone) payLoad.phone = emailOrPhone;
+                else payLoad.email = emailOrPhone;
+
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payLoad)
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.user && data.user.role === 'admin') {
+                    // Success
+                    errorDiv.style.display = 'none';
+                    sessionStorage.setItem('agroToken', data.token);
+                    sessionStorage.setItem('agroUser', JSON.stringify(data.user));
+                    sessionStorage.setItem('agroLoginTime', new Date().getTime().toString());
+                    
+                    const successMsg = document.getElementById('loginSuccessMsg');
+                    successMsg.textContent = 'Authentication successful. Redirecting to dashboard...';
+                    successMsg.style.display = 'block';
+
+                    setTimeout(() => {
+                        window.location.href = '/adminpanel/admin.html';
+                    }, 1000);
+                } else {
+                    errorDiv.textContent = data.message || 'Invalid admin credentials or unauthorized';
+                    errorDiv.style.display = 'block';
+                }
+            } catch (err) {
+                console.error("Admin login error:", err);
+                errorDiv.textContent = 'Server error during authentication';
+                errorDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+
+</html>

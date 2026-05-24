@@ -1,0 +1,1391 @@
+        <!-- Modern Confirmation Modal -->
+        <div class="modal fade" id="confirmActionModal" tabindex="-1" aria-labelledby="confirmActionModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmActionModalLabel">Confirm Action</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="confirmActionModalBody">
+                        <!-- Message will be set dynamically -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" id="confirmActionModalOk">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Farmer Details Modal -->
+        <div class="modal fade" id="farmerDetailModal" tabindex="-1" aria-labelledby="farmerDetailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="farmerDetailModalLabel"><i class="fas fa-user-farmer me-2"></i>Farmer Full Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" id="farmerDetailModalBody">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-user-circle fa-5x text-secondary"></i>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-md-6 border-bottom pb-2">
+                                <strong>Name:</strong> <span id="det-name"></span>
+                            </div>
+                            <div class="col-md-6 border-bottom pb-2">
+                                <strong>Email:</strong> <span id="det-email"></span>
+                            </div>
+                            <div class="col-md-6 border-bottom pb-2">
+                                <strong>Role:</strong> <span id="det-role" class="text-capitalize"></span>
+                            </div>
+                            <div class="col-md-6 border-bottom pb-2">
+                                <strong>Status:</strong> <span id="det-status"></span>
+                            </div>
+                            <div class="col-md-6 border-bottom pb-2">
+                                <strong>Registered On:</strong> <span id="det-date"></span>
+                            </div>
+                            <div class="col-md-12 border-bottom pb-2">
+                                <strong>Address:</strong> <span id="det-address"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <strong>Certificate:</strong>
+                                <div id="det-cert-container" class="mt-2 text-center">
+                                    <p id="no-cert" class="text-muted" style="display:none;">No certificate uploaded.</p>
+                                    <img id="det-cert-img" class="img-fluid rounded border shadow-sm" style="max-height: 400px; display:none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary px-4" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Agro-Direct</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="../notifications.css">
+    <script src="../theme-switcher.js"></script>
+    <script src="../notifications.js"></script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="admin.html"><i class="fas fa-leaf me-2"></i>Agro-Direct</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin.html"><i
+                                class="fas fa-tachometer-alt me-1"></i>Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="customization.html"><i class="fas fa-magic me-1"></i><span data-i18n="controls">Controls</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#farmer-verification-section" id="verifyTab"><i
+                                class="fas fa-user-check me-1"></i><span data-i18n="verifier">Verifier</span></a>
+                    </li>
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="user.html"><i class="fas fa-cog me-1"></i>Users</a>
+                    </li> -->
+                </ul>
+                <div class="d-flex align-items-center">
+                    <a href="orderadmin.html" class="btn btn-outline-light me-3">
+                        <i class="fas fa-shopping-cart me-1"></i><span data-i18n="orders">Orders</span>
+                    </a>
+
+                    <div class="dropdown" id="userSection" style="display: none;">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle me-1"></i><span id="userNameDisplay"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="userDropdown">
+                            <!-- Links will be populated by auth-core.js -->
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger fw-bold" href="#" id="logoutButton"><i class="fas fa-sign-out-alt me-2"></i>Sign Out</a></li>
+                        </ul>
+                    </div>
+                    <a href="../adminlogin.html" class="btn btn-outline-light ms-2" id="loginButton">
+                        <span data-i18n="login">Login</span> <i class="fas fa-sign-in-alt ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+
+        <!-- Force English language for admin dashboard -->
+        <script>
+            localStorage.setItem('agroDirectLang', 'en-US');
+            window.agroDirectLang = 'en-US';
+        </script>
+        <script type="module" src="../lang-core.js"></script>
+        <script src="../auth-core.js"></script>
+        <script src="../theme-customizer.js" defer></script>
+
+        <!-- Admin Auth Check -->
+        <script>
+            (function() {
+                const u = sessionStorage.getItem('agroUser');
+                if (!u) {
+                    window.location.href = '../adminlogin.html';
+                } else {
+                    try {
+                        const pj = JSON.parse(u);
+                        if (pj.role !== 'admin') {
+                            window.location.href = '../adminlogin.html';
+                        }
+                    } catch(e) {
+                        window.location.href = '../adminlogin.html';
+                    }
+                }
+            })();
+        </script>
+
+    <div class="dashboard-container">
+        <div class="panel-header text-center mb-4">
+            <h1 class="panel-title mb-3">
+                <a href="admin.html" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-leaf me-2"></i>
+                    Agro-Direct
+                </a>
+            </h1>
+            <span class="badge bg-primary mb-4" data-i18n="adminDashboard">Admin Panel</span>
+            <style>
+                .feature-card-inner {
+                    border-radius: 18px;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
+                    background: #fff;
+                    border: 1px solid rgba(0,0,0,0.05);
+                }
+                .feature-card-inner:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 15px 30px rgba(0,0,0,0.08) !important;
+                    border-color: rgba(0,0,0,0.1);
+                }
+                .icon-wrapper {
+                    width: 64px;
+                    height: 64px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 1rem;
+                    transition: transform 0.3s ease;
+                }
+                .feature-card-inner:hover .icon-wrapper {
+                    transform: scale(1.1);
+                }
+            </style>
+
+            <div class="dashboard-features-grid mt-5 w-100 mb-5">
+                <div class="row g-4 justify-content-center">
+                    
+                    <div class="col-xl-4 col-md-6">
+                        <a href="customization.html" class="text-decoration-none d-block h-100">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #f1f5f9;">
+                                        <i class="fas fa-sliders-h fs-4 text-secondary"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Controls & Settings</h5>
+                                    <p class="text-muted small mb-0">System configuration & site preferences.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    
+                    <div class="col-xl-4 col-md-6">
+                        <div class="d-block h-100" id="reviewTab">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #e0f2fe;">
+                                        <i class="fas fa-star-half-alt fs-4 text-info"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Product Reviews</h5>
+                                    <p class="text-muted small mb-0">Monitor & moderate customer feedback.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6">
+                        <div class="d-block h-100" id="contactMessagesTab">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #f0fdf4;">
+                                        <i class="fas fa-envelope-open-text fs-4 text-success"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Contact Messages</h5>
+                                    <p class="text-muted small mb-0">View all user inquiries from Contact Us.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6">
+                        <div class="d-block h-100" id="monthlySalesTab">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #dbeafe;">
+                                        <i class="fas fa-chart-line fs-4 text-primary"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Sales Analytics</h5>
+                                    <p class="text-muted small mb-0">Revenue streams & order activity.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6">
+                        <div class="d-block h-100" id="userVisitsTab">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #fef3c7;">
+                                        <i class="fas fa-users-viewfinder fs-4 text-warning"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Audience Details</h5>
+                                    <p class="text-muted small mb-0">Analyze visitor traffic & user growth.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-4 col-md-6">
+                        <div class="d-block h-100" id="manageCategoriesTab">
+                            <div class="card h-100 feature-card-inner shadow-sm p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-wrapper" style="background: #e2e8f0;">
+                                        <i class="fas fa-images fs-4 text-dark"></i>
+                                    </div>
+                                    <h5 class="fw-bold text-dark mb-2">Category Images</h5>
+                                    <p class="text-muted small mb-0">Curate and manage category banners.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+                    <!-- Monthly Sales Details Section -->
+                    <div id="monthly-sales-section" class="section-card mb-5 w-100" style="display: none; background: #ffffff; border-radius: 16px; border: 1px solid #eaeaea; box-shadow: 0 10px 30px rgba(0,0,0,0.04); padding: 30px;">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                            <h3 class="section-title m-0" style="font-weight: 700; color: #1e293b; font-size: 1.5rem;">
+                                <i class="fas fa-chart-pie text-primary me-2"></i>
+                                Advanced Sales Analytics
+                            </h3>
+                        </div>
+                        
+                        <!-- Top Summary Widgets -->
+                        <div class="row g-4 mb-4" id="salesSummaryCards">
+                            <div class="col-md-4">
+                                <div class="card border-0 rounded-4 p-4 shadow-sm h-100" style="background: linear-gradient(135deg, #e0eafc, #cfdef3);">
+                                    <h6 class="text-primary fw-bold text-uppercase mb-2" style="letter-spacing: 0.5px;"><i class="fas fa-wallet me-2"></i>Total Revenue Stream</h6>
+                                    <h2 class="fw-bolder text-dark mb-0 fs-2" id="statTotalRevenue">₹0.00</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-0 rounded-4 p-4 shadow-sm h-100" style="background: linear-gradient(135deg, #d4fc79, #96e6a1);">
+                                    <h6 class="text-success fw-bold text-uppercase mb-2" style="color: #2b7a0b !important; letter-spacing: 0.5px;"><i class="fas fa-box-open me-2"></i>Lifetime Orders</h6>
+                                    <h2 class="fw-bolder text-dark mb-0 fs-2" id="statTotalOrders">0</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-0 rounded-4 p-4 shadow-sm h-100" style="background: linear-gradient(135deg, #fbc2eb, #a6c1ee);">
+                                    <h6 class="text-dark fw-bold text-uppercase mb-2" style="letter-spacing: 0.5px;"><i class="fas fa-star text-warning me-2"></i>Overall Top Product</h6>
+                                    <h4 class="fw-bolder text-dark mb-0 text-truncate fs-3 pt-1" id="statTopProduct">Evaluating...</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive rounded-4 border" style="overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <table class="table table-hover align-middle mb-0" style="background-color: white;">
+                                <thead style="background-color: #f8fafc; color: #475569; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;">
+                                    <tr>
+                                        <th class="py-4 px-4 border-0">Reporting Period</th>
+                                        <th class="py-4 px-4 border-0 text-center">Volume (Orders)</th>
+                                        <th class="py-4 px-4 border-0 text-start">Gross Sales</th>
+                                        <th class="py-4 px-4 border-0 text-center">Month's Bestseller</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="monthlySalesTableBody" style="border-top: none;">
+                                    <tr><td colspan="4" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Loading advanced data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- User Visits Section -->
+                    <div id="user-visits-section" class="section-card mb-5 w-100" style="display: none; background: #ffffff; border-radius: 16px; border: 1px solid #eaeaea; box-shadow: 0 10px 30px rgba(0,0,0,0.04); padding: 30px;">
+                        <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                            <h3 class="section-title m-0" style="font-weight: 700; color: #1e293b; font-size: 1.5rem;">
+                                <i class="fas fa-users-viewfinder text-warning me-2"></i>
+                                Audience & Acquisition
+                            </h3>
+                        </div>
+
+                        <!-- Top Summary Widgets -->
+                        <div class="row g-4 mb-4" id="visitsSummaryCards">
+                            <div class="col-md-6">
+                                <div class="card border-0 rounded-4 p-4 shadow-sm h-100" style="background: linear-gradient(135deg, #ffd3a5, #fd6585);">
+                                    <h6 class="text-white fw-bold text-uppercase mb-2" style="letter-spacing: 0.5px;"><i class="fas fa-users me-2"></i>Total Registrations</h6>
+                                    <h2 class="fw-bolder text-white mb-0 fs-1" id="statTotalUsers">0</h2>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card border-0 rounded-4 p-4 shadow-sm h-100" style="background: linear-gradient(135deg, #84fab0, #8fd3f4);">
+                                    <h6 class="text-dark fw-bold text-uppercase mb-2" style="letter-spacing: 0.5px;"><i class="fas fa-arrow-trend-up text-primary me-2"></i>Highest Peak Month</h6>
+                                    <h4 class="fw-bolder text-dark mb-0 fs-2 pt-1" id="statPeakMonth">Evaluating...</h4>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive rounded-4 border" style="overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+                            <table class="table table-hover align-middle mb-0" style="background-color: white;">
+                                <thead style="background-color: #f8fafc; color: #475569; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px;">
+                                    <tr>
+                                        <th class="py-4 px-4 border-0">Timeline Trajectory</th>
+                                        <th class="py-4 px-4 border-0 text-center">Audience Acquired</th>
+                                        <th class="py-4 px-4 border-0 text-center">Status Index</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userVisitsTableBody" style="border-top: none;">
+                                    <tr><td colspan="3" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Compiling data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    <!-- Manage Categories Section -->
+                    <div id="manage-categories-section" class="section-card mb-5 w-100" style="display: none;">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="section-title">
+                                <i class="fas fa-images me-2"></i>
+                                Manage Category Images
+                            </h3>
+                        </div>
+                        <div class="table-responsive mb-4">
+                            <table class="table table-striped table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Category (Display Name)</th>
+                                        <th>Internal Name</th>
+                                        <th>Current Image</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="categoryListTableBody">
+                                    <tr><td colspan="4" class="text-center text-muted">Loading categories...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        <div id="alertToast" class="alert-toast"></div>
+
+        <!-- Verifier Section: Farmer Verification -->
+        <div id="farmer-verification-section" class="section-card mb-5" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="section-title">
+                    <i class="fas fa-user-check me-2"></i>
+                    <span data-i18n="verifier">Verifier</span>
+                </h3>
+            </div>
+            <div class="table-responsive mb-4">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="unverifiedFarmersTable">
+                        <tr><td colspan="4" class="text-center text-muted">No pending verification requests.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+                <h3 class="section-title">
+                    <i class="fas fa-user-check me-2"></i>
+                    <span data-i18n="verifiedFarmers">Verified Farmers</span>
+                </h3>
+                <span class="badge bg-success px-3 py-2" id="verifiedFarmersCount">0 Verified</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th data-i18n="productName">Name</th>
+                            <th data-i18n="email">Email</th>
+                            <th data-i18n="role">Role</th>
+                            <th data-i18n="productStatus">Status</th>
+                            <th data-i18n="actions">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="verifiedFarmersTable">
+                        <tr><td colspan="4" class="text-center text-muted">No verified farmers yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <!-- Farmer Detail Modal -->
+        <div class="modal fade" id="farmerDetailModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Farmer Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><strong>Name:</strong> <span id="det-name"></span></p>
+                                <p><strong>Email:</strong> <span id="det-email"></span></p>
+                                <p><strong>Role:</strong> <span id="det-role"></span></p>
+                                <p><strong>Status:</strong> <span id="det-status"></span></p>
+                                <p><strong>Registration Date:</strong> <span id="det-date"></span></p>
+                                <p><strong>Address:</strong> <span id="det-address"></span></p>
+                            </div>
+                            <div class="col-md-6 border-start">
+                                <h6 class="mb-3">Verification Certificate</h6>
+                                <div id="no-cert" style="display:none;" class="alert alert-light border">No certificate uploaded.</div>
+                                <img id="det-cert-img" src="" class="img-fluid rounded border shadow-sm" style="display:none; max-height: 400px; width: 100%; object-fit: contain;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+        <div class="modal fade" id="editProductModal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" data-i18n="edit">Edit Product Details</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editProductForm">
+                            <input type="hidden" id="editItemId">
+                            <input type="hidden" id="editItemCategory">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" class="form-control" id="editItemName" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label"><span data-i18n="productPrice">Price</span> (₹)</label>
+                                    <input type="number" step="0.01" class="form-control" id="editItemPrice" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Product Image</label>
+                                <input type="file" class="form-control" id="editItemImg" accept="image/png, image/jpeg">
+                                <img id="editImagePreview" class="img-thumbnail mt-3" style="display:none;max-height:150px;">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea class="form-control" id="editItemDesc" rows="3" required></textarea>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Size/Unit (optional)</label>
+                                    <input type="text" class="form-control" id="editItemSize">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label d-block">Status</label>
+                                    <div class="form-check form-switch mt-2">
+                                        <input class="form-check-input" type="checkbox" id="editItemAvailable">
+                                        <label class="form-check-label" for="editItemAvailable">Available</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" form="editProductForm" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2" data-i18n="loading">Loading data...</p>
+        </div>
+
+        <!-- Category Sections Container -->
+        <div id="categorySections">
+            <!-- Dynamic sections will be inserted here -->
+        </div>
+
+        <!-- Review Viewing Tab Section -->
+        <div id="review-section" class="section-card mb-5" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="section-title">
+                    <i class="fas fa-star-half-alt me-2"></i>
+                    Product Reviews
+                </h3>
+            </div>
+            <div class="table-responsive mb-5">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Reviewer</th>
+                            <th>Rating</th>
+                            <th>Comment</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviewTableBody">
+                        <tr><td colspan="4" class="text-center text-muted">No reviews to display.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contact Messages Section -->
+        <div id="contact-messages-section" class="section-card mb-5" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="section-title">
+                    <i class="fas fa-envelope-open-text me-2"></i>
+                    Contact Messages
+                </h3>
+            </div>
+            <div class="table-responsive mb-5">
+                <table class="table item-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Subject</th>
+                            <th>Message</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactMessagesTableBody">
+                        <tr><td colspan="7" class="text-center text-muted">No messages to display.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Farmer Details Section Removed as requested -->
+                    <tbody id="unverifiedFarmersTable">
+                        <tr>
+                            <td colspan="4" class="text-center text-muted">No pending verification requests.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Removed duplicate verified farmers section -->
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+            const currentLang = localStorage.getItem('agroDirectLang') || 'en-US';
+            $('#loadingSpinner').show();
+
+            // Add click handlers for admin panel buttons
+            $('#reviewTab').click(function () {
+                $('.section-card').hide();
+                $('#review-section').show();
+                loadReviews();
+            });
+
+            async function loadReviews() {
+                try {
+                    const res = await fetch('/api/reviews');
+                    const reviews = await res.json();
+                    
+                    const tbody = $('#reviewTableBody');
+                    if (!reviews || reviews.length === 0) {
+                        tbody.html('<tr><td colspan="7" class="text-center text-muted py-4">No reviews found in the system.</td></tr>');
+                        return;
+                    }
+
+                    tbody.html(reviews.map(r => `
+                        <tr>
+                            <td class="fw-bold">${r.productName}</td>
+                            <td><span class="badge bg-secondary">${r.category}</span></td>
+                            <td>
+                                <div>${r.userName || 'Anonymous'}</div>
+                                <small class="text-muted">${r.userEmail || ''}</small>
+                            </td>
+                            <td>
+                                <div class="text-warning">
+                                    ${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}
+                                </div>
+                            </td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${r.comment || ''}">
+                                ${r.comment || '<span class="text-muted italic">No comment</span>'}
+                            </td>
+                            <td class="small text-muted">${new Date(r.date).toLocaleDateString()}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm" onclick="deleteReview(${r.id})">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `).join(''));
+                } catch (e) {
+                    console.error("Error loading reviews:", e);
+                }
+            }
+
+            window.deleteReview = async function(id) {
+                const confirmed = await window.modernConfirm(
+                    'Delete Review',
+                    'Are you sure you want to delete this review? This action cannot be undone.'
+                );
+                
+                if (confirmed) {
+                    try {
+                        const res = await fetch(`/api/reviews/${id}`, { method: 'DELETE' });
+                        if (res.ok) {
+                            showSuccess('Review deleted successfully');
+                            loadReviews();
+                        } else {
+                            showError('Failed to delete review');
+                        }
+                    } catch (e) {
+                        console.error('Error deleting review:', e);
+                        showError('Error deleting review');
+                    }
+                }
+            };
+
+            $('#contactMessagesTab').click(function () {
+                $('.section-card').hide();
+                $('#contact-messages-section').show();
+                loadContactMessages();
+            });
+
+            async function loadContactMessages() {
+                try {
+                    const res = await fetch('/api/contact-messages');
+                    const messages = await res.json();
+                    const tbody = $('#contactMessagesTableBody');
+
+                    if (!messages || messages.length === 0) {
+                        tbody.html('<tr><td colspan="8" class="text-center text-muted py-4">No contact messages found.</td></tr>');
+                        return;
+                    }
+
+                    tbody.html(messages.map(msg => {
+                        const replyStatus = msg.isReplied ? '<span class="badge bg-success">Replied</span>' : '<span class="badge bg-warning">Pending</span>';
+                        return `
+                        <tr>
+                            <td>${msg.userName || 'Guest'}</td>
+                            <td><a href="mailto:${msg.userEmail}">${msg.userEmail || 'N/A'}</a></td>
+                            <td>${msg.phone || 'N/A'}</td>
+                            <td>${msg.subject || 'No subject'}</td>
+                            <td style="max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${msg.message || ''}">${msg.message || '-'}</td>
+                            <td class="small text-muted">${new Date(msg.date).toLocaleString()}</td>
+                            <td>${replyStatus}</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm me-2" onclick="replyToMessage(${msg.id}, '${msg.userName || 'Guest'}', '${msg.userEmail || ''}')">
+                                    <i class="fas fa-reply me-1"></i>Reply
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteContactMessage(${msg.id})">
+                                    <i class="fas fa-trash me-1"></i>Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `}).join(''));
+                } catch (e) {
+                    console.error('Error loading contact messages:', e);
+                    $('#contactMessagesTableBody').html('<tr><td colspan="8" class="text-center text-danger py-4">Unable to load contact messages.</td></tr>');
+                }
+            }
+
+            window.deleteContactMessage = async function(id) {
+                const confirmed = await window.modernConfirm(
+                    'Delete Contact Message',
+                    'Are you sure you want to delete this contact message? This action cannot be undone.'
+                );
+                
+                if (confirmed) {
+                    try {
+                        const res = await fetch(`/api/contact-messages/${id}`, { 
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                        if (res.ok) {
+                            showSuccess('Message deleted successfully');
+                            loadContactMessages();
+                        } else {
+                            const error = await res.json();
+                            showError('Failed to delete message: ' + (error.error || 'Unknown error'));
+                        }
+                    } catch (e) {
+                        console.error('Error deleting message:', e);
+                        showError('Error deleting message');
+                    }
+                }
+            };
+
+            $('#monthlySalesTab').click(function () {
+                $('.section-card').hide();
+                $('#monthly-sales-section').show();
+                loadMonthlySalesUI();
+            });
+
+            $('#userVisitsTab').click(function () {
+                $('.section-card').hide();
+                $('#user-visits-section').show();
+                loadUserVisitsUI();
+            });
+
+            async function loadMonthlySalesUI() {
+                try {
+                    const tbody = $('#monthlySalesTableBody');
+                    tbody.html('<tr><td colspan="4" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Processing sales...</td></tr>');
+                    const res = await fetch('/admin/analytics/monthly-sales');
+                    const data = await res.json();
+                    
+                    let totalRev = 0;
+                    let totalOrds = 0;
+                    
+                    if (data.salesByMonth && data.salesByMonth.length > 0) {
+                        const html = data.salesByMonth.map(m => {
+                            totalRev += parseFloat(m.totalSales) || 0;
+                            totalOrds += parseInt(m.totalOrders) || 0;
+                            return `<tr>
+                                <td class="fw-bold px-4 py-3" style="color: #334155; font-size: 1.05rem;">${m.month}</td>
+                                <td class="text-center"><span class="badge bg-transparent text-dark border border-secondary shadow-sm rounded-pill px-3 py-2" style="font-size: 0.85rem;"><i class="fas fa-shopping-bag me-2 text-muted"></i>${m.totalOrders}</span></td>
+                                <td class="text-success fw-bolder fs-5 text-start">₹${parseFloat(m.totalSales).toLocaleString('en-IN', {minimumFractionDigits: 2})}</td>
+                                <td class="text-center"><span class="badge" style="background-color: #e2e8f0; color: #475569; font-size: 0.85rem;">${m.topProduct || 'N/A'}</span></td>
+                            </tr>`;
+                        }).join('');
+                        tbody.html(html);
+                        
+                        // Try finding overall top product correctly if provided, or simply display best metric
+                        let bestProduct = 'Evaluating...';
+                        if (data.topProducts && data.topProducts.length > 0) {
+                            bestProduct = data.topProducts[0].name;
+                        } else {
+                            bestProduct = 'N/A';
+                        }
+                        
+                        $('#statTotalRevenue').text(`₹${totalRev.toLocaleString('en-IN', {minimumFractionDigits: 2})}`);
+                        $('#statTotalOrders').text(totalOrds);
+                        $('#statTopProduct').text(bestProduct);
+                        
+                    } else {
+                        tbody.html('<tr><td colspan="4" class="text-center text-muted py-5">No advanced sales data logged yet.</td></tr>');
+                    }
+                } catch(e) {
+                    console.error(e);
+                    $('#monthlySalesTableBody').html('<tr><td colspan="4" class="text-center text-danger py-5">System error processing sales matrix.</td></tr>');
+                }
+            }
+
+            async function loadUserVisitsUI() {
+                try {
+                    const tbody = $('#userVisitsTableBody');
+                    tbody.html('<tr><td colspan="3" class="text-center text-muted py-5"><div class="spinner-border spinner-border-sm text-warning me-2"></div>Calculating visits...</td></tr>');
+                    const res = await fetch('/admin/analytics/user-visits');
+                    const data = await res.json();
+                    
+                    let totalUsers = 0;
+                    let peakMonthVal = 0;
+                    let peakMonthName = "N/A";
+                    
+                    if (data && data.length > 0) {
+                        const html = data.map(m => {
+                            let uc = parseInt(m.userCount) || 0;
+                            totalUsers += uc;
+                            if (uc > peakMonthVal) {
+                                peakMonthVal = uc;
+                                peakMonthName = m.month;
+                            }
+                            return `<tr>
+                                <td class="fw-bold px-4 py-3" style="color: #334155; font-size: 1.05rem;">${m.month}</td>
+                                <td class="text-center"><span class="badge rounded-pill px-4 py-2 shadow-sm" style="background-color: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; font-size: 0.9rem;"><i class="fas fa-user-plus me-2"></i>${m.userCount} Recorded</span></td>
+                                <td class="text-center"><span class="badge bg-success bg-opacity-10 text-success border border-success px-3 py-2 rounded-pill"><i class="fas fa-arrow-trend-up me-1"></i> Positive</span></td>
+                            </tr>`;
+                        }).join('');
+                        tbody.html(html);
+                        
+                        $('#statTotalUsers').text(totalUsers);
+                        $('#statPeakMonth').text(`${peakMonthName} (${peakMonthVal})`);
+                    } else {
+                        tbody.html('<tr><td colspan="3" class="text-center text-muted py-5">No user registration footprint found.</td></tr>');
+                    }
+                } catch(e) {
+                    console.error(e);
+                    $('#userVisitsTableBody').html('<tr><td colspan="3" class="text-center text-danger py-5">System mapping failed for visits.</td></tr>');
+                }
+            }
+
+            // Category Images Management
+            $('#manageCategoriesTab').click(function () {
+                $('.section-card').hide();
+                $('#manage-categories-section').show();
+                loadCategoriesMgmt();
+            });
+
+            function loadCategoriesMgmt() {
+                $.get('/admin/categories', function (categories) {
+                    let rows = "";
+                    if (!categories || categories.length === 0) {
+                        $('#categoryListTableBody').html('<tr><td colspan="4" class="text-center text-muted">No categories found.</td></tr>');
+                        return;
+                    }
+                    categories.forEach(cat => {
+                        const imgSrc = cat.image && (cat.image.startsWith('data:') || cat.image.startsWith('http') || cat.image.startsWith('/')) 
+                                       ? cat.image 
+                                       : '../shopnow_images/vegetableimg.webp'; // fallback
+                        
+                        rows += `
+                            <tr>
+                                <td class="fw-bold fs-5">${cat.displayName}</td>
+                                <td class="text-muted">${cat.name}</td>
+                                <td>
+                                    <img src="${imgSrc}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #ccc;">
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <label class="btn btn-outline-primary btn-sm mb-0 shadow-sm" style="cursor: pointer;" title="Upload New Image">
+                                            <i class="fas fa-upload"></i>
+                                            <input type="file" class="d-none cat-img-upload" data-id="${cat.id}" accept="image/png, image/jpeg, image/webp">
+                                        </label>
+                                        <button class="btn btn-outline-danger btn-sm shadow-sm delete-category-btn" data-id="${cat.id}" data-name="${cat.displayName}" title="Remove Category">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    });
+                    $('#categoryListTableBody').html(rows);
+                });
+            }
+
+            $(document).on('change', '.cat-img-upload', function() {
+                const file = this.files[0];
+                if (!file) return;
+                const id = $(this).data('id');
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        const max_size = 800;
+                        
+                        // Maintain aspect ratio while resizing
+                        if (width > height) {
+                            if (width > max_size) {
+                                height *= max_size / width;
+                                width = max_size;
+                            }
+                        } else {
+                            if (height > max_size) {
+                                width *= max_size / height;
+                                height = max_size;
+                            }
+                        }
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        // Compress to JPEG with 0.8 quality
+                        const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                        
+                        $.ajax({
+                            url: '/admin/update-category-image',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify({ id: id, imageBase64: base64 }),
+                            success: function (res) {
+                                showSuccess(res.message);
+                                loadCategoriesMgmt();
+                            },
+                            error: function (err) {
+                                let errMsg = 'Unknown error';
+                                if (err.status === 413) errMsg = 'Image is too large.';
+                                else if (err.responseJSON && err.responseJSON.error) errMsg = err.responseJSON.error;
+                                showError('Error updating image: ' + errMsg);
+                            }
+                        });
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on('click', '.delete-category-btn', async function() {
+                const id = $(this).data('id');
+                const name = $(this).data('name');
+                const confirmed = await window.modernConfirm(
+                    'Remove Category',
+                    `Are you sure you want to completely remove the category "${name}"? This will delete all products inside it. This action cannot be undone.`
+                );
+                
+                if (confirmed) {
+                    $.ajax({
+                        url: '/admin/delete-category',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ id: id }),
+                        success: function (res) {
+                            showSuccess(res.message);
+                            loadCategoriesMgmt();
+                        },
+                        error: function (err) {
+                            showError('Error deleting: ' + (err.responseJSON?.error || 'Unknown error'));
+                        }
+                    });
+                }
+            });
+
+            function loadDashboard() {
+                // Category/product navigation and sections removed as requested
+                $('#categorySections').html('');
+                $('#loadingSpinner').hide();
+            }
+
+            loadDashboard();
+
+
+            // Load unverified and verified farmers
+            function loadFarmerVerification() {
+                // Unverified farmers
+                $.get('/admin/unverified-farmers', function(farmers) {
+                    let rows = '';
+                    if (!farmers || farmers.length === 0) {
+                        rows = '<tr><td colspan="4" class="text-center text-muted">No pending verification requests.</td></tr>';
+                    } else {
+                        farmers.forEach(farmer => {
+                            rows += `<tr>
+                                <td>${farmer.name}</td>
+                                <td>${farmer.email}</td>
+                                <td>${farmer.role}</td>
+                                <td>
+                                    <button class="btn btn-success btn-sm verify-farmer-btn" data-id="${farmer.id}">Verify</button>
+                                    <button class="btn btn-danger btn-sm reject-farmer-btn ms-2" data-id="${farmer.id}">Reject</button>
+                                </td>
+                            </tr>`;
+                        });
+                    }
+                    $('#unverifiedFarmersTable').html(rows);
+                });
+                // Verified farmers
+                $.get('/admin/verified-farmers', function(farmers) {
+                    let rows = '';
+                    if (!farmers || farmers.length === 0) {
+                        rows = '<tr><td colspan="4" class="text-center text-muted">No verified farmers yet.</td></tr>';
+                    } else {
+                        farmers.forEach(farmer => {
+                            rows += `<tr>
+                                <td>${farmer.name}</td>
+                                <td>${farmer.email}</td>
+                                <td>${farmer.role}</td>
+                                <td>
+                                    <span class="badge bg-success">Verified</span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-info btn-sm view-farmer-btn" data-id="${farmer.id}"><i class="fas fa-eye me-1"></i>View</button>
+                                    <button class="btn btn-danger btn-sm remove-farmer-btn ms-2" data-id="${farmer.id}"><i class="fas fa-trash me-1"></i>Remove</button>
+                                </td>
+                            </tr>`;
+                        });
+                                // Modern confirmation modal logic
+                                let confirmActionCallback = null;
+                                function showConfirmModal(message, okBtnClass, okBtnText, callback) {
+                                    $('#confirmActionModalBody').text(message);
+                                    const okBtn = $('#confirmActionModalOk');
+                                    okBtn.removeClass('btn-danger btn-success btn-primary').addClass(okBtnClass || 'btn-danger');
+                                    okBtn.text(okBtnText || 'OK');
+                                    confirmActionCallback = callback;
+                                    const modal = new bootstrap.Modal(document.getElementById('confirmActionModal'));
+                                    modal.show();
+                                }
+                                $('#confirmActionModalOk').off('click').on('click', function() {
+                                    if (typeof confirmActionCallback === 'function') confirmActionCallback();
+                                    const modalEl = document.getElementById('confirmActionModal');
+                                    const modal = bootstrap.Modal.getInstance(modalEl);
+                                    modal.hide();
+                                });
+
+                                // Handle reject button click
+                                $(document).on('click', '.reject-farmer-btn', function () {
+                                    const id = $(this).data('id');
+                                    showConfirmModal('Are you sure you want to reject this farmer request?', 'btn-danger', 'Reject', function() {
+                                        $.ajax({
+                                            url: `/admin/reject-farmer/${id}`,
+                                            type: 'DELETE',
+                                            success: function () {
+                                                loadFarmerVerification();
+                                            },
+                                            error: function () {
+                                                alert('Failed to reject farmer request.');
+                                            }
+                                        });
+                                    });
+                                });
+
+                                // Handle remove button click for verified farmers
+                                $(document).on('click', '.remove-farmer-btn', function () {
+                                    const id = $(this).data('id');
+                                    showConfirmModal('Are you sure you want to remove this verified farmer?', 'btn-danger', 'Remove', function() {
+                                        $.ajax({
+                                            url: `/admin/remove-farmer/${id}`,
+                                            type: 'DELETE',
+                                            success: function () {
+                                                loadFarmerVerification();
+                                            },
+                                            error: function () {
+                                                alert('Failed to remove farmer.');
+                                            }
+                                        });
+                                    });
+                                });
+                    }
+                    $('#verifiedFarmersTable').html(rows);
+                    $('#verifiedFarmersCount').text(`${farmers.length} Verified`);
+
+                    // View Full Details Logic
+                    $(document).off('click', '.view-farmer-btn').on('click', '.view-farmer-btn', function() {
+                        const id = $(this).data('id');
+                        $.get(`/admin/farmer-details/${id}`, function(farmer) {
+                            $('#det-name').text(farmer.name);
+                            $('#det-email').text(farmer.email);
+                            $('#det-role').text(farmer.role);
+                            $('#det-status').html(farmer.isVerified ? '<span class="badge bg-success">Verified</span>' : '<span class="badge bg-warning">Unverified</span>');
+                            $('#det-date').text(farmer.registrationDate ? new Date(farmer.registrationDate).toLocaleDateString() : 'N/A');
+                            $('#det-address').text(farmer.address || 'Address not provided');
+                            
+                            if (farmer.certificate) {
+                                $('#det-cert-img').attr('src', farmer.certificate).show();
+                                $('#no-cert').hide();
+                            } else {
+                                $('#det-cert-img').hide();
+                                $('#no-cert').show();
+                            }
+                            
+                            new bootstrap.Modal(document.getElementById('farmerDetailModal')).show();
+                        }).fail(function() {
+                            alert('Failed to load farmer details.');
+                        });
+                    });
+                });
+            }
+
+            // Show Verifier section and load data
+            $('#verifyTab').click(function (e) {
+                e.preventDefault();
+                $('.section-card').hide();
+                $('.category-nav').hide();
+                $('#farmer-verification-section').show();
+                if ($('#verifier-info-alert').length === 0) {
+                    $('<div id="verifier-info-alert" class="alert alert-info mb-4"><i class="fas fa-info-circle me-2"></i>Product management is now handled by farmers. Admins can only verify farmers and manage website settings.</div>').insertBefore('#farmer-verification-section');
+                }
+                loadFarmerVerification();
+            });
+
+            // Handle verify button click
+            $(document).on('click', '.verify-farmer-btn', function () {
+                const id = $(this).data('id');
+                $.ajax({
+                    url: '/admin/verify-farmer',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ id }),
+                    success: function (res) {
+                        showSuccess(res.message || 'Farmer verified successfully');
+                        loadFarmerVerification();
+                    },
+                    error: function (err) {
+                        showError('Error: ' + (err.responseJSON?.error || 'Failed to verify farmer'));
+                    }
+                });
+            });
+
+            function fetchItems(type, tableId, updateUrl, countId) {
+                $.get(`/admin/items/${type}`, function (items) {
+                    let rows = "";
+                    if (!items || items.length === 0) {
+                        $(tableId).html('<tr><td colspan="5" class="text-center text-muted">No items in this category.</td></tr>');
+                        $(countId).text(`0 items`);
+                        return;
+                    }
+
+                    items.forEach(item => {
+                        const statusBadge = item.isAvailable ?
+                            `<span class="status-badge status-available" data-i18n="available">${window.translations?.[currentLang]?.available || 'Available'}</span>` :
+                            `<span class="status-badge status-unavailable" data-i18n="unavailable">${window.translations?.[currentLang]?.unavailable || 'Unavailable'}</span>`;
+
+                        rows += `
+                            <tr>
+                                <td class="item-name">${item.name}</td>
+                                <td><img src="${item.img}" class="item-img" alt="${item.name}"></td>
+                                <td>${statusBadge}</td>
+                                <td>
+                                    <div class="form-check form-switch">
+                                        <input type="checkbox" class="form-check-input item-checkbox" 
+                                            data-name="${item.name}" 
+                                            data-type="${type}"
+                                            data-url="${updateUrl}" 
+                                            ${item.isAvailable ? "checked" : ""}>
+                                    </div>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-info edit-details-btn me-2" 
+                                        data-item='${JSON.stringify(item).replace(/'/g, "&apos;")}'
+                                        data-category="${type}">
+                                        <i class="fas fa-edit"></i> <span data-i18n="edit">Edit Details</span>
+                                    </button>
+                                    <button class="btn btn-sm btn-warning price-change-btn" 
+                                        data-name="${item.name}" 
+                                        data-type="${type}"
+                                        data-price="${item.price}">
+                                        <i class="fas fa-rupee-sign"></i> <span data-i18n="productPrice">Price</span>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    });
+
+                    $(tableId).html(rows);
+                    $(countId).text(`${items.length} items`);
+                });
+            }
+
+            $(document).on('click', '.edit-details-btn', function () {
+                const item = $(this).data('item');
+                const category = $(this).data('category');
+
+                                $('#editItemId').val(item.id);
+                                $('#editItemCategory').val(category);
+                                $('#editItemName').val(item.name);
+                                $('#editItemPrice').val(item.price);
+                                $('#editItemImg').val(''); // Clear file input
+                                $('#editItemDesc').val(item.desc);
+                                $('#editItemSize').val(item.size || '');
+                                $('#editItemAvailable').prop('checked', item.isAvailable);
+                                if (item.img && item.img.startsWith('data:image')) {
+                                    $('#editImagePreview').attr('src', item.img).show();
+                                } else if (item.img) {
+                                    $('#editImagePreview').attr('src', item.img).show();
+                                } else {
+                                    $('#editImagePreview').hide();
+                                }
+                                $('#editProductModal').modal('show');
+            });
+
+            $('#editProductForm').submit(function (e) {
+                e.preventDefault();
+                                const getBase64 = file => new Promise((resolve, reject) => {
+                                    const reader = new FileReader();
+                                    reader.onload = () => resolve(reader.result);
+                                    reader.onerror = reject;
+                                    reader.readAsDataURL(file);
+                                });
+
+                                (async () => {
+                                    const file = $('#editItemImg')[0].files[0];
+                                    let img = '';
+                                    if (file) {
+                                        img = await getBase64(file);
+                                    } else {
+                                        img = $('#editImagePreview').attr('src') || '';
+                                    }
+                                    const data = {
+                                        id: $('#editItemId').val(),
+                                        category: $('#editItemCategory').val(),
+                                        name: $('#editItemName').val(),
+                                        price: $('#editItemPrice').val(),
+                                        img,
+                                        desc: $('#editItemDesc').val(),
+                                        size: $('#editItemSize').val(),
+                                        isAvailable: $('#editItemAvailable').is(':checked')
+                                    };
+                                    $.ajax({
+                                        url: '/admin/edit-product',
+                                        type: 'POST',
+                                        contentType: 'application/json',
+                                        data: JSON.stringify(data),
+                                        success: function (res) {
+                                            showSuccess(res.message);
+                                            $('#editProductModal').modal('hide');
+                                            loadDashboard();
+                                        },
+                                        error: function (err) {
+                                            showError('Error: ' + (err.responseJSON?.error || 'Failed to update product'));
+                                        }
+                                    });
+                                })();
+                                    // Preview image in edit modal
+                                    $('#editItemImg').on('change', function () {
+                                        const file = this.files[0];
+                                        if (file) {
+                                            const reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                $('#editImagePreview').attr('src', e.target.result).show();
+                                            };
+                                            reader.readAsDataURL(file);
+                                        } else {
+                                            $('#editImagePreview').hide();
+                                        }
+                                    });
+            });
+
+            $(document).on('click', '.price-change-btn', function () {
+                const button = $(this);
+                const itemName = button.data("name");
+                const itemType = button.data("type");
+                const currentPrice = button.data("price");
+
+                const newPrice = prompt(`Update price for ${itemName} (Current: ₹${currentPrice}):`);
+                if (newPrice && !isNaN(newPrice)) {
+                    $.ajax({
+                        url: "/admin/update-price",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({ name: itemName, type: itemType, price: parseFloat(newPrice) }),
+                        success: function (res) {
+                            showSuccess(`Price updated for ${itemName}`);
+                            button.data('price', newPrice);
+                        }
+                    });
+                }
+            });
+
+            $(document).on('change', '.item-checkbox', function () {
+                const itemName = $(this).data("name");
+                const isAvailable = $(this).is(":checked");
+                const type = $(this).data("type");
+
+                $.post(`/admin/select-${type}`, { name: itemName, isAvailable }, function () {
+                    showSuccess(`${itemName} status updated`);
+                });
+            });
+
+            // Reply to contact message function
+            window.replyToMessage = function(messageId, userName, userEmail) {
+                $('#replyMessageId').val(messageId);
+                $('#replyUserName').text(userName);
+                $('#replyUserEmail').text(userEmail);
+                $('#replyText').val('');
+                new bootstrap.Modal(document.getElementById('replyModal')).show();
+            };
+
+            // Send reply
+            window.sendReply = async function() {
+                const messageId = $('#replyMessageId').val();
+                const replyText = $('#replyText').val().trim();
+                
+                if (!replyText) {
+                    alert('Please enter a reply message.');
+                    return;
+                }
+
+                try {
+                    const res = await fetch(`/api/contact-messages/${messageId}/reply`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ adminReply: replyText })
+                    });
+
+                    if (res.ok) {
+                        alert('Reply sent successfully!');
+                        $('#replyModal').modal('hide');
+                        loadContactMessages();
+                    } else {
+                        const error = await res.json();
+                        alert('Failed to send reply: ' + (error.error || 'Unknown error'));
+                    }
+                } catch (e) {
+                    console.error('Error sending reply:', e);
+                    alert('Failed to send reply. Please try again.');
+                }
+            };
+
+            // Internal legacy showToast replaced by notifications.js global showSuccess/showError
+        });
+    </script>
+
+    <!-- Reply Modal -->
+    <div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="replyModalLabel">Reply to Contact Message</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="replyMessageId">
+                    <div class="mb-3">
+                        <label class="form-label">Replying to:</label>
+                        <div class="border p-2 bg-light rounded">
+                            <strong id="replyUserName"></strong> (<span id="replyUserEmail"></span>)
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="replyText" class="form-label">Your Reply:</label>
+                        <textarea class="form-control" id="replyText" rows="5" placeholder="Enter your reply message..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="sendReply()">Send Reply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Product - Agro-Direct</title>
+  
+  <!-- Bootstrap & FontAwesome -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 70px;
+    }
+    
+    .navbar-custom {
+      background-color: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .navbar-brand {
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .navbar-brand i {
+      color: #27ae60;
+    }
+    
+    .nav-link {
+      font-weight: 500;
+      color: #34495e;
+      margin: 0 5px;
+    }
+    
+    .nav-link:hover {
+      color: #27ae60;
+    }
+    
+    .nav-link.active {
+      background-color: #f1f7fc;
+      color: #27ae60;
+      border-radius: 4px;
+    }
+    
+    .btn-login {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .btn-login:hover {
+      background-color: #219653;
+      color: white;
+    }
+    
+    .btn-order {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      font-weight: 500;
+    }
+    
+    .btn-order:hover {
+      background-color: #2980b9;
+      color: white;
+    }
+    
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    .panel-header {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+    
+    .panel-title {
+      color: #2c3e50;
+      font-weight: 600;
+      margin-bottom: 0;
+    }
+    
+    .upload-container {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 25px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s;
+    }
+    
+    .upload-container:hover {
+      transform: translateY(-5px);
+    }
+    
+    .form-title {
+      color: #2c3e50;
+      font-size: 1.5rem;
+      margin-bottom: 25px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #f1f1f1;
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-title i {
+      margin-right: 10px;
+      color: #27ae60;
+    }
+    
+    .btn-submit {
+      background-color: #27ae60;
+      color: white;
+      border: none;
+      font-weight: 500;
+      padding: 8px 20px;
+      transition: all 0.2s;
+    }
+    
+    .btn-submit:hover {
+      background-color: #219653;
+      transform: translateY(-1px);
+    }
+    
+    .btn-secondary {
+      background-color: #95a5a6;
+      color: white;
+      border: none;
+      font-weight: 500;
+      padding: 8px 20px;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #7f8c8d;
+      color: white;
+    }
+    
+    .category-card {
+      background-color: #ffffff;
+      border: 1px solid #e9ecef;
+      text-align: center;
+      padding: 25px 15px;
+      cursor: pointer;
+      border-radius: 10px;
+      transition: all 0.3s;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      height: 100%;
+    }
+    
+    .category-card:hover {
+      border-color: #27ae60;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .category-card.selected {
+      background-color: #e8f5e9;
+      border-color: #27ae60;
+    }
+    
+    .category-card i {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+    }
+    
+    .category-card div {
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    
+    /* Category-specific colors */
+    .category-card[data-category="fruits"] i { color: #e74c3c; }
+    .category-card[data-category="vegetables"] i { color: #2ecc71; }
+    .category-card[data-category="seeds"] i { color: #f39c12; }
+    .category-card[data-category="saplings"] i { color: #9b59b6; }
+    .category-card[data-category="oilextracts"] i { color: #3498db; }
+    .category-card[data-category="grains"] i { color: #e67e22; }
+    
+    #imagePreview {
+      margin-top: 15px;
+      max-width: 200px;
+      max-height: 200px;
+      display: none;
+      border-radius: 8px;
+      border: 2px solid #e9ecef;
+    }
+    
+    .alert-toast {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      z-index: 1100;
+      min-width: 300px;
+    }
+    
+    .form-label {
+      font-weight: 500;
+      color: #2c3e50;
+      margin-bottom: 8px;
+    }
+    
+    .form-control {
+      border-radius: 5px;
+      padding: 10px 15px;
+      border: 1px solid #ced4da;
+    }
+    
+    .form-control:focus {
+      border-color: #27ae60;
+      box-shadow: 0 0 0 0.25rem rgba(39, 174, 96, 0.25);
+    }
+    
+    .form-check-input {
+      width: 1.5em;
+      height: 1.5em;
+      cursor: pointer;
+    }
+    
+    .form-check-input:checked {
+      background-color: #2ecc71;
+      border-color: #2ecc71;
+    }
+    
+    .form-switch .form-check-input {
+      width: 3em;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="#"><i class="fas fa-leaf me-2"></i>Agro-Direct</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="admin.html"><i class="fas fa-tachometer-alt me-1"></i>Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="upload.html"><i class="fas fa-plus-circle me-1"></i>Upload Product</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link" href="user.html"><i class="fas fa-users me-1"></i>Users</a>
+        </li> -->
+      </ul>
+      <div class="d-flex">
+        <a href="orderadmin.html" class="btn btn-order me-2">
+          <i class="fas fa-shopping-cart me-1"></i>Orders
+        </a>
+        <!-- <a href="../frontend/index.html" class="btn btn-login">
+          <i class="fas fa-sign-in-alt me-1"></i>Login
+        </a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="dashboard-container">
+  <div class="panel-header">
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="panel-title">
+        <i class="fas fa-plus-circle me-2"></i>
+        Upload New Product
+      </h1>
+      <span class="badge bg-primary">Admin Panel</span>
+    </div>
+  </div>
+
+  <div id="alertToast" class="alert-toast"></div>
+
+  <!-- Upload Form -->
+  <div class="upload-container" id="categoryStep">
+    <h2 class="form-title"><i class="fas fa-list me-2"></i>Select Product Category</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="category-card" data-category="fruits">
+          <i class="fas fa-apple-alt"></i>
+          <div>Fruits</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card" data-category="vegetables">
+          <i class="fas fa-carrot"></i>
+          <div>Vegetables</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card" data-category="seeds">
+          <i class="fas fa-seedling"></i>
+          <div>Seeds</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card" data-category="saplings">
+          <i class="fas fa-tree"></i>
+          <div>Saplings</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card" data-category="oilextracts">
+          <i class="fas fa-oil-can"></i>
+          <div>Oil Extracts</div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="category-card" data-category="grains">
+          <i class="fas fa-wheat-awn"></i>
+          <div>Grains</div>
+        </div>
+      </div>
+    </div>
+    <div class="text-center mt-4">
+      <button class="btn btn-submit" id="nextBtn" disabled><i class="fas fa-arrow-right me-2"></i>Next</button>
+    </div>
+  </div>
+
+  <div class="upload-container" id="productFormStep" style="display: none;">
+    <h2 class="form-title"><i class="fas fa-plus-circle me-2"></i>Add New Product</h2>
+    <form id="productForm">
+      <input type="hidden" id="productCategory">
+
+      <div class="mb-3">
+        <label class="form-label">Product Name</label>
+        <input type="text" class="form-control" id="productName" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Price (₹)</label>
+        <input type="number" class="form-control" id="productPrice" required min="1" step="0.01">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea class="form-control" id="productDescription" rows="4" required></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Product Image</label>
+        <input type="file" class="form-control" id="productImage" accept="image/png, image/jpeg">
+        <img id="imagePreview" class="img-thumbnail mt-3">
+      </div>
+
+      <div class="form-check form-switch mb-4">
+        <input class="form-check-input" type="checkbox" id="productAvailable" checked>
+        <label class="form-check-label" for="productAvailable">Available Immediately</label>
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" id="backBtn"><i class="fas fa-arrow-left me-2"></i>Back</button>
+        <button type="submit" class="btn btn-submit"><i class="fas fa-save me-2"></i>Save Product</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- JS -->
+<script>
+$(document).ready(function() {
+  let selectedCategory = null;
+
+  // Select category
+  $('.category-card').click(function() {
+    $('.category-card').removeClass('selected');
+    $(this).addClass('selected');
+    selectedCategory = $(this).data('category');
+    $('#nextBtn').prop('disabled', false);
+  });
+
+  // Next to Product Form
+  $('#nextBtn').click(function() {
+    if (!selectedCategory) {
+      showToast('Please select a category first', 'danger');
+      return;
+    }
+    $('#productCategory').val(selectedCategory);
+    $('#categoryStep').hide();
+    $('#productFormStep').show();
+  });
+
+  // Back to Category Step
+  $('#backBtn').click(function() {
+    $('#productFormStep').hide();
+    $('#categoryStep').show();
+  });
+
+  // Preview image
+  $('#productImage').change(function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        $('#imagePreview').attr('src', e.target.result).show();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      $('#imagePreview').hide();
+    }
+  });
+
+  // Submit form
+  $('#productForm').submit(async function(e) {
+    e.preventDefault();
+
+    const name = $('#productName').val().trim();
+    const price = $('#productPrice').val();
+    const desc = $('#productDescription').val().trim();
+    const category = $('#productCategory').val();
+    const isAvailable = $('#productAvailable').is(':checked');
+
+    if (!name || !price || !desc) {
+      showToast('Please fill all fields', 'warning');
+      return;
+    }
+
+    let imgBase64 = '';
+    const file = $('#productImage')[0].files[0];
+    if (file) {
+      imgBase64 = await toBase64(file);
+    }
+
+    $.ajax({
+      url: 'http://localhost:5003/admin/add-product',
+      method: 'POST',
+      contentType: 'application/json',
+      data: JSON.stringify({
+        name,
+        price,
+        desc,
+        category,
+        isAvailable,
+        img: imgBase64
+      }),
+      success: function(response) {
+        if (response.success) {
+          showToast('Product added successfully!', 'success');
+          $('#productForm')[0].reset();
+          $('#imagePreview').hide();
+          $('#productFormStep').hide();
+          $('#categoryStep').show();
+        } else {
+          showToast(response.message || 'Failed to add product', 'danger');
+        }
+      },
+      error: function(xhr) {
+        console.error(xhr);
+        showToast('Error adding product', 'danger');
+      }
+    });
+  });
+
+  // Helper: file to base64
+  function toBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
+  }
+
+  // Toast
+  function showToast(message, type) {
+    const icon = type === 'success' ? 'check-circle' : 
+                 type === 'warning' ? 'exclamation-triangle' : 
+                 type === 'danger' ? 'times-circle' : 'info-circle';
+    
+    const toastHTML = `
+      <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+        <i class="fas fa-${icon} me-2"></i>
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>`;
+    
+    $('#alertToast').html(toastHTML);
+    setTimeout(() => $('#alertToast .alert').alert('close'), 3000);
+  }
+});
+</script>
+
+</body>
+</html>

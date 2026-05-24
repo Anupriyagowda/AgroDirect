@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Customization - Admin Panel</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="../notifications.css">
+    <script src="../theme-switcher.js"></script>
+    <script src="../notifications.js"></script>
+    <style>
+        .custom-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .color-preview {
+            width: 100%;
+            height: 100px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="../home page/home.html"><i class="fas fa-leaf me-2"></i>Agro-Direct</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html"><span data-i18n="dashboard">Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="customization.html"><span data-i18n="controls">Customization</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container" style="margin-top: 100px;">
+        <div class="container">
+            <h2 class="mb-4"><i class="fas fa-magic me-2"></i><span data-i18n="controls">Website Controls</span></h2>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="custom-card">
+                        <h4 data-i18n="brandColors">Brand Colors</h4>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="primaryColor">Primary Color</label>
+                            <input type="color" class="form-control form-control-color w-100" id="primaryColor"
+                                value="#2E5A1C">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="primaryLight">Primary Light (Accent)</label>
+                            <input type="color" class="form-control form-control-color w-100" id="primaryLight"
+                                value="#4CAF50">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="custom-card">
+                        <h4 data-i18n="bgSettings">Background Settings</h4>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="bgType">Page Background Type</label>
+                            <select class="form-select" id="bgType">
+                                <option value="solid" data-i18n="solidColorOption">Solid Color</option>
+                                <option value="gradient" data-i18n="gradientOption">Premium Gradient</option>
+                            </select>
+                        </div>
+                        <div class="mb-3" id="solidBgContainer">
+                            <label class="form-label" data-i18n="bgColor">Background Color</label>
+                            <input type="color" class="form-control form-control-color w-100" id="bgColor"
+                                value="#f8f9fa">
+                        </div>
+                        <div class="mb-3 d-none" id="gradientBgContainer">
+                            <label class="form-label" data-i18n="bgGradient">Gradient Preset</label>
+                            <select class="form-select" id="bgGradient">
+                                <option value="linear-gradient(to bottom, #f8f9fa, #e8f5e9)">Nature Green</option>
+                                <option value="linear-gradient(to bottom, #fff, #f3e5f5)">Soft Lavender</option>
+                                <option value="linear-gradient(to bottom, #fffaf0, #ffebcd)">Warm Cream</option>
+                                <option value="linear-gradient(to bottom, #1a1a1a, #2c3e50)">Dark Slate</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="custom-card">
+                        <h4><i class="fas fa-sign-in-alt me-2"></i><span data-i18n="loginBg">Login Background</span></h4>
+                        <div class="mb-3 text-center">
+                            <img id="loginBgPreview" src="../login-bg.png" class="img-fluid rounded mb-2" style="max-height: 150px; border: 1px solid #ddd;">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="uploadLoginBg">Upload New Login Background</label>
+                            <input type="file" class="form-control" id="loginBgInput" accept="image/*">
+                        </div>
+                        <button class="btn btn-success w-100 mb-2" type="button" onclick="uploadBackground('loginBg', 'loginBgInput')">
+                            <i class="fas fa-upload me-2"></i><span data-i18n="uploadButton">Upload Login Image</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="custom-card">
+                        <h4><i class="fas fa-desktop me-2"></i><span data-i18n="websiteBg">Website Background</span></h4>
+                        <div class="mb-3 text-center">
+                            <div id="websiteBgPreview" style="height: 150px; border: 1px solid #ddd; border-radius: 8px; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; color: #999;">
+                                <span data-i18n="noImageSet">No Image Set</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="uploadWebsiteBg">Upload Website Background</label>
+                            <input type="file" class="form-control" id="websiteBgInput" accept="image/*">
+                        </div>
+                        <button class="btn btn-success w-100 mb-2" type="button" onclick="uploadBackground('websiteBg', 'websiteBgInput')">
+                            <i class="fas fa-upload me-2"></i><span data-i18n="uploadButton">Upload Website Image</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button class="btn btn-primary btn-lg px-5" onclick="saveSettings()">
+                    <i class="fas fa-save me-2"></i><span data-i18n="applySave">Apply & Save Settings</span>
+                </button>
+                <button class="btn btn-outline-secondary btn-lg px-5 ms-3" onclick="resetSettings()">
+                    <span data-i18n="resetDefault">Reset to Default</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = ''; // Same origin
+
+        document.getElementById('bgType').addEventListener('change', function () {
+            if (this.value === 'solid') {
+                document.getElementById('solidBgContainer').classList.remove('d-none');
+                document.getElementById('gradientBgContainer').classList.add('d-none');
+            } else {
+                document.getElementById('solidBgContainer').classList.add('d-none');
+                document.getElementById('gradientBgContainer').classList.remove('d-none');
+            }
+        });
+
+        async function loadSettings() {
+            try {
+                const response = await fetch('/api/settings');
+                const s = await response.json();
+                
+                if (s.primaryColor) document.getElementById('primaryColor').value = s.primaryColor;
+                if (s.primaryLight) document.getElementById('primaryLight').value = s.primaryLight;
+                
+                // Handle background
+                if (s.backgroundColor && s.backgroundColor.includes('gradient')) {
+                    document.getElementById('bgType').value = 'gradient';
+                    document.getElementById('gradientBgContainer').classList.remove('d-none');
+                    document.getElementById('solidBgContainer').classList.add('d-none');
+                    document.getElementById('bgGradient').value = s.backgroundColor;
+                } else {
+                    document.getElementById('bgType').value = 'solid';
+                    document.getElementById('solidBgContainer').classList.remove('d-none');
+                    document.getElementById('gradientBgContainer').classList.add('d-none');
+                    document.getElementById('bgColor').value = s.backgroundColor || '#f8f9fa';
+                }
+
+                if (s.loginBg) {
+                    document.getElementById('loginBgPreview').src = s.loginBg.startsWith('/') ? '..' + s.loginBg : s.loginBg;
+                }
+                
+                if (s.websiteBg) {
+                    const preview = document.getElementById('websiteBgPreview');
+                    const imgUrl = s.websiteBg.startsWith('/') ? '..' + s.websiteBg : s.websiteBg;
+                    preview.style.backgroundImage = `url('${imgUrl}')`;
+                    preview.innerHTML = '';
+                }
+            } catch (error) {
+                console.error('Error loading settings:', error);
+            }
+        }
+
+        async function uploadBackground(key, inputId) {
+            const fileInput = document.getElementById(inputId);
+            if (!fileInput.files || !fileInput.files[0]) {
+                showWarning('Please select a file first.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('background', fileInput.files[0]);
+            formData.append('key', key);
+
+            try {
+                const response = await fetch('/admin/upload-bg', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    showSuccess('Background uploaded successfully!');
+                    loadSettings(); // Reload to show preview
+                } else {
+                    showError('Upload failed: ' + result.error);
+                }
+            } catch (error) {
+                console.error('Error uploading:', error);
+                showError('Error uploading image.');
+            }
+        }
+
+        async function saveSettings() {
+            const settings = {
+                primaryColor: document.getElementById('primaryColor').value,
+                primaryLight: document.getElementById('primaryLight').value,
+                backgroundColor: document.getElementById('bgType').value === 'solid'
+                    ? document.getElementById('bgColor').value
+                    : document.getElementById('bgGradient').value
+            };
+
+            try {
+                const response = await fetch('/admin/save-settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(settings)
+                });
+                const result = await response.json();
+                if (result.success) {
+                    // Update fallback localStorage for some pages
+                    localStorage.setItem('agroCustomSettings', JSON.stringify(settings));
+                    showSuccess('Settings saved successfully!');
+                }
+            } catch (error) {
+                console.error('Error saving:', error);
+                showError('Error saving settings.');
+            }
+        }
+
+        async function resetSettings() {
+            const confirmed = await modernConfirm('Reset Customization', 'Are you sure you want to reset all customization? This cannot be undone.');
+            if (confirmed) {
+                const defaults = {
+                    primaryColor: '#2E5A1C',
+                    primaryLight: '#4CAF50',
+                    backgroundColor: '#f8f9fa',
+                    loginBg: '/login-bg.png',
+                    websiteBg: ''
+                };
+                
+                try {
+                    await fetch('/admin/save-settings', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(defaults)
+                    });
+                    localStorage.removeItem('agroCustomSettings');
+                    location.reload();
+                } catch (error) {
+                    showError('Error resetting settings.');
+                }
+            }
+        }
+
+        // Initialize
+        loadSettings();
+    </script>
+    <script type="module" src="../lang-core.js"></script>
+    <div style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+        <button id="voiceGuideBtn" class="btn btn-success rounded-circle shadow-lg" style="width: 60px; height: 60px;">
+            <i class="fas fa-microphone"></i>
+        </button>
+    </div>
+</body>
+
+</html>

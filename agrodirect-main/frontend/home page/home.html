@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AgroDirect - Fresh Organic Produce</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="home.css">
+    <script src="../theme-switcher.js"></script>
+    <script src="../theme-customizer.js" defer></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            const user = JSON.parse(localStorage.getItem('agroUser'));
+            if (user && (user.role === 'farmer' || user.role === 'admin')) {
+                // Hide navbar links
+                const navLinks = document.querySelectorAll('a.nav-link');
+                navLinks.forEach(link => {
+                    if (
+                        link.getAttribute('data-i18n') === 'shopNow' ||
+                        link.getAttribute('data-i18n') === 'contactUs' ||
+                        link.getAttribute('data-i18n') === 'reviewUs'
+                    ) {
+                        link.style.display = 'none';
+                    }
+                });
+                // Hide footer quick links
+                const footerLinks = document.querySelectorAll('.footer-links a, .footer-title[data-i18n="contactUs"]');
+                footerLinks.forEach(link => {
+                    if (
+                        link.getAttribute('data-i18n') === 'shopNow' ||
+                        link.getAttribute('data-i18n') === 'contactUs' ||
+                        link.getAttribute('data-i18n') === 'reviewUs'
+                    ) {
+                        link.style.display = 'none';
+                    }
+                });
+                // Hide contact info column
+                const contactCol = document.querySelector('.footer-title[data-i18n="contactUs"]')?.parentElement;
+                if (contactCol) contactCol.style.display = 'none';
+
+                // Show Farmer Dashboard link if role is farmer
+                if (user.role === 'farmer') {
+                    const farmerDash = document.getElementById('farmerDashboardNavItem');
+                    if (farmerDash) farmerDash.style.display = 'block';
+                }
+            }
+        } catch (e) { /* ignore */ }
+    });
+    </script>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar sticky-top">
+        <div class="container">
+            <a class="navbar-brand premium-logo-nav" href="../home page/home.html">
+                <span class="icon-stack-sm me-2">
+                    <i class="fas fa-circle icon-bg"></i>
+                    <i class="fas fa-leaf icon-main"></i>
+                </span>
+                <span class="logo-text">AgroDirect</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="../home page/home.html" data-i18n="home">Home</a>
+                    </li>
+                    <li class="nav-item" id="farmerDashboardNavItem" style="display:none;">
+                        <a class="nav-link" href="../farmer-dashboard.html" data-i18n="farmerDashboard">Farmer Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../shopnow.html" data-i18n="shopNow">Shop Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../contactus.html" data-i18n="contactUs">Contact Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="../review.html" data-i18n="reviewUs">Review Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="btn btn-link nav-link p-0" onclick="window.ThemeSwitcher.toggle()">
+                        <i class="fas fa-moon fs-5"></i>
+                    </button>
+                    <!-- Cart (only for consumers) -->
+                    <a class="nav-link p-0" id="cartNavLink" href="../cart.html" style="display:none;"><span data-i18n="cart">Cart</span> <i class="fas fa-shopping-cart"></i></a>
+                    <div class="dropdown">
+                        <button class="btn btn-user dropdown-toggle" type="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userNameDisplay"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="../profile.html"><i class="fas fa-user me-2"></i><span
+                                        data-i18n="profile">Profile</span></a></li>
+                            <li><a class="dropdown-item" href="../order.html"><i class="fas fa-box me-2"></i><span
+                                        data-i18n="orders">My
+                                        Orders</span></a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton"><i
+                                        class="fas fa-sign-out-alt me-2"></i><span data-i18n="logout">Logout</span></a>
+                            </li>
+                        </ul>
+                    </div>
+                                                <script>
+                                                // Hide Cart link for farmer/admin
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    try {
+                                                        var user = localStorage.getItem('agroUser');
+                                                        var role = user ? (JSON.parse(user).role || 'consumer') : 'consumer';
+                                                        var cartLink = document.getElementById('cartNavLink');
+                                                        if (cartLink) {
+                                                            cartLink.style.display = (role === 'consumer') ? '' : 'none';
+                                                        }
+                                                    } catch(e) {}
+                                                });
+                                                </script>
+                </div>
+                <!-- Language Selection Dropdown -->
+                <div class="dropdown ms-2">
+                    <button class="btn btn-outline-success dropdown-toggle lang-btn" type="button" id="langDropdown"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-language me-1"></i> <span data-i18n="language">Language</span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="langDropdown">
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="en-US">English</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="hi-IN">हिन्दी</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="gu-IN">ગુજરાતી</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="kn-IN">ಕನ್ನಡ</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="te-IN">తెలుగు</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="ta-IN">தமிழ்</a></li>
+                        <li><a class="dropdown-item lang-select" href="#" data-lang="ml-IN">മലയാളം</a></li>
+                    </ul>
+                </div>
+            </div>
+            <a href="../index.html" class="btn btn-login ms-3" id="loginButton"><span data-i18n="login">Login</span>
+                <i class="fas fa-sign-in-alt"></i></a>
+        </div>
+        </div>
+    </nav>
+
+    <!-- Slider -->
+    <div id="carouselExample" class="carousel slide hero-slider" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="homeslider/slider1.png" class="d-block w-100" alt="Slider 1" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider1Title">AgroDirect</span><br><span
+                                data-i18n="slider1Sub">Premium Quality</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="homeslider/slider2.jpg" class="d-block w-100" alt="Slider 2" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider2Title">Fresh Harvest</span><br><span
+                                data-i18n="slider2Sub">Direct to You</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="homeslider/slider3.png" class="d-block w-100" alt="Slider 3" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider3Title">Pure Organic</span><br><span
+                                data-i18n="slider3Sub">Sustainable Farming</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="homeslider/slider4.png" class="d-block w-100" alt="Slider 4" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider4Title">Traditional Wisdom</span><br><span
+                                data-i18n="slider4Sub">Modern Science</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="homeslider/slider5.jpg" class="d-block w-100" alt="Slider 5" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider5Title">Our Heritage</span><br><span
+                                data-i18n="slider5Sub">Our Pride</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="homeslider/vegi.png" class="d-block w-100" alt="Vegetables" />
+                <div class="overlay">
+                    <div class="carousel-caption">
+                        <p class="slogan"><span data-i18n="slider6Title">Handpicked</span><br><span
+                                data-i18n="slider6Sub">Seasonal Variety</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        </button>
+    </div>
+    <!-- Services Section -->
+    <section class="services py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-2" data-i18n="services">OUR SERVICES</h2>
+                <h3 class="h5 text-muted fw-normal" data-i18n="slogan">Providing Fresh Produce Every Single Day</h3>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+                <!-- Service 1 -->
+                <div class="col">
+                    <div class="card glass-card h-100 border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <div class="service-icon mb-4">
+                                <i class="fas fa-leaf fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title h5 fw-bold" data-i18n="freshHarvest">Daily Harvest</h4>
+                            <p class="card-text text-muted small" data-i18n="freshHarvestDesc">Daily delivery of
+                                handpicked, organic vegetables
+                                straight from our fertile fields to your kitchen.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 2 -->
+                <div class="col">
+                    <div class="card glass-card h-100 border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <div class="service-icon mb-4">
+                                <i class="fas fa-box-open fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title h5 fw-bold" data-i18n="ecoPackaging">Eco-Packaging</h4>
+                            <p class="card-text text-muted small" data-i18n="ecoPackagingDesc">We use sustainable,
+                                plastic-free packaging to preserve
+                                freshness and protect our environment.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="col">
+                    <div class="card glass-card h-100 border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <div class="service-icon mb-4">
+                                <i class="fas fa-shipping-fast fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title h5 fw-bold" data-i18n="fastDelivery">Express Delivery</h4>
+                            <p class="card-text text-muted small" data-i18n="fastDeliveryDesc">Optimized supply chain to
+                                ensure your organic produce
+                                reaches you within hours of harvesting.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Service 4 -->
+                <div class="col">
+                    <div class="card glass-card h-100 border-0 text-center hover-lift">
+                        <div class="card-body p-4">
+                            <div class="service-icon mb-4">
+                                <i class="fas fa-clipboard-check fa-3x text-success"></i>
+                            </div>
+                            <h4 class="card-title h5 fw-bold" data-i18n="premiumOrganic">Quality Assured</h4>
+                            <p class="card-text text-muted small" data-i18n="premiumOrganicDesc">Rigorous quality checks
+                                at every step to ensure only
+                                chemical-free vegetables reach your table.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-2" data-i18n="shopByCategory">SHOP BY CATEGORY</h2>
+                <h3 class="h5 text-muted fw-normal" data-i18n="directFromSource">Directly from the source</h3>
+            </div>
+            <div class="row row-cols-1 row-cols-md-3 g-4" id="categories-container">
+                <!-- Categories will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="featured-products py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-2" data-i18n="featuredProducts">FEATURED PRODUCTS</h2>
+                <h3 class="h5 text-muted fw-normal" data-i18n="bestSellers">Our best sellers this week</h3>
+            </div>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="featured-products-container">
+                <!-- Products will be loaded here -->
+            </div>
+            <div class="text-center mt-5">
+                <a href="../shopnow.html" class="btn btn-premium btn-lg" data-i18n="viewProducts">View All Products</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="why-choose-us">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <img src="verticalfarmer.jpg" alt="Our Heritage" class="farmer-image rounded-4 shadow-lg">
+                </div>
+                <div class="col-lg-6 content-right">
+                    <div class="why-choose-content p-4 p-md-5 bg-white rounded-4 shadow-sm">
+                        <h3 class="text-success h6 fw-bold text-uppercase ls-wide mb-3" data-i18n="whyChooseUs">WHY
+                            CHOOSE US</h3>
+                        <h2 class="display-6 fw-bold mb-4 text-dark" data-i18n="websiteMission">Empowering Farmers, Connecting Communities</h2>
+                        <p class="text-muted mb-4" data-i18n="websiteMissionDesc">AgroDirect is your trusted online marketplace for fresh, local produce. We connect farmers directly with consumers, ensuring transparency, fair pricing, and a healthy food ecosystem for all.</p>
+
+                        <div class="feature-item d-flex align-items-start mb-4">
+                            <div class="feature-icon-wrapper me-4 bg-light p-3 rounded-circle">
+                                <i class="fas fa-seedling text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="h5 fw-bold mb-1" data-i18n="naturesBest">Nature's Best</h4>
+                                <p class="text-muted small mb-0" data-i18n="naturesBestDesc">We leverage natural growing
+                                    cycles and sustainable
+                                    practices for healthier, tastier produce.</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item d-flex align-items-start mb-4">
+                            <div class="feature-icon-wrapper me-4 bg-light p-3 rounded-circle">
+                                <i class="fas fa-certificate text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="h5 fw-bold mb-1" data-i18n="pesticideFree">Pesticide Free</h4>
+                                <p class="text-muted small mb-0" data-i18n="pesticideFreeDesc">100% pesticide-free and
+                                    non-GMO vegetables grown with
+                                    deep environmental respect.</p>
+                            </div>
+                        </div>
+
+                        <div class="feature-item d-flex align-items-start">
+                            <div class="feature-icon-wrapper me-4 bg-light p-3 rounded-circle">
+                                <i class="fas fa-home text-success fs-4"></i>
+                            </div>
+                            <div>
+                                <h4 class="h5 fw-bold mb-1" data-i18n="farmToDoor">Farm-to-Door</h4>
+                                <p class="text-muted small mb-0" data-i18n="farmToDoorDesc">Enjoy high-quality
+                                    vegetables delivered straight from
+                                    our local farms to your home.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+                        <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic
+                            produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="../shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                                    Products</span></a></li>
+                        <li><a href="../aboutus.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="aboutUs">About Us</span></a></li>
+                        <!-- <li><a href="/"><i class="fas fa-chevron-right"></i>Delivery Information</a></li> -->
+                        <li><a href="../privacypolicy.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="privacyPolicy">Privacy Policy</span></a></li>
+                        <!-- <li><a href="/termcondition.html"><i class="fas fa-chevron-right"></i>Terms & Conditions</a></li>-->
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="../seed/seeds.html" class="product-tag">Organic Seeds</a>
+                        <a href="../fruit/fruits.html" class="product-tag">Fresh Fruits</a>
+                        <a href="../v" class="product-tag">Vegetables</a>
+                        <a href="/oil/coconut.html" class="product-tag">Organic Oils</a>
+                        <a href="./grains/grains.html" class="product-tag">Grains</a>
+                        <!-- <a href="/" class="product-tag">Pulses</a>
+                    <a href="#" class="product-tag">Spices</a>
+                    <a href="#" class="product-tag">Herbs</a> -->
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                                Karnataka</span></p>
+                        <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+                        <p><i class="fas fa-envelope"></i> <span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+                        <p><i class="fas fa-clock"></i> <span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2026 AgroDirect All rights Reserved</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <!-- <p>Made with <i class="fas fa-heart heart"></i> for organic farming</p> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Footer -->
+
+    </script>
+    <!-- Include these dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script>
+        // Initialize auth when page loads
+        document.addEventListener("DOMContentLoaded", function () {
+            initAuth();
+            updateAuthUI();
+        });
+    </script>
+    <script src="home.js"></script>
+    <script src="../auth-core.js"></script>
+    <script type="module" src="../lang-core.js"></script>
+    <script src="../notifications.js"></script>
+</body>
+
+</html>

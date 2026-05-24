@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oil Extracts - AgroConnect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="oilextracts.css">
+    <link rel="stylesheet" href="/notifications.css">
+    <link rel="stylesheet" href="/voice-search.css">
+    <script src="/theme-switcher.js"></script>
+    <style>
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            text-align: center;
+            margin: 0 8px;
+        }
+
+        .unit-selector {
+            margin-bottom: 15px;
+        }
+
+        .oil-type {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🌿 AgroDirect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../home page/home.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="../shopnow.html">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../contactus.html">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../review.html">Review Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="../cart.html">Cart <i
+                                class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown" id="userDropdown" style="display: none;">
+                        <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <span id="userNameDisplay"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="../profile.html">Profile</a></li>
+                            <li><a class="dropdown-item" href="../order.html">My Orders</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" id="logoutButton">Logout</a></li>
+                        </ul>
+                    </div>
+                    <a href="../index.html" class="btn btn-login ms-3" id="loginButton">Login <i
+                            class="fas fa-sign-in-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Oil Extracts Section -->
+    <section class="container my-5">
+        <div class="d-flex justify-content-between align-items-center title-container">
+            <h2 class="title-text">
+                🫒 Premium <span class="text-golden">Oil Extracts</span>
+                <hr class="title-underline">
+            </h2>
+            <a href="../shopnow.html" class="btn back-home-btn">🏡 Back to Home</a>
+        </div>
+
+        <div class="row justify-content-center mb-4">
+            <div class="col-md-6">
+                <div class="search-container">
+                    <input type="text" class="form-control search-box" placeholder="Search oil extracts..." data-i18n-placeholder="searchOilPlaceholder">
+                </div>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4 mt-4" id="oils-container">
+            <!-- Oil extracts will be loaded dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo">AgroDirect</a>
+                        <p>Connecting farmers and consumers through sustainable, organic produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="/shopnow.html"><i class="fas fa-chevron-right"></i>Shop Products</a></li>
+                        <li><a href="/aboutus.html"><i class="fas fa-chevron-right"></i>About Us</a></li>
+                        <li><a href="/privacypolicy.html"><i class="fas fa-chevron-right"></i>Privacy Policy</a></li>
+                        <li><a href="/termcondition.html"><i class="fas fa-chevron-right"></i>Terms & Conditions</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="/seed/seeds.html" class="product-tag">Organic Seeds</a>
+                        <a href="/fruit/fruits.html" class="product-tag">Fresh Fruits</a>
+                        <a href="/vegetables/vegetable.html" class="product-tag">Vegetables</a>
+                        <a href="/oil/coconut.html" class="product-tag">Organic Oils</a>
+                        <a href="./grains/grains.html" class="product-tag">Grains</a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i>AgroDirect, Kolara, Karnataka</p>
+                        <p><i class="fas fa-phone"></i>+91 8660898160, 9019807488</p>
+                        <p><i class="fas fa-envelope"></i> agrodirectt@gmail.com</p>
+                        <p><i class="fas fa-clock"></i> Mon - Sat: 8:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>© 2025 Agro. All rights reserved.</p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <!-- Optional footer content -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script type="module" src="../lang-core.js"></script>
+    <script src="../auth-core.js"></script>
+    <script src="oilextracts.js"></script>
+    <script src="/notifications.js"></script>
+</body>
+
+</html>

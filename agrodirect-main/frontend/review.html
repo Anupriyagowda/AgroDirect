@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Us - AgroDirect</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="theme-switcher.js"></script>
+    <script src="theme-customizer.js" defer></script>
+    <style>
+        :root {
+            --primary: hsl(142, 70%, 25%);
+            --primary-light: hsl(142, 60%, 45%);
+            --bg-cream: hsl(45, 20%, 98%);
+            --text-dark: hsl(210, 24%, 16%);
+            --text-muted: hsl(210, 10%, 45%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+            --primary-color: #2e7d32;
+            --secondary-color: #8bc34a;
+            --accent-color: #f9a825;
+            --light-green: #e8f5e9;
+            --dark-green: #1b5e20;
+            --text-color: #333;
+            --light-text: #f5f5f5;
+        }
+
+        [data-theme="dark"] {
+            --primary: hsl(142, 60%, 45%);
+            --primary-light: hsl(142, 50%, 55%);
+            --bg-cream: hsl(210, 24%, 6%);
+            --text-dark: hsl(0, 0%, 95%);
+            --text-muted: hsl(0, 0%, 75%);
+            --glass-bg: rgba(15, 25, 15, 0.9);
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --shadow-premium: 0 24px 60px rgba(0, 0, 0, 0.6);
+
+            --primary-color: #8bc34a;
+            --light-green: #1b2e1b;
+            --text-color: #f5f5f5;
+            --text-dark: #f5f5f5;
+            background-color: #0a0a0a;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--bg-cream);
+            transition: opacity 0.5s ease, background-color 0.3s ease;
+            opacity: 0;
+        }
+
+        [data-theme="dark"] .custom-navbar {
+            background-color: #121212;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        [data-theme="dark"] .review-container,
+        [data-theme="dark"] .review-card,
+        [data-theme="dark"] .form-control,
+        [data-theme="dark"] .form-select {
+            background-color: #1a1a1a;
+            color: var(--text-dark);
+            border-color: var(--glass-border);
+        }
+
+        [data-theme="dark"] .form-control::placeholder {
+            color: var(--text-muted);
+        }
+
+        [data-theme="dark"] .review-header,
+        [data-theme="dark"] .stats-section {
+            background-color: #1b2e1b;
+        }
+
+        .btn-user {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--primary);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        [data-theme="dark"] .btn-user {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-dark);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--primary);
+            cursor: pointer;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-premium);
+        }
+
+        /* Navbar Styling */
+        .custom-navbar {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        /* Review Container */
+        .review-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .review-header {
+            background-color: var(--light-green);
+            padding: 20px 30px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review-header h2 {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .review-body {
+            padding: 30px;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-green);
+        }
+
+        /* Star Rating */
+        .star-rating {
+            display: inline-block;
+            font-size: 0;
+            position: relative;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            float: right;
+            padding: 0 2px;
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        .star-rating label:before {
+            content: '\f005';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+        }
+
+        .star-rating input:checked~label {
+            color: var(--accent-color);
+        }
+
+        .star-rating:not(:checked) label:hover,
+        .star-rating:not(:checked) label:hover~label {
+            color: var(--accent-color);
+        }
+
+        /* Display Stars */
+        .rating-stars {
+            color: var(--accent-color);
+            font-size: 18px;
+        }
+
+        .empty-star {
+            color: #ddd;
+        }
+
+        /* Form Styling */
+        .form-control {
+            border-radius: 8px;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(139, 195, 74, 0.25);
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--dark-green);
+        }
+
+        .btn-submit {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--dark-green);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        /* Review Cards */
+        .review-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .review-card:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 10px rgba(139, 195, 74, 0.2);
+        }
+
+        .review-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .review-date {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .verified-badge {
+            background-color: var(--light-green);
+            color: var(--dark-green);
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 10px;
+        }
+
+        /* Statistics Section */
+        .stats-section {
+            background-color: var(--light-green);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stats-box {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stats-number {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--dark-green);
+        }
+
+        .stats-label {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .rating-progress {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .rating-label {
+            width: 50px;
+        }
+
+        .progress {
+            flex-grow: 1;
+            height: 10px;
+            margin: 0 10px;
+        }
+
+        .progress-bar {
+            background-color: var(--primary-color);
+        }
+
+        .rating-count {
+            width: 40px;
+            text-align: right;
+            font-size: 0.85rem;
+        }
+
+        /* Organic Footer */
+        .organic-footer {
+            background-color: #1e3c14;
+            color: rgba(255, 255, 255, 0.8);
+            padding: 70px 0 0;
+        }
+
+        .footer-title {
+            color: #fff;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        .footer-links i {
+            margin-right: 10px;
+            color: var(--secondary-color);
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            text-align: center;
+            line-height: 40px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .footer-contact p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .footer-contact i {
+            margin-right: 15px;
+            color: var(--secondary-color);
+        }
+
+        .footer-bottom {
+            background-color: #152b0e;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+        }
+
+        .footer-logo {
+            font-size: 1.5rem;
+            color: #fff;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+
+        .product-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .product-tag {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+
+        .product-tag:hover {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .review-container {
+                margin: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body class="fadeIn">
+    <button id="themeToggle" class="theme-toggle" onclick="window.ThemeSwitcher.toggle()" data-i18n-title="toggleTheme">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg custom-navbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">🌿 AgroDirect</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home page/home.html" data-i18n="home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="shopnow.html" data-i18n="shopNow">Shop Now</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contactus.html" data-i18n="contactUs">Contact Us</a>
+                    </li>
+                    <li class="nav-item"><a class="nav-link active" href="review.html" data-i18n="reviewUs">Review
+                            Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html"><span data-i18n="cart">Cart</span> <i
+                                class="fas fa-shopping-cart"></i></a></li>
+                </ul>
+                <div class="d-flex align-items-center ms-3">
+                    <div class="user-section">
+                        <div class="dropdown">
+                            <button class="btn btn-user dropdown-toggle" type="button" id="userDropdown"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                <span id="userNameDisplay"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2"></i><span
+                                            data-i18n="profile">Profile</span></a></li>
+                                <li><a class="dropdown-item" href="order.html"><i class="fas fa-box me-2"></i><span
+                                            data-i18n="orders">My
+                                            Orders</span></a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="#" id="logoutButton"><i
+                                            class="fas fa-sign-out-alt me-2"></i><span
+                                            data-i18n="logout">Logout</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="index.html" class="btn btn-login ms-3" id="loginButton"><span
+                            data-i18n="login">Login</span> <i class="fas fa-sign-in-alt"></i></a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Review Container -->
+    <section class="container my-5">
+        <div class="review-container">
+            <div class="review-header">
+                <h2 data-i18n="customerReviews"><i class="fas fa-star me-2"></i> Customer Reviews</h2>
+            </div>
+            <div class="review-body">
+                <!-- Review Statistics -->
+                <div class="stats-section">
+                    <div class="row">
+                        <div class="col-md-4 stats-box">
+                            <div class="stats-number" id="averageRating">4.8</div>
+                            <div class="stats-label" data-i18n="averageRating">Average Rating</div>
+                            <div class="rating-stars mt-2" id="averageStars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 stats-box">
+                            <div class="stats-number" id="totalReviews">126</div>
+                            <div class="stats-label" data-i18n="totalReviews">Total Reviews</div>
+                        </div>
+
+                        <div class="col-md-4 stats-box">
+                            <div class="stats-number" id="satisfactionRate">94%</div>
+                            <div class="stats-label" data-i18n="satisfactionRate">Satisfaction Rate</div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-8 offset-md-2">
+                            <div class="rating-progress">
+                                <div class="rating-label">5 <i class="fas fa-star"></i></div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 75%"></div>
+                                </div>
+                                <div class="rating-count">94</div>
+                            </div>
+
+                            <div class="rating-progress">
+                                <div class="rating-label">4 <i class="fas fa-star"></i></div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 15%"></div>
+                                </div>
+                                <div class="rating-count">19</div>
+                            </div>
+
+                            <div class="rating-progress">
+                                <div class="rating-label">3 <i class="fas fa-star"></i></div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 6%"></div>
+                                </div>
+                                <div class="rating-count">8</div>
+                            </div>
+
+                            <div class="rating-progress">
+                                <div class="rating-label">2 <i class="fas fa-star"></i></div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 3%"></div>
+                                </div>
+                                <div class="rating-count">4</div>
+                            </div>
+
+                            <div class="rating-progress">
+                                <div class="rating-label">1 <i class="fas fa-star"></i></div>
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" style="width: 1%"></div>
+                                </div>
+                                <div class="rating-count">1</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Submit Review Form -->
+                    <div class="col-lg-5">
+                        <h4 class="section-title"><i class="fas fa-pen me-2"></i> <span data-i18n="writeReview">Write a
+                                Review</span></h4>
+                        <form id="reviewForm">
+                            <div class="mb-3">
+                                <label class="form-label" data-i18n="yourName">Your Name</label>
+                                <input type="text" class="form-control" id="reviewerName" readonly>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label" data-i18n="ratingLabel">Rating*</label>
+                                <div class="star-rating">
+                                    <input type="radio" id="star5" name="rating" value="5" required>
+                                    <label for="star5" title="5 stars"></label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4" title="4 stars"></label>
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3" title="3 stars"></label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2" title="2 stars"></label>
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1" data-i18n="[title]ratingLabel"></label>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reviewTitle" class="form-label" data-i18n="reviewTitleLabel">Review
+                                    Title*</label>
+                                <input type="text" class="form-control" id="reviewTitle"
+                                    placeholder="Summarize your experience"
+                                    data-i18n="[placeholder]reviewTitlePlaceholder" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reviewText" class="form-label" data-i18n="reviewTextLabel">Your
+                                    Review*</label>
+                                <textarea class="form-control" id="reviewText" rows="5"
+                                    placeholder="Share your experience with our products and service..."
+                                    data-i18n="[placeholder]reviewTextPlaceholder" required></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="productPurchased" class="form-label"
+                                    data-i18n="productPurchasedLabel">Product Name*</label>
+                                <input type="text" class="form-control" id="productPurchased"
+                                    placeholder="What product are you reviewing?"
+                                    data-i18n="[placeholder]productPlaceholder" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="reviewCategory" class="form-label">Category*</label>
+                                <select class="form-select" id="reviewCategory" required>
+                                    <option value="fruits">Fruits</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="grains">Grains</option>
+                                    <option value="seeds">Seeds</option>
+                                    <option value="saplings">Saplings</option>
+                                    <option value="oilextracts">Oil Extracts</option>
+                                    <option value="general">General Feedback</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="consentCheck" required>
+                                <label class="form-check-label" for="consentCheck" data-i18n="consentLabel">I agree to
+                                    the publication of my
+                                    review</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-submit">
+                                <i class="fas fa-paper-plane me-2"></i><span data-i18n="submitReviewBtn">Submit
+                                    Review</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Display Reviews -->
+                    <div class="col-lg-7">
+                        <h4 class="section-title"><i class="fas fa-comments me-2"></i> <span
+                                data-i18n="customerFeedback">Customer Feedback</span></h4>
+
+                        <div class="mb-3">
+                            <label class="form-label" data-i18n="filterReviews">Filter Reviews</label>
+                            <div class="d-flex">
+                                <select class="form-select me-2" id="ratingFilter">
+                                    <option value="all" data-i18n="allRatings">All Ratings</option>
+                                    <option value="5">5 Stars</option>
+                                    <option value="4">4 Stars</option>
+                                    <option value="3">3 Stars</option>
+                                    <option value="2">2 Stars</option>
+                                    <option value="1">1 Star</option>
+                                </select>
+
+                                <select class="form-select" id="sortFilter">
+                                    <option value="newest" data-i18n="newestFirst">Newest First</option>
+                                    <option value="oldest" data-i18n="oldestFirst">Oldest First</option>
+                                    <option value="highest" data-i18n="highestRating">Highest Rating</option>
+                                    <option value="lowest" data-i18n="lowestRating">Lowest Rating</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Reviews Container - Will be populated from database -->
+                        <div id="reviewsContainer">
+                            <!-- Sample Review - To be replaced with dynamic content -->
+                            <div class="review-card">
+                                <div class="review-meta">
+                                    <span class="reviewer-name">John Doe <span class="verified-badge"><i
+                                                class="fas fa-check-circle"></i> <span
+                                                data-i18n="verifiedPurchase">Verified Purchase</span></span></span>
+                                    <span class="review-date">April 20, 2025</span>
+                                </div>
+                                <div class="rating-stars mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <h5>Amazing quality produce!</h5>
+                                <p>I've been ordering from AgroDirect for three months now, and I'm extremely
+                                    impressed
+                                    with the quality and freshness of everything I've received. The organic vegetables
+                                    taste like they were just picked from the garden.</p>
+                                <div class="text-muted">Product: Organic Vegetable Box</div>
+                            </div>
+
+                            <div class="review-card">
+                                <div class="review-meta">
+                                    <span class="reviewer-name">Jane Smith <span class="verified-badge"><i
+                                                class="fas fa-check-circle"></i> <span
+                                                data-i18n="verifiedPurchase">Verified Purchase</span></span></span>
+                                    <span class="review-date">April 15, 2025</span>
+                                </div>
+                                <div class="rating-stars mb-2">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <h5>Great service, minor delivery issues</h5>
+                                <p>The products are excellent, and I love supporting local farmers. The only reason I'm
+                                    giving 4 stars instead of 5 is that delivery was a bit delayed on my last order.
+                                    Otherwise, great experience!</p>
+                                <div class="text-muted">Product: Fresh Fruits Basket</div>
+                            </div>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Reviews pagination">
+                            <ul class="pagination justify-content-center mt-4">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" data-i18n="paginationPrev">Previous</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" data-i18n="paginationNext">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="organic-footer">
+        <div class="container">
+            <div class="row">
+                <!-- Company Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <div class="footer-about">
+                        <a href="#" class="footer-logo" data-i18n="welcome">AgroDirect</a>
+                        <p data-i18n="companyInfo">Connecting farmers and consumers through sustainable, organic
+                            produce. We believe in quality,
+                            freshness, and environmental responsibility.</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-instagram"></i></a>
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="quickLinks">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="shopnow.html"><i class="fas fa-chevron-right"></i><span data-i18n="shopNow">Shop
+                                    Products</span></a></li>
+                        <li><a href="aboutus.html"><i class="fas fa-chevron-right"></i><span data-i18n="aboutUs">About
+                                    Us</span></a></li>
+                        <li><a href="privacypolicy.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="privacyPolicy">Privacy Policy</span></a></li>
+                        <li><a href="termcondition.html"><i class="fas fa-chevron-right"></i><span
+                                    data-i18n="termsConditions">Terms & Conditions</span></a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Product Categories -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="productCategories">Product Categories</h3>
+                    <div class="product-tags">
+                        <a href="seed/seeds.html" class="product-tag">Organic Seeds</a>
+                        <a href="fruit/fruits.html" class="product-tag" data-i18n="fruits">Fresh Fruits</a>
+                        <a href="vegetables/vegetable.html" class="product-tag" data-i18n="vegetables">Vegetables</a>
+                        <a href="oil/coconut.html" class="product-tag" data-i18n="oilExtracts">Organic Oils</a>
+                        <a href="grains/grains.html" class="product-tag" data-i18n="grains">Grains</a>
+                    </div>
+                </div>
+
+                <!-- Contact Info -->
+                <div class="col-lg-3 col-md-6 footer-column">
+                    <h3 class="footer-title" data-i18n="contactUs">Contact Us</h3>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-map-marker-alt"></i><span data-i18n="addressVal">AgroDirect, Kolara,
+                                Karnataka</span></p>
+                        <p><i class="fas fa-phone"></i><span data-i18n="phoneVal">+91 8660898160, 9019807488</span></p>
+                        <p><i class="fas fa-envelope"></i> <span data-i18n="emailVal">agrodirectt@gmail.com</span></p>
+                        <p><i class="fas fa-clock"></i> <span data-i18n="monSat">Mon - Sat: 8:00 AM - 6:00 PM</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2026 AgroDirect All rights Reserved</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js"></script>
+    <script src="/auth-core.js"></script>
+    <script type="module">
+        import { translatePage } from './lang-core.js';
+
+        // Fade in body on load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.opacity = "1";
+
+            // Initialize user authentication
+            if (typeof initAuth === 'function') {
+                initAuth();
+                updateAuthUI();
+            }
+
+            // Load reviews from database
+            loadReviews();
+
+            // Form submission handling
+            document.getElementById('reviewForm').addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const user = getCurrentUser();
+                if (!user) {
+                    alert('Please login to submit a review.');
+                    window.location.href = '/index.html';
+                    return;
+                }
+
+                const ratingValue = document.querySelector('input[name="rating"]:checked').value;
+                const reviewTitleValue = document.getElementById('reviewTitle').value;
+                const reviewTextValue = document.getElementById('reviewText').value;
+                const productNameValue = document.getElementById('productPurchased').value;
+                const categoryValue = document.getElementById('reviewCategory').value;
+
+                try {
+                    const response = await fetch('/api/reviews', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            userName: user.name,
+                            userEmail: user.email,
+                            productName: productNameValue,
+                            category: categoryValue,
+                            rating: parseInt(ratingValue),
+                            comment: `${reviewTitleValue}: ${reviewTextValue}`,
+                            sellerEmail: 'admin@agrodirect.com' // Global reviews go to admin
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (response.ok) {
+                        alert('Thank you for your review! It has been submitted successfully.');
+                        this.reset();
+                        if (document.getElementById('reviewerName')) document.getElementById('reviewerName').value = user.name;
+                        loadReviews(); // Reload to show the new review
+                    } else {
+                        alert('Error: ' + (result.error || 'Submission failed'));
+                    }
+                } catch (error) {
+                    console.error('Submission error:', error);
+                    alert('Failed to submit review. Please try again later.');
+                }
+            });
+
+            // Set up event listeners for filters
+            document.getElementById('ratingFilter').addEventListener('change', applyFilters);
+            document.getElementById('sortFilter').addEventListener('change', applyFilters);
+        });
+
+        // Language translation integration
+        document.addEventListener('languageChanged', () => {
+            translatePage();
+        });
+
+        // Load reviews from SQLite Backend
+        async function loadReviews() {
+            try {
+                const response = await fetch('/api/reviews');
+                const data = await response.json();
+
+                if (Array.isArray(data) && data.length > 0) {
+                    displayReviews(data);
+                    updateStatistics(data);
+                } else {
+                    useSampleData();
+                }
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                useSampleData();
+            }
+        }
+
+        function useSampleData() {
+            const sampleReviews = [
+                {
+                    userName: "Aarav Patel",
+                    rating: 5,
+                    title: "Excellent organic products",
+                    comment: "The vegetables are incredibly fresh. You can really taste the difference compared to supermarket produce.",
+                    date: new Date().toISOString(),
+                    verified: true
+                }
+            ];
+            displayReviews(sampleReviews);
+            updateStatistics(sampleReviews);
+        }
+
+        function displayReviews(reviews) {
+            const container = document.getElementById('reviewsContainer');
+            container.innerHTML = '';
+
+            if (reviews.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">No reviews yet. Be the first to review!</div>';
+                return;
+            }
+
+            reviews.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card';
+                reviewCard.dataset.rating = review.rating;
+
+                const stars = generateStarRating(review.rating);
+                const displayDate = new Date(review.date).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                reviewCard.innerHTML = `
+                    <div class="review-meta">
+                        <span class="reviewer-name">${review.userName || 'Valued Customer'} <span class="verified-badge"><i class="fas fa-check-circle"></i> Verified Purchase</span></span>
+                        <span class="review-date">${displayDate}</span>
+                    </div>
+                    <div class="rating-stars mb-2">${stars}</div>
+                    <h5>${review.productName || 'Product Review'} <span class="badge bg-light text-dark border ms-2" style="font-size: 0.7rem;">${review.category}</span></h5>
+                    <p>${review.comment || ''}</p>
+                `;
+                container.appendChild(reviewCard);
+            });
+        }
+
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) stars += '<i class="fas fa-star"></i>';
+                else stars += '<i class="far fa-star"></i>';
+            }
+            return stars;
+        }
+
+        function updateStatistics(reviews) {
+            const total = reviews.length;
+            const avg = reviews.reduce((acc, r) => acc + r.rating, 0) / total;
+
+            document.getElementById('averageRating').textContent = avg.toFixed(1);
+            document.getElementById('totalReviews').textContent = total;
+            document.getElementById('averageStars').innerHTML = generateStarRating(Math.round(avg));
+
+            // Simplified progress bar update
+            const counts = [0, 0, 0, 0, 0];
+            reviews.forEach(r => counts[5 - r.rating]++);
+
+            const bars = document.querySelectorAll('.progress-bar');
+            const labels = document.querySelectorAll('.rating-count');
+
+            counts.forEach((count, i) => {
+                const pct = (count / total) * 100;
+                if (bars[i]) bars[i].style.width = pct + '%';
+                if (labels[i]) labels[i].textContent = count;
+            });
+        }
+
+        function applyFilters() {
+            const ratingFilter = document.getElementById('ratingFilter').value;
+            const cards = document.querySelectorAll('.review-card');
+
+            cards.forEach(card => {
+                if (ratingFilter === 'all' || card.dataset.rating === ratingFilter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    <script src="/notifications.js"></script>
+</body>
+
+</html>
